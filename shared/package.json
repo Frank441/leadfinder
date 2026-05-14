@@ -1,0 +1,17 @@
+{
+  "name": "@leadfinder/shared",
+  "type": "module",
+  "exports": {
+    "./test": {
+      "import": "./dist/types/test.js",
+      "types": "./dist/types/test.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -b --watch"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}
