@@ -1,41 +1,48 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import { AuthView } from './features/auth/views/AuthView';
+import { PrivateRoute } from './router/PrivateRoute';
+import { LeadsView } from './features/leads/views/LeadsView';
+import { DashboardView } from './features/dashboard/views/DashboardView';
 
 function App() {
   return (
     <BrowserRouter>
-      {/* 
-        Aquí en el futuro envolverás tu aplicación con Providers:
-        <AuthProvider>
-          <ThemeProvider> 
-      */}
-      <Routes>
-        {/* Redirigimos la raíz (/ o index) a la vista de autenticación por defecto */}
-        <Route path="/" element={<Navigate to="/auth" replace />} />
-        
-        {/* Montamos la feature de Auth */}
-        <Route path="/auth" element={<AuthView />} />
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Navigate to="/auth" replace />} />
+          <Route path="/auth" element={<AuthView />} />
 
-        {/* 
-          Futuras rutas de tu CMS:
-          <Route path="/dashboard" element={<DashboardView />} />
-          <Route path="/users" element={<UsersView />} /> 
-        */}
-        
-        {/* Ruta comodín para manejar errores 404 */}
-        <Route 
-          path="*" 
-          element={
-            <div className="min-h-screen bg-zinc-900 flex items-center justify-center">
-              <h1 className="text-4xl font-bold text-white">404 - Página no encontrada</h1>
-            </div>
-          } 
-        />
-      </Routes>
-      {/* 
-          </ThemeProvider>
-        </AuthProvider> 
-      */}
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['director']}>
+                <DashboardView />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/leads"
+            element={
+              <PrivateRoute allowedRoles={['director', 'supervisor', 'representante']}>
+                <LeadsView />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="*"
+            element={
+              <div style={{ minHeight: '100vh', background: '#0b1929', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#f0f4f8', fontFamily: "'Inter', system-ui, sans-serif" }}>
+                  404 — Página no encontrada
+                </h1>
+              </div>
+            }
+          />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
