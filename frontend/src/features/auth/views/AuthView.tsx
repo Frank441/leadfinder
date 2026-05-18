@@ -1,52 +1,90 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 import { LoginForm } from '../components/LoginForm';
-import { RegisterForm } from '../components/RegisterForm';
-import type { LoginCredentials, RegisterCredentials } from '@leadfinder/shared/test';
+import type { LoginCredentials, UserRole } from '@leadfinder/shared/test';
 
-type AuthMode = 'login' | 'register';
+const MOCK_CREDENTIALS: Record<string, { role: UserRole; name: string }> = {
+  'director@colombo.com':      { role: 'director',      name: 'Valentín C.' },
+  'supervisor@colombo.com':    { role: 'supervisor',    name: 'Carlos Méndez' },
+  'representante@colombo.com': { role: 'representante', name: 'Ana Rodríguez' },
+};
 
 export const AuthView = () => {
-  const [mode, setMode] = useState<AuthMode>('login');
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = (credentials: LoginCredentials) => {
-    console.log('Enviando a API de login:', credentials);
-    // Aquí invocarías el servicio: authService.login(credentials)
-  };
+  const handleLogin = async ({ email, password }: LoginCredentials) => {
+    setIsLoading(true);
+    setError(null);
 
-  const handleRegister = (credentials: RegisterCredentials) => {
-    console.log('Enviando a API de registro:', credentials);
-    // Aquí invocarías el servicio: authService.register(credentials)
+    await new Promise<void>((resolve) => setTimeout(resolve, 600));
+
+    const cred = MOCK_CREDENTIALS[email.toLowerCase()];
+    if (!cred || password !== '1234') {
+      setError('Credenciales inválidas. Verificá tu email y contraseña.');
+      setIsLoading(false);
+      return;
+    }
+
+    login({ id: '1', email: email.toLowerCase(), name: cred.name, role: cred.role }, 'mock-token-123');
+    navigate(cred.role === 'director' ? '/dashboard' : '/leads', { replace: true });
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
-        
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold tracking-tight">
-            {mode === 'login' ? 'Bienvenido a LeadFinder' : 'Registro de Administrador'}
-          </h1>
+    <div style={{
+      minHeight: '100vh',
+      background: '#0b1929',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+      overflow: 'hidden',
+      fontFamily: "'Inter', system-ui, sans-serif",
+    }}>
+      {/* Círculos decorativos */}
+      <div style={{ position: 'absolute', top: '-120px', right: '-120px', width: '420px', height: '420px', borderRadius: '50%', background: 'rgba(26,170,110,0.07)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '-100px', left: '-100px', width: '360px', height: '360px', borderRadius: '50%', background: 'rgba(26,170,110,0.05)', pointerEvents: 'none' }} />
+
+      {/* Card */}
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        maxWidth: '400px',
+        margin: '0 16px',
+        background: '#172840',
+        borderRadius: '16px',
+        border: '1px solid rgba(255,255,255,0.07)',
+        padding: '36px 40px',
+      }}>
+        {/* Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
+          <div style={{
+            width: '36px', height: '36px',
+            background: '#1aaa6e',
+            borderRadius: '10px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <span style={{ color: '#fff', fontSize: '13px', fontWeight: 700, letterSpacing: '-0.5px' }}>LF</span>
+          </div>
+          <span style={{ color: '#f0f4f8', fontSize: '15px', fontWeight: 600 }}>Lead Finder</span>
         </div>
 
-        {/* Renderizado condicional de componentes */}
-        {mode === 'login' ? (
-          <LoginForm onSubmit={handleLogin} />
-        ) : (
-          <RegisterForm onSubmit={handleRegister} />
-        )}
+        <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#f0f4f8', margin: '0 0 6px 0' }}>
+          Bienvenido
+        </h1>
+        <p style={{ fontSize: '13px', color: '#7a9bbf', margin: '0 0 28px 0' }}>
+          Ingresá con tu cuenta de Colombo &amp; Magliano
+        </p>
 
-        <div className="text-center mt-6">
-          <button
-            type="button"
-            onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
-            className="text-sm text-blue-600 hover:underline"
-          >
-            {mode === 'login' 
-              ? '¿No tienes cuenta? Regístrate aquí' 
-              : '¿Ya tienes cuenta? Inicia sesión'}
-          </button>
-        </div>
+        <LoginForm onSubmit={handleLogin} isLoading={isLoading} error={error} />
 
+        <p style={{ textAlign: 'center', fontSize: '11px', color: '#3d5a73', marginTop: '20px', marginBottom: 0 }}>
+          ¿Problemas para ingresar? Contactá a tu administrador
+        </p>
       </div>
     </div>
   );
