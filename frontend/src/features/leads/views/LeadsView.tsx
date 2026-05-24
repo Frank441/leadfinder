@@ -1,37 +1,15 @@
-import { useState } from 'react';
-
-type LeadStatus = 'lead' | 'contacto' | 'prospecto' | 'cliente';
-
-interface Lead {
-  id: string;
-  cuit: string;
-  razonSocial: string;
-  localidad: string;
-  actividad: string;
-  status: LeadStatus;
-}
-
-const STATUS_CONFIG: Record<LeadStatus, { label: string; dot: string; text: string; bg: string }> = {
-  lead:      { label: 'Lead',      dot: '#e05252', text: '#ff7b7b', bg: 'rgba(224,82,82,0.13)' },
-  contacto:  { label: 'Contacto',  dot: '#e09a30', text: '#ffba55', bg: 'rgba(224,154,48,0.13)' },
-  prospecto: { label: 'Prospecto', dot: '#3d8fe0', text: '#74b4ff', bg: 'rgba(61,143,224,0.13)' },
-  cliente:   { label: 'Cliente',   dot: '#1aaa6e', text: '#2ecc8f', bg: 'rgba(26,170,110,0.13)' },
-};
-
-const MOCK_LEADS: Lead[] = [
-  { id: '1',  cuit: '20-12345678-9', razonSocial: 'PÉREZ AGROPECUARIA SA',    localidad: 'Bahía Blanca, Bs.As.',      actividad: 'Ganadería bovina',        status: 'prospecto' },
-  { id: '2',  cuit: '27-98765432-1', razonSocial: 'ESTANCIA DON PEDRO SRL',   localidad: 'General Pico, La Pampa',    actividad: 'Cría de ganado',          status: 'cliente'   },
-  { id: '3',  cuit: '30-11223344-5', razonSocial: 'CAMPO LAS LOMAS SA',       localidad: 'Olavarría, Bs.As.',         actividad: 'Agricultura y ganadería', status: 'lead'      },
-  { id: '4',  cuit: '20-55667788-2', razonSocial: 'GONZALEZ HERMANOS',        localidad: 'Venado Tuerto, Santa Fe',   actividad: 'Engorde a corral',        status: 'contacto'  },
-  { id: '5',  cuit: '27-44556677-3', razonSocial: 'LA PALOMA AGRO SRL',       localidad: 'Córdoba, Córdoba',          actividad: 'Ganadería mixta',         status: 'prospecto' },
-  { id: '6',  cuit: '30-99887766-1', razonSocial: 'CAMPO GRANDE SA',          localidad: 'Pigüé, Bs.As.',             actividad: 'Cría y engorde',          status: 'cliente'   },
-  { id: '7',  cuit: '20-33445566-8', razonSocial: 'MARTÍNEZ ESTANCIAS',       localidad: 'Río Cuarto, Córdoba',       actividad: 'Ganadería bovina',        status: 'lead'      },
-  { id: '8',  cuit: '27-22334455-6', razonSocial: 'LOS ÁLAMOS AGRO SA',       localidad: 'Trenque Lauquen, Bs.As.',  actividad: 'Agricultura y ganadería', status: 'contacto'  },
-  { id: '9',  cuit: '30-77889900-4', razonSocial: 'ESTANCIA EL CEIBO SRL',    localidad: 'Gualeguaychú, Entre Ríos', actividad: 'Cría de ganado',          status: 'prospecto' },
-  { id: '10', cuit: '20-66778899-7', razonSocial: 'RODRIGUEZ CAMPO SA',       localidad: 'Pergamino, Bs.As.',         actividad: 'Engorde bovino',          status: 'lead'      },
-  { id: '11', cuit: '27-11223355-0', razonSocial: 'AGROPECUARIA DEL SUR SRL', localidad: 'Tandil, Bs.As.',            actividad: 'Ganadería bovina',        status: 'cliente'   },
-  { id: '12', cuit: '30-44556688-9', razonSocial: 'EL RANCHO GRANDE SA',      localidad: 'Mercedes, Corrientes',      actividad: 'Cría extensiva',          status: 'contacto'  },
-];
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import type { Lead } from '@leadfinder/shared/test';
+import { useAuth } from '../../../context/AuthContext';
+import { leadsService } from '../services/leadsService';
+import { MOCK_REPRESENTANTES } from '../data/mockRepresentantes';
+import { StatusBadge } from '../components/StatusBadge';
+import { ScoreBadge } from '../components/ScoreBadge';
+import { StatusTabs } from '../components/StatusTabs';
+import type { StatusFilter } from '../components/StatusTabs';
+import { LeadsFilters } from '../components/LeadsFilters';
+import { AssignLeadModal } from '../components/AssignLeadModal';
 
 const TH: React.CSSProperties = {
   padding: '11px 16px', textAlign: 'left',
@@ -40,91 +18,211 @@ const TH: React.CSSProperties = {
   color: '#3d5a73', whiteSpace: 'nowrap',
 };
 
-const StatusBadge = ({ status }: { status: LeadStatus }) => {
-  const c = STATUS_CONFIG[status];
+const RepresentanteCell = ({ representanteId }: { representanteId: string | null }) => {
+  const rep = representanteId ? MOCK_REPRESENTANTES.find((r) => r.id === representanteId) : null;
+  if (!rep) {
+    return (
+      <span style={{ color: '#3d5a73', fontStyle: 'italic', fontSize: '12px' }}>
+        Sin asignar
+      </span>
+    );
+  }
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '2px 8px', borderRadius: '20px', fontSize: '11px', fontWeight: 500, background: c.bg, color: c.text, whiteSpace: 'nowrap' }}>
-      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: c.dot, flexShrink: 0 }} />
-      {c.label}
-    </span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{
+        width: '22px', height: '22px', borderRadius: '50%',
+        background: 'rgba(26,170,110,0.15)', color: '#1aaa6e',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '10px', fontWeight: 600,
+      }}>
+        {rep.initials}
+      </div>
+      <span style={{ fontSize: '12px', color: '#f0f4f8' }}>{rep.name}</span>
+    </div>
   );
 };
 
 export const LeadsView = () => {
-  const [search, setSearch] = useState('');
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const filtered = MOCK_LEADS.filter((l) => {
-    const q = search.toLowerCase();
-    return l.razonSocial.toLowerCase().includes(q) || l.cuit.includes(q) || l.localidad.toLowerCase().includes(q);
-  });
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('todos');
+  const [zonaFilter, setZonaFilter] = useState('');
+  const [actividadFilter, setActividadFilter] = useState('');
+  const [assignTarget, setAssignTarget] = useState<Lead | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Reload leads cuando cambia el usuario.
+  // Si es representante, sólo ve los leads asignados a él (matching por user.id).
+  useEffect(() => {
+    let cancelled = false;
+    setIsLoading(true);
+    leadsService.getAll().then((data) => {
+      if (cancelled) return;
+      const filtered = user?.role === 'representante'
+        ? data.filter((l) => l.representanteId === user.id)
+        : data;
+      setLeads(filtered);
+      setIsLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, [user]);
+
+  // Aplicar filtros locales sobre el dataset (búsqueda + status + zona + actividad)
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    return leads.filter((l) => {
+      if (statusFilter !== 'todos' && l.status !== statusFilter) return false;
+      if (zonaFilter && l.zona !== zonaFilter) return false;
+      if (actividadFilter && l.actividad !== actividadFilter) return false;
+      if (q && !(
+        l.razonSocial.toLowerCase().includes(q) ||
+        l.cuit.includes(q) ||
+        l.localidad.toLowerCase().includes(q)
+      )) return false;
+      return true;
+    });
+  }, [leads, search, statusFilter, zonaFilter, actividadFilter]);
+
+  const handleAssigned = (updated: Lead) => {
+    setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
+  };
+
+  const canAssign = user?.role === 'supervisor';
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+      {/* Subtítulo + acciones */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
         <p style={{ fontSize: '12px', color: '#7a9bbf', margin: 0 }}>
-          {filtered.length} {filtered.length === 1 ? 'registro' : 'registros'}
+          {filtered.length} {filtered.length === 1 ? 'lead' : 'leads'} en total
         </p>
-        <button style={{ background: 'rgba(26,170,110,0.15)', border: '1px solid rgba(26,170,110,0.4)', color: '#1aaa6e', borderRadius: '8px', padding: '6px 14px', fontSize: '12px', fontWeight: 500, cursor: 'pointer' }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(26,170,110,0.25)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(26,170,110,0.15)'; }}
-        >
-          + Nuevo CUIT
+        <button style={{
+          background: 'rgba(26,170,110,0.15)',
+          border: '1px solid rgba(26,170,110,0.4)',
+          color: '#1aaa6e',
+          borderRadius: '8px',
+          padding: '6px 14px',
+          fontSize: '12px',
+          fontWeight: 500,
+          cursor: 'pointer',
+          fontFamily: "'Inter', system-ui, sans-serif",
+        }}>
+          + Nuevo Lead
         </button>
       </div>
 
-      <div style={{ marginBottom: '16px' }}>
+      {/* Búsqueda + filtros + tabs */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', marginBottom: '14px' }}>
         <input
           type="text"
-          placeholder="Buscar por CUIT, razón social o localidad..."
+          placeholder="Buscar por nombre o CUIT..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ width: '100%', maxWidth: '380px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '9px', color: '#f0f4f8', padding: '9px 13px', fontSize: '13px', outline: 'none', fontFamily: "'Inter', system-ui, sans-serif" }}
+          style={{
+            flex: '1 1 260px',
+            minWidth: '220px',
+            background: 'rgba(255,255,255,0.05)',
+            border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: '9px',
+            color: '#f0f4f8',
+            padding: '9px 13px',
+            fontSize: '13px',
+            outline: 'none',
+            fontFamily: "'Inter', system-ui, sans-serif",
+          }}
           onFocus={(e) => { e.target.style.borderColor = '#1aaa6e'; e.target.style.background = 'rgba(26,170,110,0.06)'; }}
           onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.07)'; e.target.style.background = 'rgba(255,255,255,0.05)'; }}
         />
+        <LeadsFilters
+          zona={zonaFilter}
+          actividad={actividadFilter}
+          onChangeZona={setZonaFilter}
+          onChangeActividad={setActividadFilter}
+        />
+        <StatusTabs value={statusFilter} onChange={setStatusFilter} />
       </div>
 
+      {/* Tabla */}
       <div style={{ background: '#172840', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+              <th style={TH}>Establecimiento</th>
               <th style={TH}>CUIT</th>
-              <th style={TH}>Razón social</th>
-              <th style={TH}>Localidad</th>
-              <th style={TH}>Actividad</th>
+              <th style={TH}>Zona</th>
+              <th style={TH}>Representante</th>
               <th style={TH}>Estado</th>
-              <th style={TH}></th>
+              <th style={{ ...TH, textAlign: 'center' }}>Score</th>
+              {canAssign && <th style={TH}></th>}
             </tr>
           </thead>
           <tbody>
-            {filtered.length === 0 ? (
-              <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px' }}>No se encontraron resultados para "{search}"</td></tr>
+            {isLoading ? (
+              <tr><td colSpan={canAssign ? 7 : 6} style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px' }}>Cargando...</td></tr>
+            ) : filtered.length === 0 ? (
+              <tr><td colSpan={canAssign ? 7 : 6} style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px' }}>No se encontraron leads con los filtros aplicados</td></tr>
             ) : (
               filtered.map((lead, idx) => (
-                <tr key={lead.id}
-                  style={{ borderBottom: idx < filtered.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none' }}
+                <tr
+                  key={lead.id}
+                  onClick={() => navigate(`/leads/${lead.id}`)}
+                  style={{
+                    borderBottom: idx < filtered.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                    cursor: 'pointer',
+                  }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                 >
-                  <td style={{ padding: '12px 16px', fontSize: '12px', color: '#7a9bbf', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{lead.cuit}</td>
-                  <td style={{ padding: '12px 16px', fontSize: '13px', color: '#f0f4f8', fontWeight: 500 }}>{lead.razonSocial}</td>
-                  <td style={{ padding: '12px 16px', fontSize: '12px', color: '#7a9bbf', whiteSpace: 'nowrap' }}>{lead.localidad}</td>
-                  <td style={{ padding: '12px 16px', fontSize: '12px', color: '#7a9bbf' }}>{lead.actividad}</td>
-                  <td style={{ padding: '12px 16px' }}><StatusBadge status={lead.status} /></td>
                   <td style={{ padding: '12px 16px' }}>
-                    <button style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '6px', color: '#7a9bbf', padding: '4px 10px', fontSize: '11px', cursor: 'pointer', fontFamily: "'Inter', system-ui, sans-serif" }}
-                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#1aaa6e'; e.currentTarget.style.color = '#1aaa6e'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#7a9bbf'; }}
-                    >
-                      Ver
-                    </button>
+                    <div style={{ fontSize: '13px', color: '#f0f4f8', fontWeight: 500 }}>{lead.razonSocial}</div>
+                    <div style={{ fontSize: '11px', color: '#7a9bbf', marginTop: '2px' }}>
+                      {lead.cabezas} cab. · {lead.superficieHa.toLocaleString('es-AR')} ha
+                    </div>
                   </td>
+                  <td style={{ padding: '12px 16px', fontSize: '12px', color: '#7a9bbf', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{lead.cuit}</td>
+                  <td style={{ padding: '12px 16px', fontSize: '12px', color: '#7a9bbf', whiteSpace: 'nowrap' }}>{lead.zona}</td>
+                  <td style={{ padding: '12px 16px' }}><RepresentanteCell representanteId={lead.representanteId} /></td>
+                  <td style={{ padding: '12px 16px' }}><StatusBadge status={lead.status} /></td>
+                  <td style={{ padding: '12px 16px', textAlign: 'center' }}><ScoreBadge score={lead.score} /></td>
+                  {canAssign && (
+                    <td style={{ padding: '12px 16px' }}>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setAssignTarget(lead); }}
+                        style={{
+                          background: 'transparent',
+                          border: '1px solid rgba(255,255,255,0.07)',
+                          borderRadius: '6px',
+                          color: '#7a9bbf',
+                          padding: '4px 10px',
+                          fontSize: '11px',
+                          cursor: 'pointer',
+                          whiteSpace: 'nowrap',
+                          fontFamily: "'Inter', system-ui, sans-serif",
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#1aaa6e'; e.currentTarget.style.color = '#1aaa6e'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#7a9bbf'; }}
+                      >
+                        {lead.representanteId ? 'Reasignar' : 'Asignar'}
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
+
+      {assignTarget && (
+        <AssignLeadModal
+          lead={assignTarget}
+          onClose={() => setAssignTarget(null)}
+          onAssigned={handleAssigned}
+        />
+      )}
     </div>
   );
 };

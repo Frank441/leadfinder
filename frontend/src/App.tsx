@@ -3,7 +3,9 @@ import { AuthProvider } from './context/AuthContext';
 import { AuthView } from './features/auth/views/AuthView';
 import { PrivateRoute } from './router/PrivateRoute';
 import { LeadsView } from './features/leads/views/LeadsView';
+import { FichaCUITView } from './features/leads/views/FichaCUITView';
 import { DashboardView } from './features/dashboard/views/DashboardView';
+import { MapView } from './features/map/views/MapView';
 
 function App() {
   return (
@@ -27,6 +29,24 @@ function App() {
             element={
               <PrivateRoute allowedRoles={['director', 'supervisor', 'representante']}>
                 <LeadsView />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/leads/:id"
+            element={
+              <PrivateRoute allowedRoles={['director', 'supervisor', 'representante']}>
+                <FichaCUITView />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/mapa"
+            element={
+              <PrivateRoute allowedRoles={['director', 'supervisor', 'representante']}>
+                <MapView />
               </PrivateRoute>
             }
           />
