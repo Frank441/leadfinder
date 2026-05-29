@@ -31,6 +31,7 @@ pnpm install && pnpm --filter shared build
 
 ### 4. Inicializar la base de datos
 ```bash
+cd backend
 pnpm run db:dev
 ```
 
@@ -54,14 +55,22 @@ Una vez completado, las credenciales de acceso disponibles son:
 | Supervisor    | supervisor@colombomagliano.com         | Supervisor123!    |
 | Representante | representante@colombomagliano.com      | Representante123! |
 
-### 7. Iniciar el servidor de desarrollo
+### 7. Carga datos de las APIs
+```bash
+pnpm run parser
+```
+
+> Este comando procesa los archivos Excel (BCRA, SENASA, ARCA) y carga los datos en la base de datos. Puede tardar varios minutos.
+
+### 8. Iniciar el servidor de desarrollo
 ```bash
 pnpm dev
 ```
 
-### 8. Iniciar el cliente
+### 9. Iniciar el cliente
 Abrí una nueva terminal desde la raíz del proyecto:
 ```bash
+cd ..
 cd frontend
 pnpm dev
 ```
@@ -78,7 +87,7 @@ Si necesitás borrar todo y empezar de cero:
 cd backend
 npx prisma migrate reset
 ```
-> Este comando borra todos los datos, re-aplica las migraciones y corre el seed automáticamente.
+> Este comando borra todos los datos, re-aplica las migraciones y corre el seed automáticamente. Una vez completado, recordá volver a ejecutar `pnpm run parser`.
 
 ### Apagar el contenedor de la base de datos
 ```bash
