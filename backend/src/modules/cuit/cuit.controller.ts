@@ -10,12 +10,25 @@ export class CuitController {
             const data = await this.service.getFiscal(String(req.params.cuit));
             res.json(data);
         } catch (err) {
-            if (err instanceof NotFoundError) {
-                res.status(404).json({ message: err.message });
-                return;
-            }
-            console.error('[CuitController]', err);
-            res.status(500).json({ message: 'Error interno del servidor.' });
+            this.handleError(err, res);
         }
     };
+
+    getCrediticio: RequestHandler = async (req, res) => {
+        try {
+            const data = await this.service.getCrediticio(String(req.params.cuit));
+            res.json(data);
+        } catch (err) {
+            this.handleError(err, res);
+        }
+    };
+
+    private handleError(err: unknown, res: Parameters<RequestHandler>[1]): void {
+        if (err instanceof NotFoundError) {
+            res.status(404).json({ message: err.message });
+            return;
+        }
+        console.error('[CuitController]', err);
+        res.status(500).json({ message: 'Error interno del servidor.' });
+    }
 }

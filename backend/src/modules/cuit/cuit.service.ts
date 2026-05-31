@@ -1,7 +1,13 @@
-import type { SenasaData, ArcaData } from "@leadfinder/shared/types/leads";
+import type { SenasaData, ArcaData, BcraData, BcraSituacion } from "@leadfinder/shared/types/leads";
 import type { PrismaCuitData } from "@/types/api";
 import type { CuitRepository } from "./cuit.repository";
 import { NotFoundError } from "@/errors/errors";
+
+export interface CrediticioResponse {
+    cuit:        string;
+    razonSocial: string;
+    bcra:        BcraData;
+}
 
 export interface FiscalResponse {
     cuit:         string;
@@ -34,6 +40,18 @@ export class CuitService {
         };
     }
 
+    async getCrediticio(cuit: string): Promise<CrediticioResponse> {
+        const empresa = await this.repository.findByCuit(cuit);
+
+        if (!empresa) throw new NotFoundError(`CUIT ${cuit} no encontrado.`);
+
+        return {
+            cuit:        empresa.cuit,
+            razonSocial: empresa.nombre_empresa,
+            bcra:        this.mapBcra(empresa),
+        };
+    }
+
     // ─── Mappers ───────────────────────────────────────────────────────────────
 
     private mapSenasa(empresa: PrismaCuitData): SenasaData {
@@ -44,6 +62,26 @@ export class CuitService {
             superficieHa:   Number(s?.superficie ?? empresa.superficie ?? 0),
             estadoSanitario: s?.fecha_baja ? 'Inactivo' : 'Activo',
             renspaActivo:   !s?.fecha_baja,
+        };
+    }
+
+    private mapBcra(empresa: PrismaCuitData): BcraData {
+        const b = empresa.bcra[0] ?? null;
+        const situacionMap: Record<number, BcraSituacion> = {
+            1: 'Normal',
+            2: 'Riesgo bajo',
+            3: 'Riesgo alto',
+            4: 'Riesgo alto',
+            5: 'Riesgo alto',
+            6: 'Riesgo alto',
+        };
+        return {
+            situacion:          b?.situacion_crediticia != null
+                                    ? (situacionMap[b.situacion_crediticia] ?? 'Sin datos')
+                                    : 'Sin datos',
+            chequesRechazados:  0,
+            deudasIncobrables:  0,
+            ultimaConsulta:     b?.fecha_consulta?.toISOString() ?? new Date().toISOString(),
         };
     }
 
