@@ -2,6 +2,7 @@ import cors from "cors";
 import authRouter from "@/modules/auth/auth.routes";
 import estadosRouter from "@/modules/estados/estados.routes";
 import cuitRouter    from "@/modules/cuit/cuit.routes";
+import leadsRouter   from "@/modules/leads/leads.routes";
 import express, { type Request, type Response } from "express";
 
 for (const key of ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_PORT', 'JWT_SECRET']) {
@@ -21,6 +22,7 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/v1/auth',    authRouter);
 app.use('/api/v1/estados', estadosRouter);
 app.use('/api/v1/cuit',    cuitRouter);
+app.use('/api/v1/leads',   leadsRouter);
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}\nGo to http://localhost:${port}`);
