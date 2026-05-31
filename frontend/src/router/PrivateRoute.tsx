@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { AppLayout } from '../layouts/AppLayout';
-import type { UserRole } from '@leadfinder/shared/test';
+import type { UserRole } from '@leadfinder/shared/types/user';
 
 interface PrivateRouteProps {
   children: React.ReactNode;

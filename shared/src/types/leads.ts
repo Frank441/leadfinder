@@ -1,34 +1,3 @@
-export type SharedTest = string | number;
-
-// ─────────────────────────────────────────────
-// AUTH
-// ─────────────────────────────────────────────
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface RegisterCredentials extends LoginCredentials {
-  confirmPassword: string;
-}
-
-export type UserRole = 'director' | 'supervisor' | 'representante';
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: UserRole;
-}
-
-export interface AuthResponse {
-  token: string;
-  user: User;
-}
-
-// ─────────────────────────────────────────────
-// LEADS
-// ─────────────────────────────────────────────
 export type LeadStatus = 'lead' | 'contacto' | 'prospecto' | 'cliente';
 
 export interface Representante {
@@ -66,7 +35,11 @@ export interface ArcaData {
 }
 
 // Datos provenientes de BCRA (US13d)
-export type BcraSituacion = 'Normal' | 'Riesgo bajo' | 'Riesgo alto' | 'Sin datos';
+export type BcraSituacion = 
+  | 'Normal' 
+  | 'Riesgo bajo' 
+  | 'Riesgo alto' 
+  | 'Sin datos';
 
 export interface BcraData {
   situacion: BcraSituacion;

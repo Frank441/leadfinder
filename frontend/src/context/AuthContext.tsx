@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import type { User } from '@leadfinder/shared/test';
+import type { User } from '@leadfinder/shared/types/user';
 
 interface AuthContextValue {
   user: User | null;

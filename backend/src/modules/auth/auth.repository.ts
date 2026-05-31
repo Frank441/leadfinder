@@ -1,29 +1,69 @@
-import type { IRepository } from "@/types/api";
-import type { CreateUserDTO, UpdateUserDTO, User, UserId } from "@inrias/shared/user";
+import type { IAuthRepository, PrismaUsuarioWithRole, UserWithHash } from "@/types/api";
+import type { SignupDTO } from "@leadfinder/shared/types/auth";
+import { toUserId } from "@leadfinder/shared/types/user";
+import type { User, UserId, UserRole } from "@leadfinder/shared/types/user";
+import prisma from "../../../prisma/client";
 
-export class AuthRepository implements IRepository<User, UserId> {
+export class AuthRepository implements IAuthRepository {
+    async findByEmail(email: string): Promise<UserWithHash | null> {
+        const row = await prisma.usuarios.findUnique({
+            where: { email },
+            include: { role: true }
+        });
+
+        if (!row) return null;
+        return this.mapWithHash(row);
+    }
+
     async findById(id: UserId): Promise<User | null> {
-        throw new Error("Method not implemented.");
-    }
-    
-    async findAll(): Promise<User[]> {
-        throw new Error("Method not implemented.");
+        const row = await prisma.usuarios.findUnique({
+            where: { id_usuario: Number(id) },
+            include: { role: true }
+        });
+
+        if (!row) return null;
+        return this.map(row);
     }
 
-    async create(data: CreateUserDTO): Promise<User> {
-        throw new Error("Method not implemented.");
+    async create(data: SignupDTO): Promise<User> {
+        const row = await prisma.usuarios.create({
+            data: {
+                ...data,
+                password_hash: data.password,
+                telefono: data.telefono ?? null,
+                id_role: data.roleId
+            },
+            include: { role: true }
+        });
+
+        return this.map(row);
     }
 
-    async update(id: UserId, data: UpdateUserDTO): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async updateLastAccess(id: UserId): Promise<void> {
+        await prisma.usuarios.update({
+            where: { id_usuario: Number(id) },
+            data: { fecha_ultimo_acceso: new Date() }
+        });
     }
 
-    async patch(id: UserId, data: Partial<UpdateUserDTO>): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    private map(row: PrismaUsuarioWithRole): User {
+        return {
+            id:                toUserId(row.id_usuario),
+            nombre:            row.nombre,
+            apellido:          row.apellido,
+            email:             row.email,
+            telefono:          row.telefono,
+            activo:            row.activo,
+            role:              row.role.nombre.toLowerCase() as UserRole,
+            fechaCreacion:     row.fecha_creacion,
+            fechaUltimoAcceso: row.fecha_ultimo_acceso,
+        };
     }
 
-    async remove(id: UserId): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    private mapWithHash(row: PrismaUsuarioWithRole): UserWithHash {
+        return {
+            ...this.map(row),
+            passwordHash: row.password_hash
+        };
     }
-
 }
