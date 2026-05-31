@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Lead } from '@leadfinder/shared/test';
+import type { Lead, Representante } from '@leadfinder/shared/types/leads';
 import { useAuth } from '../../../context/AuthContext';
 import { leadsService } from '../services/leadsService';
-import { MOCK_REPRESENTANTES } from '../data/mockRepresentantes';
+import { representantesService } from '../services/representantesService';
 import { StatusBadge } from '../components/StatusBadge';
 import { ScoreBadge } from '../components/ScoreBadge';
 import { StatusTabs } from '../components/StatusTabs';
@@ -18,14 +18,10 @@ const TH: React.CSSProperties = {
   color: '#3d5a73', whiteSpace: 'nowrap',
 };
 
-const RepresentanteCell = ({ representanteId }: { representanteId: string | null }) => {
-  const rep = representanteId ? MOCK_REPRESENTANTES.find((r) => r.id === representanteId) : null;
+const RepresentanteCell = ({ representanteId, representantes }: { representanteId: string | null; representantes: Representante[] }) => {
+  const rep = representanteId ? representantes.find((r) => r.id === representanteId) : null;
   if (!rep) {
-    return (
-      <span style={{ color: '#3d5a73', fontStyle: 'italic', fontSize: '12px' }}>
-        Sin asignar
-      </span>
-    );
+    return <span style={{ color: '#3d5a73', fontStyle: 'italic', fontSize: '12px' }}>Sin asignar</span>;
   }
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -47,6 +43,7 @@ export const LeadsView = () => {
   const navigate = useNavigate();
 
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [representantes, setRepresentantes] = useState<Representante[]>([]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('todos');
   const [zonaFilter, setZonaFilter] = useState('');
@@ -54,23 +51,18 @@ export const LeadsView = () => {
   const [assignTarget, setAssignTarget] = useState<Lead | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Reload leads cuando cambia el usuario.
-  // Si es representante, sólo ve los leads asignados a él (matching por user.id).
   useEffect(() => {
     let cancelled = false;
     setIsLoading(true);
-    leadsService.getAll().then((data) => {
+    Promise.all([leadsService.getAll(), representantesService.getAll()]).then(([data, reps]) => {
       if (cancelled) return;
-      const filtered = user?.role === 'representante'
-        ? data.filter((l) => l.representanteId === user.id)
-        : data;
-      setLeads(filtered);
+      setLeads(data);
+      setRepresentantes(reps);
       setIsLoading(false);
     });
     return () => { cancelled = true; };
   }, [user]);
 
-  // Aplicar filtros locales sobre el dataset (búsqueda + status + zona + actividad)
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
     return leads.filter((l) => {
@@ -90,31 +82,16 @@ export const LeadsView = () => {
     setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
   };
 
-  const canAssign = user?.role === 'supervisor';
+  const canAssign = user?.role === 'director' || user?.role === 'supervisor';
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
-      {/* Subtítulo + acciones */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
         <p style={{ fontSize: '12px', color: '#7a9bbf', margin: 0 }}>
           {filtered.length} {filtered.length === 1 ? 'lead' : 'leads'} en total
         </p>
-        <button style={{
-          background: 'rgba(26,170,110,0.15)',
-          border: '1px solid rgba(26,170,110,0.4)',
-          color: '#1aaa6e',
-          borderRadius: '8px',
-          padding: '6px 14px',
-          fontSize: '12px',
-          fontWeight: 500,
-          cursor: 'pointer',
-          fontFamily: "'Inter', system-ui, sans-serif",
-        }}>
-          + Nuevo Lead
-        </button>
       </div>
 
-      {/* Búsqueda + filtros + tabs */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', marginBottom: '14px' }}>
         <input
           type="text"
@@ -122,15 +99,11 @@ export const LeadsView = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={{
-            flex: '1 1 260px',
-            minWidth: '220px',
+            flex: '1 1 260px', minWidth: '220px',
             background: 'rgba(255,255,255,0.05)',
             border: '1px solid rgba(255,255,255,0.07)',
-            borderRadius: '9px',
-            color: '#f0f4f8',
-            padding: '9px 13px',
-            fontSize: '13px',
-            outline: 'none',
+            borderRadius: '9px', color: '#f0f4f8',
+            padding: '9px 13px', fontSize: '13px', outline: 'none',
             fontFamily: "'Inter', system-ui, sans-serif",
           }}
           onFocus={(e) => { e.target.style.borderColor = '#1aaa6e'; e.target.style.background = 'rgba(26,170,110,0.06)'; }}
@@ -145,7 +118,6 @@ export const LeadsView = () => {
         <StatusTabs value={statusFilter} onChange={setStatusFilter} />
       </div>
 
-      {/* Tabla */}
       <div style={{ background: '#172840', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -184,7 +156,9 @@ export const LeadsView = () => {
                   </td>
                   <td style={{ padding: '12px 16px', fontSize: '12px', color: '#7a9bbf', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{lead.cuit}</td>
                   <td style={{ padding: '12px 16px', fontSize: '12px', color: '#7a9bbf', whiteSpace: 'nowrap' }}>{lead.zona}</td>
-                  <td style={{ padding: '12px 16px' }}><RepresentanteCell representanteId={lead.representanteId} /></td>
+                  <td style={{ padding: '12px 16px' }}>
+                    <RepresentanteCell representanteId={lead.representanteId} representantes={representantes} />
+                  </td>
                   <td style={{ padding: '12px 16px' }}><StatusBadge status={lead.status} /></td>
                   <td style={{ padding: '12px 16px', textAlign: 'center' }}><ScoreBadge score={lead.score} /></td>
                   {canAssign && (
@@ -194,12 +168,9 @@ export const LeadsView = () => {
                         style={{
                           background: 'transparent',
                           border: '1px solid rgba(255,255,255,0.07)',
-                          borderRadius: '6px',
-                          color: '#7a9bbf',
-                          padding: '4px 10px',
-                          fontSize: '11px',
-                          cursor: 'pointer',
-                          whiteSpace: 'nowrap',
+                          borderRadius: '6px', color: '#7a9bbf',
+                          padding: '4px 10px', fontSize: '11px',
+                          cursor: 'pointer', whiteSpace: 'nowrap',
                           fontFamily: "'Inter', system-ui, sans-serif",
                         }}
                         onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#1aaa6e'; e.currentTarget.style.color = '#1aaa6e'; }}
