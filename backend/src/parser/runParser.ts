@@ -1,18 +1,16 @@
-import { fileURLToPath } from "url";
 import path from "path";
-import * as dotenv from "dotenv";
 import { PrismaClient } from "../../generated/prisma/index.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { parseSenasa } from "./parseSenasa";
 import { parseArca } from "./parseArca";
 import { parseBcra } from "./parseBcra";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+process.loadEnvFile();
 
-dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+const { DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = process.env;
+const connectionString = `postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}`;
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 const BATCH_SIZE = 500;
