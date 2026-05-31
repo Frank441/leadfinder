@@ -18,7 +18,7 @@ export interface UserWithHash extends User {
 export type PrismaUsuarioWithRole = Prisma.usuariosGetPayload<{ include: { role: true } }>;
 
 export type PrismaCuitData = Prisma.empresasGetPayload<{
-    include: { senasa: true; arca: true };
+    include: { senasa: true; arca: true; bcra: true };
 }>;
 
 export interface IAuthRepository {

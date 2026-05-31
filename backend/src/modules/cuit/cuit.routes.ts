@@ -10,6 +10,7 @@ const controller = new CuitController(service);
 
 const cuitRouter = Router();
 
-cuitRouter.get("/:cuit/fiscal", authenticate, controller.getFiscal);
+cuitRouter.get("/:cuit/fiscal",      authenticate, controller.getFiscal);
+cuitRouter.get("/:cuit/crediticio",  authenticate, controller.getCrediticio);
 
 export default cuitRouter;
