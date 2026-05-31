@@ -102,7 +102,7 @@ model empresas {
 // ─────────────────────────────────────────────────────────────
 model leads {
   id_lead               Int       @id @default(autoincrement())
-  id_empresa            Int
+  id_empresa            Int       @unique
   id_estado             Int
   score_viabilidad      Decimal?  @db.Decimal(5, 2)
   situacion_crediticia  Int?
@@ -161,7 +161,7 @@ model visitas {
 model senasa {
   id_senasa            Int       @id @default(autoincrement())
   id_empresa           Int
-  renspa               String?   @db.VarChar(50)
+  renspa               String    @unique @db.VarChar(50)
   titular              String?   @db.VarChar(200)
   tipo_explotacion     String?   @db.VarChar(5)
   superficie           Decimal?  @db.Decimal(10, 2)
@@ -179,7 +179,7 @@ model senasa {
 model arca {
   id_arca          Int       @id @default(autoincrement())
   id_empresa       Int
-  cuit             String?   @db.VarChar(20)
+  cuit             String    @unique @db.VarChar(20)
   denominacion     String?   @db.VarChar(200)
   imp_ganancias    String?   @db.VarChar(10)
   imp_iva          String?   @db.VarChar(10)
@@ -197,7 +197,7 @@ model arca {
 model bcra {
   id_bcra              Int       @id @default(autoincrement())
   id_empresa           Int
-  cuit                 String?   @db.VarChar(20)
+  cuit                 String    @unique @db.VarChar(20)
   denominacion         String?   @db.VarChar(200)
   periodo              String?   @db.VarChar(10)
   entidad              String?   @db.VarChar(200)
