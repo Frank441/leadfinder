@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate, matchPath } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import type { UserRole } from '@leadfinder/shared/test';
+import type { UserRole } from '@leadfinder/shared/types/user';
 
 interface NavItem {
   path: string;
@@ -145,11 +145,11 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: '11px', fontWeight: 600, flexShrink: 0,
             }}>
-              {(user?.name ?? 'U').split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
+              {[user?.nombre, user?.apellido].filter(Boolean).map((n) => n![0]).join('').slice(0, 2).toUpperCase() || 'U'}
             </div>
             <div style={{ minWidth: 0, flex: 1 }}>
               <div style={{ fontSize: '12px', fontWeight: 500, color: '#f0f4f8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {user?.name ?? 'Usuario'}
+                {user ? `${user.nombre} ${user.apellido}` : 'Usuario'}
               </div>
               <div style={{ fontSize: '10px', color: '#7a9bbf', marginTop: '1px' }}>
                 {user?.role ? ROLE_LABEL[user.role] : ''}

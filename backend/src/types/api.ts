@@ -1,4 +1,6 @@
+import type { User } from "@leadfinder/shared/types/user";
 import type { RequestHandler } from "express";
+import type { Prisma } from "../../generated/prisma";
 
 export interface IRepository<T, I> {
     findById(id: I): Promise<T | null>;
@@ -7,6 +9,16 @@ export interface IRepository<T, I> {
     update(id: I, data: unknown): Promise<boolean>;
     patch(id: I, data: Partial<unknown>): Promise<boolean>;
     remove(id: I): Promise<boolean>;
+}
+
+export interface UserWithHash extends User {
+    passwordHash: string;
+}
+
+export type PrismaUsuarioWithRole = Prisma.usuariosGetPayload<{ include: { role: true } }>;
+
+export interface IAuthRepository {
+    findByEmail(email: string): Promise<UserWithHash | null>
 }
 
 

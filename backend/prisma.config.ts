@@ -1,8 +1,8 @@
-import * as dotenv from "dotenv";
-import path from "path";
 import { defineConfig } from "prisma/config";
 
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+process.loadEnvFile();
+
+const { DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = process.env;
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -10,6 +10,6 @@ export default defineConfig({
     seed: "tsx prisma/seed/seed.ts",
   },
   datasource: {
-    url: process.env["DATABASE_URL"]!,
+    url: `postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}`,
   },
 });

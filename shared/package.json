@@ -2,9 +2,9 @@
   "name": "@leadfinder/shared",
   "type": "module",
   "exports": {
-    "./test": {
-      "import": "./dist/types/test.js",
-      "types": "./dist/types/test.d.ts"
+    "./types/*": {
+      "import": "./dist/types/*.js",
+      "types": "./dist/types/*.d.ts"
     }
   },
   "scripts": {

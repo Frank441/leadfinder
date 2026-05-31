@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import type { LoginCredentials } from '@leadfinder/shared/test';
+import type { LoginDTO } from '@leadfinder/shared/types/auth';
 
 interface LoginFormProps {
-  onSubmit: (credentials: LoginCredentials) => void;
+  onSubmit: (credentials: LoginDTO) => void;
   isLoading?: boolean;
   error?: string | null;
 }

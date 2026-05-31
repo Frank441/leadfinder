@@ -2,16 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { LoginForm } from '../components/LoginForm';
-import type { LoginCredentials, UserRole } from '@leadfinder/shared/test';
-
-// Los IDs deben coincidir con el ID del representante en mockRepresentantes.ts
-// para que el filtro "ver solo mis leads" funcione correctamente.
-// Cuando se conecte el backend, este id va a venir directamente del endpoint /auth/login.
-const MOCK_CREDENTIALS: Record<string, { role: UserRole; name: string; id: string }> = {
-  'director@colombo.com':      { role: 'director',      name: 'Valentín C.',   id: 'd1' },
-  'supervisor@colombo.com':    { role: 'supervisor',    name: 'Carlos Méndez', id: 's1' },
-  'representante@colombo.com': { role: 'representante', name: 'Ana Rodríguez', id: 'r2' },
-};
+import type { LoginDTO } from '@leadfinder/shared/types/auth';
+import { login as loginService } from '../services/authService';
 
 export const AuthView = () => {
   const { login } = useAuth();
@@ -19,21 +11,19 @@ export const AuthView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async ({ email, password }: LoginCredentials) => {
+  const handleLogin = async (credentials: LoginDTO) => {
     setIsLoading(true);
     setError(null);
 
-    await new Promise<void>((resolve) => setTimeout(resolve, 600));
-
-    const cred = MOCK_CREDENTIALS[email.toLowerCase()];
-    if (!cred || password !== '1234') {
-      setError('Credenciales inválidas. Verificá tu email y contraseña.');
+    try {
+      const { user, token } = await loginService(credentials);
+      login(user, token);
+      navigate(user.role === 'director' ? '/dashboard' : '/leads', { replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al iniciar sesión.');
+    } finally {
       setIsLoading(false);
-      return;
     }
-
-    login({ id: cred.id, email: email.toLowerCase(), name: cred.name, role: cred.role }, 'mock-token-123');
-    navigate(cred.role === 'director' ? '/dashboard' : '/leads', { replace: true });
   };
 
   return (
