@@ -1,4 +1,4 @@
-import type { LeadsFilters } from "@leadfinder/shared/types/leads";
+import type { LeadsFilters, Representante } from "@leadfinder/shared/types/leads";
 import type { UserRole, UserId } from "@leadfinder/shared/types/user";
 import type { PrismaLeadWithRelations, PrismaVisitaWithUser } from "@/types/api";
 import { LEAD_INCLUDE } from "@/types/api";
@@ -37,6 +37,49 @@ export class LeadsRepository {
         return prisma.leads.findUnique({
             where:   { id_lead: id },
             include: LEAD_INCLUDE,
+        });
+    }
+
+    async getRepresentantes(): Promise<Representante[]> {
+        const rows = await prisma.usuarios.findMany({
+            where: { activo: true, role: { nombre: "Representante" } },
+            include: { role: true },
+            orderBy: { nombre: "asc" },
+        });
+        return rows.map((r) => ({
+            id:       String(r.id_usuario),
+            name:     `${r.nombre} ${r.apellido}`,
+            email:    r.email,
+            initials: `${r.nombre[0]}${r.apellido[0]}`.toUpperCase(),
+        }));
+    }
+
+    async updateAsignado(
+        leadId: number,
+        representanteId: number | null,
+    ): Promise<PrismaLeadWithRelations> {
+        return prisma.leads.update({
+            where:   { id_lead: leadId },
+            data:    {
+                id_usuario_asignado: representanteId,
+                fecha_asignacion:    representanteId ? new Date() : null,
+            },
+            include: LEAD_INCLUDE,
+        });
+    }
+
+    async updateEstado(leadId: number, estadoId: number): Promise<PrismaLeadWithRelations> {
+        return prisma.leads.update({
+            where:   { id_lead: leadId },
+            data:    { id_estado: estadoId, fecha_ultima_actividad: new Date() },
+            include: LEAD_INCLUDE,
+        });
+    }
+
+    findEstadoByNombre(nombre: string): Promise<{ id_estado: number } | null> {
+        return prisma.estados_lead.findFirst({
+            where:  { nombre: { equals: nombre, mode: "insensitive" } },
+            select: { id_estado: true },
         });
     }
 

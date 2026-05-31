@@ -1,4 +1,4 @@
-import type { Lead, VisitNote, LeadsFilters } from "@leadfinder/shared/types/leads";
+import type { Lead, VisitNote, LeadsFilters, Representante } from "@leadfinder/shared/types/leads";
 import type { UserRole, UserId } from "@leadfinder/shared/types/user";
 import type { LeadsRepository } from "./leads.repository";
 import { NotFoundError } from "@/errors/errors";
@@ -16,6 +16,29 @@ export class LeadsService {
         const lead = await this.repository.findById(id);
         if (!lead) throw new NotFoundError(`Lead ${id} no encontrado.`);
         return mapLead(lead);
+    }
+
+    getRepresentantes(): Promise<Representante[]> {
+        return this.repository.getRepresentantes();
+    }
+
+    async assign(leadId: number, representanteId: string | null): Promise<Lead> {
+        const lead = await this.repository.findById(leadId);
+        if (!lead) throw new NotFoundError(`Lead ${leadId} no encontrado.`);
+        const updated = await this.repository.updateAsignado(
+            leadId,
+            representanteId ? Number(representanteId) : null,
+        );
+        return mapLead(updated);
+    }
+
+    async updateStatus(leadId: number, status: string): Promise<Lead> {
+        const lead = await this.repository.findById(leadId);
+        if (!lead) throw new NotFoundError(`Lead ${leadId} no encontrado.`);
+        const estado = await this.repository.findEstadoByNombre(status);
+        if (!estado) throw new NotFoundError(`Estado "${status}" no encontrado.`);
+        const updated = await this.repository.updateEstado(leadId, estado.id_estado);
+        return mapLead(updated);
     }
 
     async createNote(leadId: number, userId: number, content: string): Promise<VisitNote> {
