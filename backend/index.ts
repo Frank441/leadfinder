@@ -1,9 +1,11 @@
-import cors from "cors";
+process.loadEnvFile()
+
 import authRouter from "@/modules/auth/auth.routes";
+import cuitRouter from "@/modules/cuit/cuit.routes";
 import estadosRouter from "@/modules/estados/estados.routes";
-import cuitRouter    from "@/modules/cuit/cuit.routes";
-import leadsRouter   from "@/modules/leads/leads.routes";
-import express, { type Request, type Response } from "express";
+import leadsRouter from "@/modules/leads/leads.routes";
+import cors from "cors";
+import express from "express";
 
 for (const key of ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_PORT', 'JWT_SECRET']) {
     if (!process.env[key]) throw new Error(`${key} is not set in .env`);
