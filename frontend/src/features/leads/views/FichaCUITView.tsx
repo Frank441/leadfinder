@@ -3,7 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { Lead, LeadStatus } from '@leadfinder/shared/types/leads';
 import { useAuth } from '../../../context/AuthContext';
 import { leadsService } from '../services/leadsService';
-import { MOCK_REPRESENTANTES } from '../data/mockRepresentantes';
+import { representantesService } from '../services/representantesService';
+import type { Representante } from '@leadfinder/shared/types/leads';
 import { StatusBadge } from '../components/StatusBadge';
 import { StateChangeButtons } from '../components/StateChangeButtons';
 import { VisitNotesSection } from '../components/VisitNotesSection';
@@ -17,6 +18,7 @@ export const FichaCUITView = () => {
   const { user } = useAuth();
 
   const [lead, setLead] = useState<Lead | null>(null);
+  const [representantes, setRepresentantes] = useState<Representante[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -24,10 +26,11 @@ export const FichaCUITView = () => {
     if (!id) return;
     let cancelled = false;
     setIsLoading(true);
-    leadsService.getById(id).then((result) => {
+    Promise.all([leadsService.getById(id), representantesService.getAll()]).then(([result, reps]) => {
       if (cancelled) return;
       if (!result) setNotFound(true);
       else setLead(result);
+      setRepresentantes(reps);
       setIsLoading(false);
     });
     return () => { cancelled = true; };
@@ -72,7 +75,7 @@ export const FichaCUITView = () => {
     );
   }
 
-  const rep = lead.representanteId ? MOCK_REPRESENTANTES.find((r) => r.id === lead.representanteId) : null;
+  const rep = lead.representanteId ? representantes.find((r) => r.id === lead.representanteId) : null;
   const canEditStatus = user?.role === 'representante';
   const canAddNote    = user?.role === 'representante';
 

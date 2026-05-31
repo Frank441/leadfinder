@@ -1,4 +1,4 @@
-import type { LeadStatus } from '@leadfinder/shared/test';
+import type { LeadStatus } from '@leadfinder/shared/types/leads';
 import { STATUS_CONFIG } from './StatusBadge';
 
 interface StateChangeButtonsProps {

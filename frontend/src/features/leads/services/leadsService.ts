@@ -29,12 +29,17 @@ export const leadsService = {
         });
     },
 
-    // Pendiente de implementar en el back (próximos tickets)
     async assign(leadId: string, representanteId: string | null): Promise<Lead> {
-        throw new Error(`assign(${leadId}, ${representanteId}) no implementado aún.`);
+        return apiFetch<Lead>(`/api/v1/leads/${leadId}/asignar`, {
+            method: 'PUT',
+            body:   JSON.stringify({ representanteId }),
+        });
     },
 
     async updateStatus(leadId: string, status: LeadStatus): Promise<Lead> {
-        throw new Error(`updateStatus(${leadId}, ${status}) no implementado aún.`);
+        return apiFetch<Lead>(`/api/v1/leads/${leadId}/estado`, {
+            method: 'PUT',
+            body:   JSON.stringify({ status }),
+        });
     },
 };
