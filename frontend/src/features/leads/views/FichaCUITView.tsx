@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { Lead, LeadStatus } from '@leadfinder/shared/test';
+import type { Lead, LeadStatus } from '@leadfinder/shared/types/leads';
 import { useAuth } from '../../../context/AuthContext';
 import { leadsService } from '../services/leadsService';
 import { MOCK_REPRESENTANTES } from '../data/mockRepresentantes';
@@ -41,8 +41,7 @@ export const FichaCUITView = () => {
 
   const handleAddNote = async (content: string) => {
     if (!lead || !user) return;
-    await leadsService.addNote(lead.id, { userId: user.id, userName: user.name, content });
-    // Refetch para traer la lista actualizada
+    await leadsService.addNote(lead.id, content);
     const updated = await leadsService.getById(lead.id);
     if (updated) setLead(updated);
   };
