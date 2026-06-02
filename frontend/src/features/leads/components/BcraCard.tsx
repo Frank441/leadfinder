@@ -1,4 +1,4 @@
-import type { BcraData, BcraSituacion } from '@leadfinder/shared/test';
+import type { BcraData, BcraSituacion } from "@leadfinder/shared/types/leads";
 
 interface BcraCardProps {
   data: BcraData;

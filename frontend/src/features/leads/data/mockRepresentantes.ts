@@ -8,7 +8,7 @@ export const MOCK_REPRESENTANTES: Representante[] = [
 ];
 
 export const ZONAS = [
-  'Pampa Húmeda',
+  'Buenos Aires',
   'NOA',
   'NEA',
   'Patagonia',

@@ -42,7 +42,7 @@ export type BcraSituacion =
   | 'Sin datos';
 
 export interface BcraData {
-  situacion: BcraSituacion;
+  situacion: BcraSituacion; 
   chequesRechazados: number;
   deudasIncobrables: number;
   ultimaConsulta: string; // ISO datetime

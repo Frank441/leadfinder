@@ -4,6 +4,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { parseSenasa } from "./parseSenasa";
 import { parseArca } from "./parseArca";
 import { parseBcra } from "./parseBcra";
+import { loadProvincias } from "./loadProvinces.js";
 
 process.loadEnvFile();
 
@@ -67,7 +68,7 @@ async function loadData(
         senasa: senasaMap.get(bcra.cuit) ?? null,
         arca: arcaMap.get(bcra.cuit) ?? null,
         bcra,
-    }));
+    })).filter(c => c.senasa !== null);
 
     console.log(`\nCUITs consolidados: ${consolidados.length}`);
 
@@ -218,6 +219,7 @@ async function main() {
         path.resolve(bcraPath)
     );
 
+    await loadProvincias();
     await prisma.$disconnect();
 }
 

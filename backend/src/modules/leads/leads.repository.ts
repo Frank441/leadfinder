@@ -2,6 +2,7 @@ import type { LeadsFilters, Representante } from "@leadfinder/shared/types/leads
 import type { UserRole, UserId } from "@leadfinder/shared/types/user";
 import type { PrismaLeadWithRelations, PrismaVisitaWithUser } from "@/types/api";
 import { LEAD_INCLUDE } from "@/types/api";
+import { mapProvinciaToZona } from "@/utils/leadMappers";
 import prisma from "../../../prisma/client";
 
 export class LeadsRepository {
@@ -16,10 +17,14 @@ export class LeadsRepository {
         });
 
         return leads.filter((lead) => {
+            if (!lead.empresa.provincia?.trim()) return false;
             if (role === "representante" && lead.id_usuario_asignado !== Number(userId)) return false;
             if (filters.representanteId && String(lead.id_usuario_asignado) !== filters.representanteId) return false;
             if (filters.status && filters.status !== "todos" && lead.estado.nombre.toLowerCase() !== filters.status) return false;
-            if (filters.zona && lead.empresa.provincia?.toLowerCase() !== filters.zona.toLowerCase()) return false;
+            if (filters.zona) {
+                const leadZona = mapProvinciaToZona(lead.empresa.provincia ?? "");
+                if (leadZona.toLowerCase() !== filters.zona.toLowerCase()) return false;
+            }
             if (filters.actividad && !lead.empresa.actividad_principal?.toLowerCase().includes(filters.actividad.toLowerCase())) return false;
             if (filters.search) {
                 const q = filters.search.toLowerCase();

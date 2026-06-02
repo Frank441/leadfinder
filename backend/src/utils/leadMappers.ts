@@ -14,6 +14,36 @@ const BCRA_SITUACION: Record<number, BcraSituacion> = {
     6: "Riesgo alto",
 };
 
+export function mapProvinciaToZona(provincia: string): string {
+    const p = (provincia ?? "").toLowerCase().trim();
+    const MAP: Record<string, string> = {
+        "buenos aires": "Buenos Aires",
+        "córdoba": "Centro",
+        "santa fe": "Centro",
+        "entre ríos": "Centro",
+        "mendoza": "Cuyo",
+        "san juan": "Cuyo",
+        "san luis": "Cuyo",
+        "neuquén": "Patagonia",
+        "la pampa": "Patagonia",
+        "río negro": "Patagonia",
+        "chubut": "Patagonia",
+        "santa cruz": "Patagonia",
+        "tierra del fuego": "Patagonia",
+        "tucumán": "NOA",
+        "salta": "NOA",
+        "jujuy": "NOA",
+        "santiago del estero": "NOA",
+        "catamarca": "NOA",
+        "la rioja": "NOA",
+        "chaco": "NEA",
+        "corrientes": "NEA",
+        "formosa": "NEA",
+        "misiones": "NEA"
+    };
+    return MAP[p] ?? provincia ?? "";
+}
+
 export function mapSenasaData(empresa: PrismaCuitData): SenasaData {
     const s = empresa.senasa[0] ?? null;
     return {
@@ -70,7 +100,7 @@ export function mapLead(lead: PrismaLeadWithRelations): Lead {
         razonSocial:     lead.empresa.nombre_empresa,
         localidad:       lead.empresa.localidad ?? "",
         provincia:       lead.empresa.provincia ?? "",
-        zona:            lead.empresa.provincia ?? "",
+        zona:            mapProvinciaToZona(lead.empresa.provincia ?? ""),
         actividad:       lead.empresa.actividad_principal ?? "",
         status:          lead.estado.nombre.toLowerCase() as LeadStatus,
         score:           Number(lead.score_viabilidad ?? 0),
