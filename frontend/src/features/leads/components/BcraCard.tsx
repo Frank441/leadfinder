@@ -27,6 +27,7 @@ const formatDate = (iso: string) => new Date(iso).toLocaleDateString('es-AR', { 
 export const BcraCard = ({ data }: BcraCardProps) => {
   const c = SITUACION_COLOR[data.situacion];
   const icon = data.situacion === 'Normal' ? '✓' : data.situacion === 'Sin datos' ? '?' : '!';
+  const situacion = data.situacionNumero ? `${data.situacionNumero}` : 'Sin datos';  console.log(situacion);
 
   return (
     <div style={{
@@ -57,7 +58,7 @@ export const BcraCard = ({ data }: BcraCardProps) => {
         <div style={{ marginTop: '8px', fontSize: '13px', fontWeight: 600, color: c.text }}>
           {data.situacion}
         </div>
-        <div style={{ fontSize: '11px', color: '#7a9bbf', marginTop: '2px' }}>Situación crediticia</div>
+        <div style={{ fontSize: '11px', color: '#7a9bbf', marginTop: '2px' }}>Situación crediticia: {situacion}</div>
       </div>
 
       <Row label="Cheques rechazados" value={data.chequesRechazados === 0 ? 'Sin registros' : data.chequesRechazados} />

@@ -43,6 +43,7 @@ export type BcraSituacion =
 
 export interface BcraData {
   situacion: BcraSituacion; 
+  situacionNumero: number; 
   chequesRechazados: number;
   deudasIncobrables: number;
   ultimaConsulta: string; // ISO datetime

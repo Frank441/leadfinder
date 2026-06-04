@@ -76,6 +76,7 @@ export function mapBcraData(empresa: PrismaCuitData): BcraData {
         situacion:         b?.situacion_crediticia != null
                                ? (BCRA_SITUACION[b.situacion_crediticia] ?? "Sin datos")
                                : "Sin datos",
+        situacionNumero:   b?.situacion_crediticia ?? 0,
         chequesRechazados: 0,
         deudasIncobrables: 0,
         ultimaConsulta:    b?.fecha_consulta?.toISOString() ?? new Date().toISOString(),
