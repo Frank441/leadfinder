@@ -61,7 +61,6 @@ export interface Lead {
   score: number; // 0–100
   representanteId: string | null;
   superficieHa: number;
-  cabezas: number;
   lat: number;
   lng: number;
   senasa: SenasaData;

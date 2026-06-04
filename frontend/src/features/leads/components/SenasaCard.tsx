@@ -30,7 +30,6 @@ export const SenasaCard = ({ data }: SenasaCardProps) => {
         </span>
       </div>
       <Row label="Actividad"     value={data.actividad} />
-      <Row label="Cabezas"       value={`${data.cabezas.toLocaleString('es-AR')} cab.`} />
       <Row label="Superficie"    value={`${data.superficieHa.toLocaleString('es-AR')} ha`} />
       <Row label="Estado sanit." value={data.estadoSanitario} />
       <Row label="RENSPA"        value={data.renspaActivo ? 'Activo' : 'Inactivo'} />

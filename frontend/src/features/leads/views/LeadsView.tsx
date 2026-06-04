@@ -151,7 +151,7 @@ export const LeadsView = () => {
                   <td style={{ padding: '12px 16px' }}>
                     <div style={{ fontSize: '13px', color: '#f0f4f8', fontWeight: 500 }}>{lead.razonSocial}</div>
                     <div style={{ fontSize: '11px', color: '#7a9bbf', marginTop: '2px' }}>
-                      {lead.cabezas} cab. · {lead.superficieHa.toLocaleString('es-AR')} ha
+                      {lead.superficieHa.toLocaleString('es-AR')} ha
                     </div>
                   </td>
                   <td style={{ padding: '12px 16px', fontSize: '12px', color: '#7a9bbf', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{lead.cuit}</td>

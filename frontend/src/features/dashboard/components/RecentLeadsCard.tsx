@@ -38,7 +38,7 @@ export const RecentLeadsCard = ({ leads }: RecentLeadsCardProps) => {
                 {lead.razonSocial}
               </div>
               <div style={{ fontSize: '11px', color: '#7a9bbf', marginTop: '2px' }}>
-                {lead.localidad} · {lead.cabezas} cab.
+                {lead.localidad}
               </div>
             </div>
             <StatusBadge status={lead.status} />
