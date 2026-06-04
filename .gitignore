@@ -147,6 +147,3 @@ vite.config.ts.timestamp-*
 
 # Prisma
 generated/
-
-# Parser source files
-backend/data/
