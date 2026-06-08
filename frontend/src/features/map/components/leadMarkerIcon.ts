@@ -41,7 +41,9 @@ export const buildLeadIcon = (status: LeadStatus): L.DivIcon => {
 
   return L.divIcon({
     html,
-    className: 'lead-marker-icon', // limpia el background blanco por defecto
+    // Incluimos el estado en el className para que el cluster pueda
+    // contar cuantos marcadores hay de cada estado leyendolo de aca.
+    className: `lead-marker-icon lead-status-${status}`,
     iconSize: [26, 34],
     iconAnchor: [13, 34],
     popupAnchor: [0, -32],
