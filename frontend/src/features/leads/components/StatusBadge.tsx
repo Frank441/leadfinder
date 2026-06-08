@@ -1,4 +1,4 @@
-import type { LeadStatus } from '@leadfinder/shared/test';
+import type { LeadStatus } from '@leadfinder/shared/types/leads';
 
 export const STATUS_CONFIG: Record<LeadStatus, { label: string; dot: string; text: string; bg: string }> = {
   lead:      { label: 'Lead',      dot: '#e05252', text: '#ff7b7b', bg: 'rgba(224,82,82,0.13)' },

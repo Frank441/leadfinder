@@ -27,3 +27,28 @@ body {
 input::placeholder {
   color: #3d5a73;
 }
+
+/* Leaflet: limpia el background blanco por defecto que viene en divIcon */
+.lead-marker-icon,
+.lead-cluster-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Estilo del popup del mapa, alineado al dark theme */
+.leaflet-popup-content-wrapper {
+  background: #172840 !important;
+  color: #f0f4f8 !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.leaflet-popup-content {
+  margin: 12px 14px !important;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.leaflet-popup-tip {
+  background: #172840 !important;
+}
+.leaflet-container a.leaflet-popup-close-button {
+  color: #7a9bbf !important;
+}

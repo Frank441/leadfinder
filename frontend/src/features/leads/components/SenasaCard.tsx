@@ -1,4 +1,4 @@
-import type { SenasaData } from '@leadfinder/shared/test';
+import type { SenasaData } from '@leadfinder/shared/types/leads';
 
 interface SenasaCardProps {
   data: SenasaData;

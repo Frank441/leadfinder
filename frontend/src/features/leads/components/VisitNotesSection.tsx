@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { VisitNote } from '@leadfinder/shared/test';
+import type { VisitNote } from '@leadfinder/shared/types/leads';
 
 interface VisitNotesSectionProps {
   notes: VisitNote[];

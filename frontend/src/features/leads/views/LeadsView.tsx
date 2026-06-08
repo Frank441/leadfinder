@@ -10,6 +10,7 @@ import { StatusTabs } from '../components/StatusTabs';
 import type { StatusFilter } from '../components/StatusTabs';
 import { LeadsFilters } from '../components/LeadsFilters';
 import { AssignLeadModal } from '../components/AssignLeadModal';
+import { Pagination } from '../components/Pagination';
 
 const TH: React.CSSProperties = {
   padding: '11px 16px', textAlign: 'left',
@@ -17,6 +18,8 @@ const TH: React.CSSProperties = {
   letterSpacing: '0.06em', textTransform: 'uppercase',
   color: '#3d5a73', whiteSpace: 'nowrap',
 };
+
+const ITEMS_PER_PAGE = 20;
 
 const RepresentanteCell = ({ representanteId, representantes }: { representanteId: string | null; representantes: Representante[] }) => {
   const rep = representanteId ? representantes.find((r) => r.id === representanteId) : null;
@@ -51,6 +54,10 @@ export const LeadsView = () => {
   const [assignTarget, setAssignTarget] = useState<Lead | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Paginacion client-side: cargamos todos los leads y mostramos de a 20.
+  // Cuando el backend soporte ?page=X&limit=Y, esto pasa a server-side.
+  const [page, setPage] = useState(1);
+
   useEffect(() => {
     let cancelled = false;
     setIsLoading(true);
@@ -78,6 +85,22 @@ export const LeadsView = () => {
     });
   }, [leads, search, statusFilter, zonaFilter, actividadFilter]);
 
+  // Reset a pagina 1 cuando cambian los filtros (sino podrias quedar en una pagina vacia)
+  useEffect(() => {
+    setPage(1);
+  }, [search, statusFilter, zonaFilter, actividadFilter]);
+
+  // Slice de la pagina actual
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  const paginatedLeads = useMemo(() => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    return filtered.slice(start, start + ITEMS_PER_PAGE);
+  }, [filtered, page]);
+
+  // Rango "X-Y" mostrado en el contador
+  const rangeStart = filtered.length === 0 ? 0 : (page - 1) * ITEMS_PER_PAGE + 1;
+  const rangeEnd   = Math.min(page * ITEMS_PER_PAGE, filtered.length);
+
   const handleAssigned = (updated: Lead) => {
     setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
   };
@@ -88,7 +111,11 @@ export const LeadsView = () => {
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
         <p style={{ fontSize: '12px', color: '#7a9bbf', margin: 0 }}>
-          {filtered.length} {filtered.length === 1 ? 'lead' : 'leads'} en total
+          {isLoading
+            ? 'Cargando leads...'
+            : filtered.length === 0
+              ? '0 leads'
+              : `Mostrando ${rangeStart}–${rangeEnd} de ${filtered.length.toLocaleString('es-AR')} leads`}
         </p>
       </div>
 
@@ -134,15 +161,15 @@ export const LeadsView = () => {
           <tbody>
             {isLoading ? (
               <tr><td colSpan={canAssign ? 7 : 6} style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px' }}>Cargando...</td></tr>
-            ) : filtered.length === 0 ? (
+            ) : paginatedLeads.length === 0 ? (
               <tr><td colSpan={canAssign ? 7 : 6} style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px' }}>No se encontraron leads con los filtros aplicados</td></tr>
             ) : (
-              filtered.map((lead, idx) => (
+              paginatedLeads.map((lead, idx) => (
                 <tr
                   key={lead.id}
                   onClick={() => navigate(`/leads/${lead.id}`)}
                   style={{
-                    borderBottom: idx < filtered.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                    borderBottom: idx < paginatedLeads.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
                     cursor: 'pointer',
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
@@ -186,6 +213,8 @@ export const LeadsView = () => {
           </tbody>
         </table>
       </div>
+
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
 
       {assignTarget && (
         <AssignLeadModal

@@ -76,8 +76,11 @@ export const FichaCUITView = () => {
   }
 
   const rep = lead.representanteId ? representantes.find((r) => r.id === lead.representanteId) : null;
-  const canEditStatus = user?.role === 'representante';
-  const canAddNote    = user?.role === 'representante';
+
+  // Permisos por rol (US11 + US14):
+  // - Notas: solo el representante deja constancia de visitas.
+  // - Cambio de estado: la habilitacion fina vive dentro de StateChangeButtons.
+  const canAddNote = user?.role === 'representante';
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
@@ -152,9 +155,13 @@ export const FichaCUITView = () => {
         </div>
       </div>
 
-      {/* Cambio de estado (US11) */}
+      {/* Cambio de estado (US11 + US14) */}
       <div style={{ marginBottom: '18px' }}>
-        <StateChangeButtons current={lead.status} onChange={handleStatusChange} disabled={!canEditStatus} />
+        <StateChangeButtons
+          current={lead.status}
+          onChange={handleStatusChange}
+          userRole={user?.role}
+        />
       </div>
 
       {/* Cards externas (US13b/c/d - shell visual) */}

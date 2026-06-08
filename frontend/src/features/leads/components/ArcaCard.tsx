@@ -1,4 +1,4 @@
-import type { ArcaData } from '@leadfinder/shared/test';
+import type { ArcaData } from '@leadfinder/shared/types/leads';
 
 interface ArcaCardProps {
   data: ArcaData;

@@ -1,4 +1,4 @@
-import type { Representante } from '@leadfinder/shared/test';
+import type { Representante } from '@leadfinder/shared/types/leads';
 
 export const MOCK_REPRESENTANTES: Representante[] = [
   { id: 'r1', name: 'Carlos Méndez',   email: 'carlos@colombo.com', initials: 'CM' },
