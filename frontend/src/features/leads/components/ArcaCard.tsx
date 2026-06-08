@@ -6,7 +6,7 @@ interface ArcaCardProps {
 
 const Row = ({ label, value }: { label: string; value: string }) => (
   <div style={{ marginBottom: '10px' }}>
-    <div style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.04em', color: '#3d5a73', textTransform: 'uppercase' }}>
+    <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.04em', color: '#a8bdd4', textTransform: 'uppercase' }}>
       {label}
     </div>
     <div style={{ fontSize: '13px', fontWeight: 600, color: '#f0f4f8', marginTop: '2px' }}>

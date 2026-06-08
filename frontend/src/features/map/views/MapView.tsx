@@ -91,7 +91,7 @@ export const MapView = () => {
         <p style={{ fontSize: '12px', color: '#7a9bbf', margin: 0 }}>
           {isLoading
             ? 'Cargando leads...'
-            : `${visibleLeads.length} ${visibleLeads.length === 1 ? 'lead' : 'leads'} con geolocalizacion`}
+            : `${visibleLeads.length} ${visibleLeads.length === 1 ? 'lead ubicado' : 'leads ubicados'} en el mapa`}
         </p>
 
         {isSupervisor && (

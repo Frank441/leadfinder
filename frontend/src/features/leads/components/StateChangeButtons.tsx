@@ -48,8 +48,8 @@ export const StateChangeButtons = ({ current, onChange, userRole }: StateChangeB
       padding: '18px 20px',
     }}>
       <div style={{
-        fontSize: '10px', fontWeight: 600, letterSpacing: '0.06em',
-        textTransform: 'uppercase', color: '#3d5a73',
+        fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em',
+        textTransform: 'uppercase', color: '#a8bdd4',
         marginBottom: '14px',
       }}>
         Cambio de estado

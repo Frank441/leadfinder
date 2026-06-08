@@ -114,7 +114,7 @@ export const FichaCUITView = () => {
         flexWrap: 'wrap',
       }}>
         <div style={{ flex: 1, minWidth: '260px' }}>
-          <div style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.06em', color: '#3d5a73', textTransform: 'uppercase', marginBottom: '6px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', color: '#a8bdd4', textTransform: 'uppercase', marginBottom: '6px' }}>
             CUIT {lead.cuit}
           </div>
           <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#f0f4f8', margin: '0 0 12px 0' }}>

@@ -15,8 +15,8 @@ export const LeadMarkerPopup = ({ lead }: LeadMarkerPopupProps) => {
 
   return (
     <div style={{ minWidth: '200px', maxWidth: '260px' }}>
-      <div style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.06em',
-                    color: '#3d5a73', textTransform: 'uppercase', marginBottom: '4px' }}>
+      <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em',
+                    color: '#a8bdd4', textTransform: 'uppercase', marginBottom: '4px' }}>
         CUIT {lead.cuit}
       </div>
       <div style={{ fontSize: '14px', fontWeight: 600, color: '#f0f4f8', marginBottom: '8px' }}>

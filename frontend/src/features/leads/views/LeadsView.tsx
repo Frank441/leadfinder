@@ -14,9 +14,9 @@ import { Pagination } from '../components/Pagination';
 
 const TH: React.CSSProperties = {
   padding: '11px 16px', textAlign: 'left',
-  fontSize: '10px', fontWeight: 600,
+  fontSize: '11px', fontWeight: 600,
   letterSpacing: '0.06em', textTransform: 'uppercase',
-  color: '#3d5a73', whiteSpace: 'nowrap',
+  color: '#a8bdd4', whiteSpace: 'nowrap',
 };
 
 const ITEMS_PER_PAGE = 20;
