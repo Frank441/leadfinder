@@ -44,11 +44,20 @@ export function mapProvinciaToZona(provincia: string): string {
     return MAP[p] ?? provincia ?? "";
 }
 
+export function mapActividad(actividad: string): string {
+    const a = (actividad ?? "").toLowerCase().trim();
+    const MAP: Record<string, string> = {
+        "g": "Ganadería",
+        "a": "Agricultura",
+        "m": "Mixto",
+    };
+    return MAP[a] ?? actividad ?? "";
+}
+
 export function mapSenasaData(empresa: PrismaCuitData): SenasaData {
     const s = empresa.senasa[0] ?? null;
     return {
-        actividad:       empresa.actividad_principal ?? s?.tipo_explotacion ?? "N/A",
-        cabezas:         0,
+        actividad:       mapActividad(s?.tipo_explotacion ?? "N/A"),
         superficieHa:    Number(s?.superficie ?? empresa.superficie ?? 0),
         estadoSanitario: s?.fecha_baja ? "Inactivo" : "Activo",
         renspaActivo:    !s?.fecha_baja,
@@ -102,12 +111,11 @@ export function mapLead(lead: PrismaLeadWithRelations): Lead {
         localidad:       lead.empresa.localidad ?? "",
         provincia:       lead.empresa.provincia ?? "",
         zona:            mapProvinciaToZona(lead.empresa.provincia ?? ""),
-        actividad:       lead.empresa.actividad_principal ?? "",
+        actividad:       mapActividad(lead.empresa.tipo_explotacion ?? ""),
         status:          lead.estado.nombre.toLowerCase() as LeadStatus,
         score:           Number(lead.score_viabilidad ?? 0),
         representanteId: lead.id_usuario_asignado ? String(lead.id_usuario_asignado) : null,
         superficieHa:    Number(lead.empresa.superficie ?? 0),
-        cabezas:         0,
         lat:             Number(lead.empresa.latitud ?? 0),
         lng:             Number(lead.empresa.longitud ?? 0),
         senasa:          mapSenasaData(lead.empresa),
