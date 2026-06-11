@@ -35,10 +35,11 @@ export interface ArcaData {
 }
 
 // Datos provenientes de BCRA (US13d)
-export type BcraSituacion = 
-  | 'Normal' 
-  | 'Riesgo bajo' 
-  | 'Riesgo alto' 
+export type BcraSituacion =
+  | 'Normal'
+  | 'Riesgo bajo'
+  | 'Riesgo medio'
+  | 'Riesgo alto'
   | 'Sin datos';
 
 export interface BcraData {
@@ -46,7 +47,7 @@ export interface BcraData {
   situacionNumero: number; 
   chequesRechazados: number;
   deudasIncobrables: number;
-  ultimaConsulta: string; // ISO datetime
+  ultimaConsulta: string | null; // ISO datetime; null si no hay consulta registrada
 }
 
 export interface Lead {

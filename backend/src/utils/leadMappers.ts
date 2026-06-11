@@ -8,7 +8,7 @@ import type { PrismaCuitData, PrismaLeadWithRelations, PrismaVisitaWithUser } fr
 const BCRA_SITUACION: Record<number, BcraSituacion> = {
     1: "Normal",
     2: "Riesgo bajo",
-    3: "Riesgo alto",
+    3: "Riesgo medio",
     4: "Riesgo alto",
     5: "Riesgo alto",
     6: "Riesgo alto",
@@ -79,7 +79,7 @@ export function mapBcraData(empresa: PrismaCuitData): BcraData {
         situacionNumero:   b?.situacion_crediticia ?? 0,
         chequesRechazados: 0,
         deudasIncobrables: 0,
-        ultimaConsulta:    b?.fecha_consulta?.toISOString() ?? new Date().toISOString(),
+        ultimaConsulta:    b?.fecha_consulta?.toISOString() ?? null,
     };
 }
 

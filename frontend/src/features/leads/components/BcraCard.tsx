@@ -7,6 +7,7 @@ interface BcraCardProps {
 const SITUACION_COLOR: Record<BcraSituacion, { ring: string; text: string; bg: string }> = {
   'Normal':       { ring: '#1aaa6e', text: '#2ecc8f', bg: 'rgba(26,170,110,0.13)' },
   'Riesgo bajo':  { ring: '#e09a30', text: '#ffba55', bg: 'rgba(224,154,48,0.13)' },
+  'Riesgo medio': { ring: '#e0742e', text: '#ff9a52', bg: 'rgba(224,116,46,0.13)' },
   'Riesgo alto':  { ring: '#e05252', text: '#ff7b7b', bg: 'rgba(224,82,82,0.13)' },
   'Sin datos':    { ring: '#3d5a73', text: '#7a9bbf', bg: 'rgba(122,155,191,0.08)' },
 };
@@ -22,12 +23,13 @@ const Row = ({ label, value }: { label: string; value: string | number }) => (
   </div>
 );
 
-const formatDate = (iso: string) => new Date(iso).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const formatDate = (iso: string | null) =>
+  iso ? new Date(iso).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Sin datos';
 
 export const BcraCard = ({ data }: BcraCardProps) => {
   const c = SITUACION_COLOR[data.situacion];
   const icon = data.situacion === 'Normal' ? '✓' : data.situacion === 'Sin datos' ? '?' : '!';
-  const situacion = data.situacionNumero ? `${data.situacionNumero}` : 'Sin datos';  console.log(situacion);
+  const situacion = data.situacionNumero ? `${data.situacionNumero}` : 'Sin datos';
 
   return (
     <div style={{
