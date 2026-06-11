@@ -19,7 +19,6 @@ export interface VisitNote {
 // Datos provenientes de SENASA (US13b)
 export interface SenasaData {
   actividad: string;
-  cabezas: number;
   superficieHa: number;
   estadoSanitario: string;
   renspaActivo: boolean;

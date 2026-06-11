@@ -17,10 +17,7 @@ export const ZONAS = [
 ] as const;
 
 export const ACTIVIDADES = [
-  'Cría bovina',
-  'Engorde a corral',
-  'Cría y engorde',
-  'Ganadería mixta',
-  'Agricultura y ganadería',
-  'Cría extensiva',
+  'Ganadería',
+  'Agricultura',
+  'Mixta'
 ] as const;
