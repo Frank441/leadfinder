@@ -53,17 +53,9 @@ export const AuthView = () => {
         padding: '36px 40px',
       }}>
         {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
-          <div style={{
-            width: '36px', height: '36px',
-            background: '#1aaa6e',
-            borderRadius: '10px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-          }}>
-            <span style={{ color: '#fff', fontSize: '13px', fontWeight: 700, letterSpacing: '-0.5px' }}>LF</span>
-          </div>
-          <span style={{ color: '#f0f4f8', fontSize: '15px', fontWeight: 600 }}>Lead Finder</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '28px' }}>
+          <img src="/logo.png" alt="Lead Finder" style={{ width: '44px', height: '44px', objectFit: 'contain', flexShrink: 0, display: 'block' }} />
+          <span style={{ color: '#f0f4f8', fontSize: '24px', fontWeight: 700 }}>Lead Finder</span>
         </div>
 
         <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#f0f4f8', margin: '0 0 6px 0' }}>

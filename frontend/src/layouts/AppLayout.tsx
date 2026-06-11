@@ -106,9 +106,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
         {/* Brand */}
         <div style={{ padding: '18px 16px', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           <Link to={user?.role === 'director' ? '/dashboard' : '/leads'} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-            <div style={{ width: '32px', height: '32px', background: '#1aaa6e', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <span style={{ color: '#fff', fontSize: '12px', fontWeight: 700 }}>LF</span>
-            </div>
+            <img src="/logo.png" alt="Lead Finder" style={{ width: '36px', height: '36px', objectFit: 'contain', flexShrink: 0, display: 'block' }} />
             <span style={{ fontSize: '13px', fontWeight: 600, color: '#f0f4f8' }}>Lead Finder</span>
           </Link>
         </div>
