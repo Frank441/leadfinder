@@ -49,7 +49,7 @@ export function mapActividad(actividad: string): string {
     const MAP: Record<string, string> = {
         "g": "Ganadería",
         "a": "Agricultura",
-        "m": "Mixto",
+        "m": "Mixta",
     };
     return MAP[a] ?? actividad ?? "";
 }
