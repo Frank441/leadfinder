@@ -105,7 +105,7 @@ export const LeadsView = () => {
     setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
   };
 
-  const canAssign = user?.role === 'director' || user?.role === 'supervisor';
+  const canAssign = user?.role === 'supervisor';
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
