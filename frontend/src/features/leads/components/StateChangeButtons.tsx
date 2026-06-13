@@ -28,21 +28,15 @@ const ORDER: LeadStatus[] = [
  *
  * - Director: solo lectura (no es un rol operativo de cambio de estado).
  */
-const canChangeTo = (target: LeadStatus, current: LeadStatus, role: UserRole | undefined): boolean => {
-  if (!role) return false;
-  if (target === current) return false; // ya esta en ese estado
+const canChangeTo = (
+  target: LeadStatus,
+  current: LeadStatus,
+  role: UserRole | undefined
+): boolean => {
+  if (role !== ROLES.representante) return false;
+  if (target === current) return false;
+  if (current === LEAD_STATUSES.cliente || target === LEAD_STATUSES.cliente) return false;
 
-  if (role === ROLES.director) return false;
-
-  if (role === ROLES.representante) {
-    // No puede cambiar leads ya convertidos
-    if (current === 'cliente') return false;
-    // No puede convertir a cliente
-    if (target === 'cliente') return false;
-    return true;
-  }
-
-  // supervisor: puede mover libremente
   return true;
 };
 
@@ -72,8 +66,11 @@ export const StateChangeButtons = ({ current, onChange, userRole }: StateChangeB
           let title: string | undefined;
           if (!enabled && !isActive) {
             if (userRole === ROLES.director) title = 'El director no puede cambiar el estado';
-            else if (userRole === ROLES.representante && status === 'cliente') title = 'Solo el supervisor puede convertir a Cliente';
-            else if (userRole === ROLES.representante && current === 'cliente') title = 'El lead ya fue convertido a Cliente';
+            if (userRole === ROLES.representante) {
+              title = current === LEAD_STATUSES.cliente
+                ? 'El lead ya fue convertido a Cliente'
+                : 'Solo el supervisor puede convertir a Cliente';
+            }
           }
 
           return (
