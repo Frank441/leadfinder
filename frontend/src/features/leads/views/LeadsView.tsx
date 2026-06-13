@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Lead, Representante } from '@leadfinder/shared/types/leads';
+import { ROLES } from "@leadfinder/shared/types/user";
 import { useAuth } from '../../../context/AuthContext';
 import { leadsService } from '../services/leadsService';
 import { representantesService } from '../services/representantesService';
@@ -105,7 +106,7 @@ export const LeadsView = () => {
     setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
   };
 
-  const canAssign = user?.role === 'supervisor';
+  const canAssign = user?.role === ROLES.supervisor;
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>

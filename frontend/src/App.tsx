@@ -6,6 +6,7 @@ import { LeadsView } from './features/leads/views/LeadsView';
 import { FichaCUITView } from './features/leads/views/FichaCUITView';
 import { DashboardView } from './features/dashboard/views/DashboardView';
 import { MapView } from './features/map/views/MapView';
+import { ROLES } from "@leadfinder/shared/types/user";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute allowedRoles={['director']}>
+              <PrivateRoute allowedRoles={[ROLES.director]}>
                 <DashboardView />
               </PrivateRoute>
             }
@@ -27,7 +28,7 @@ function App() {
           <Route
             path="/leads"
             element={
-              <PrivateRoute allowedRoles={['director', 'supervisor', 'representante']}>
+              <PrivateRoute allowedRoles={[ROLES.director, ROLES.supervisor, ROLES.representante]}>
                 <LeadsView />
               </PrivateRoute>
             }
@@ -36,7 +37,7 @@ function App() {
           <Route
             path="/leads/:id"
             element={
-              <PrivateRoute allowedRoles={['director', 'supervisor', 'representante']}>
+              <PrivateRoute allowedRoles={[ROLES.director, ROLES.supervisor, ROLES.representante]}>
                 <FichaCUITView />
               </PrivateRoute>
             }
@@ -45,7 +46,7 @@ function App() {
           <Route
             path="/mapa"
             element={
-              <PrivateRoute allowedRoles={['director', 'supervisor', 'representante']}>
+              <PrivateRoute allowedRoles={[ROLES.director, ROLES.supervisor, ROLES.representante]}>
                 <MapView />
               </PrivateRoute>
             }

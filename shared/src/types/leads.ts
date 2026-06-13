@@ -1,4 +1,11 @@
-export type LeadStatus = 'lead' | 'contacto' | 'prospecto' | 'cliente';
+export const LEAD_STATUSES = {
+  lead: 'lead',
+  contacto: 'contacto',
+  prospecto: 'prospecto',
+  cliente: 'cliente',
+} as const;
+
+export type LeadStatus = (typeof LEAD_STATUSES)[keyof typeof LEAD_STATUSES];
 
 export interface Representante {
   id: string;

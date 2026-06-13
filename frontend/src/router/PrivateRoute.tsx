@@ -2,6 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { AppLayout } from '../layouts/AppLayout';
 import type { UserRole } from '@leadfinder/shared/types/user';
+import { ROLES } from "@leadfinder/shared/types/user";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ export const PrivateRoute = ({ children, allowedRoles }: PrivateRouteProps) => {
   if (!isAuthenticated) return <Navigate to="/auth" replace />;
 
   if (allowedRoles && user?.role && !allowedRoles.includes(user.role)) {
-    return <Navigate to={user.role === 'director' ? '/dashboard' : '/leads'} replace />;
+    return <Navigate to={user.role === ROLES.director ? '/dashboard' : '/leads'} replace />;
   }
 
   return <AppLayout>{children}</AppLayout>;

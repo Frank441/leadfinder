@@ -1,5 +1,7 @@
 import type { LeadStatus } from '@leadfinder/shared/types/leads';
 import type { UserRole } from '@leadfinder/shared/types/user';
+import { ROLES } from '@leadfinder/shared/types/user';
+import { LEAD_STATUSES } from '@leadfinder/shared/types/leads';
 import { STATUS_CONFIG } from './StatusBadge';
 
 interface StateChangeButtonsProps {
@@ -8,7 +10,12 @@ interface StateChangeButtonsProps {
   userRole: UserRole | undefined;
 }
 
-const ORDER: LeadStatus[] = ['lead', 'contacto', 'prospecto', 'cliente'];
+const ORDER: LeadStatus[] = [
+  LEAD_STATUSES.lead,
+  LEAD_STATUSES.contacto,
+  LEAD_STATUSES.prospecto,
+  LEAD_STATUSES.cliente,
+];
 
 /**
  * Reglas de negocio del cambio de estado (US11 + US14):
@@ -25,9 +32,9 @@ const canChangeTo = (target: LeadStatus, current: LeadStatus, role: UserRole | u
   if (!role) return false;
   if (target === current) return false; // ya esta en ese estado
 
-  if (role === 'director') return false;
+  if (role === ROLES.director) return false;
 
-  if (role === 'representante') {
+  if (role === ROLES.representante) {
     // No puede cambiar leads ya convertidos
     if (current === 'cliente') return false;
     // No puede convertir a cliente
@@ -64,9 +71,9 @@ export const StateChangeButtons = ({ current, onChange, userRole }: StateChangeB
           // Tooltip explicativo segun por que no esta habilitado
           let title: string | undefined;
           if (!enabled && !isActive) {
-            if (userRole === 'director') title = 'El director no puede cambiar el estado';
-            else if (userRole === 'representante' && status === 'cliente') title = 'Solo el supervisor puede convertir a Cliente';
-            else if (userRole === 'representante' && current === 'cliente') title = 'El lead ya fue convertido a Cliente';
+            if (userRole === ROLES.director) title = 'El director no puede cambiar el estado';
+            else if (userRole === ROLES.representante && status === 'cliente') title = 'Solo el supervisor puede convertir a Cliente';
+            else if (userRole === ROLES.representante && current === 'cliente') title = 'El lead ya fue convertido a Cliente';
           }
 
           return (

@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate, matchPath } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import type { UserRole } from '@leadfinder/shared/types/user';
+import { ROLES } from "@leadfinder/shared/types/user";
 
 interface NavItem {
   path: string;
@@ -47,18 +48,18 @@ const IconLogout = () => (
 );
 
 const NAV_ITEMS: NavItem[] = [
-  { path: '/dashboard', label: 'Dashboard',  icon: <IconDashboard />, roles: ['director'] },
-  { path: '/leads',     label: 'Leads',      icon: <IconLeads />,    roles: ['director', 'supervisor', 'representante'] },
-  { path: '/mapa',      label: 'Mapa',       icon: <IconMap />,      roles: ['director', 'supervisor', 'representante'] },
+  { path: '/dashboard', label: 'Dashboard',  icon: <IconDashboard />, roles: [ROLES.director] },
+  { path: '/leads',     label: 'Leads',      icon: <IconLeads />,    roles: [ROLES.director, ROLES.supervisor, ROLES.representante] },
+  { path: '/mapa',      label: 'Mapa',       icon: <IconMap />,      roles: [ROLES.director, ROLES.supervisor, ROLES.representante] },
   // Item dinámico: solo aparece cuando estás dentro de una ficha
-  { path: '#', label: 'Ficha CUIT', icon: <IconCard />, roles: ['director', 'supervisor', 'representante'],
+  { path: '#', label: 'Ficha CUIT', icon: <IconCard />, roles: [ROLES.director, ROLES.supervisor, ROLES.representante],
     matchPattern: '/leads/:id', hideUnlessMatched: true },
 ];
 
 const ROLE_LABEL: Record<UserRole, string> = {
   director:      'Director Comercial',
-  supervisor:    'Supervisor',
-  representante: 'Representante',
+  supervisor:    ROLES.supervisor,
+  representante: ROLES.representante,
 };
 
 const PAGE_INFO: Record<string, { title: string; subtitle?: string }> = {
@@ -105,7 +106,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
       }}>
         {/* Brand */}
         <div style={{ padding: '18px 16px', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-          <Link to={user?.role === 'director' ? '/dashboard' : '/leads'} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+          <Link to={user?.role === ROLES.director ? '/dashboard' : '/leads'} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
             <img src="/logo.png" alt="Lead Finder" style={{ width: '36px', height: '36px', objectFit: 'contain', flexShrink: 0, display: 'block' }} />
             <span style={{ fontSize: '13px', fontWeight: 600, color: '#f0f4f8' }}>Lead Finder</span>
           </Link>

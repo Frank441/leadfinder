@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { LoginForm } from '../components/LoginForm';
 import type { LoginDTO } from '@leadfinder/shared/types/auth';
+import { ROLES } from "@leadfinder/shared/types/user";
 import { login as loginService } from '../services/authService';
 
 export const AuthView = () => {
@@ -18,7 +19,7 @@ export const AuthView = () => {
     try {
       const { user, token } = await loginService(credentials);
       login(user, token);
-      navigate(user.role === 'director' ? '/dashboard' : '/leads', { replace: true });
+      navigate(user.role === ROLES.director ? '/dashboard' : '/leads', { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión.');
     } finally {

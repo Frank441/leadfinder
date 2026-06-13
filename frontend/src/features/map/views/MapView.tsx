@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import type { Lead, Representante } from '@leadfinder/shared/types/leads';
+import { ROLES } from "@leadfinder/shared/types/user";
 import { useAuth } from '../../../context/AuthContext';
 import { leadsService } from '../../leads/services/leadsService';
 import { representantesService } from '../../leads/services/representantesService';
@@ -59,7 +60,7 @@ export const MapView = () => {
     Promise.all([
       leadsService.getAll(),
       // Solo el supervisor necesita la lista de reps para el filtro
-      user?.role === 'supervisor' ? representantesService.getAll() : Promise.resolve([] as Representante[]),
+      user?.role === ROLES.supervisor ? representantesService.getAll() : Promise.resolve([] as Representante[]),
     ]).then(([leadsData, repsData]) => {
       if (cancelled) return;
       setLeads(leadsData);
@@ -75,11 +76,11 @@ export const MapView = () => {
   // Aplica el filtro por representante (solo si supervisor + selecciono uno)
   const visibleLeads = useMemo(() => {
     const withCoords = leads.filter(hasValidCoords);
-    if (user?.role !== 'supervisor' || !repFilter) return withCoords;
+    if (user?.role !== ROLES.supervisor || !repFilter) return withCoords;
     return withCoords.filter((l) => l.representanteId === repFilter);
   }, [leads, repFilter, user]);
 
-  const isSupervisor = user?.role === 'supervisor';
+  const isSupervisor = user?.role === ROLES.supervisor;
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>

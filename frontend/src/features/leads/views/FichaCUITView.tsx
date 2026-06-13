@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Lead, LeadStatus } from '@leadfinder/shared/types/leads';
+import { ROLES } from "@leadfinder/shared/types/user";
 import { useAuth } from '../../../context/AuthContext';
 import { leadsService } from '../services/leadsService';
 import { representantesService } from '../services/representantesService';
@@ -80,7 +81,7 @@ export const FichaCUITView = () => {
   // Permisos por rol (US11 + US14):
   // - Notas: solo el representante deja constancia de visitas.
   // - Cambio de estado: la habilitacion fina vive dentro de StateChangeButtons.
-  const canAddNote = user?.role === 'representante';
+  const canAddNote = user?.role === ROLES.representante;
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>

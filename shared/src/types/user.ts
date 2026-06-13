@@ -5,10 +5,13 @@ export const toUserId = (value: string | number): UserId => {
     return `${value}` as UserId;
 }
 
-export type UserRole =
-    | "director"
-    | "supervisor"
-    | "representante";
+export const ROLES = {
+    director: 'director',
+    supervisor: 'supervisor',
+    representante: 'representante', 
+} as const;
+
+export type UserRole = (typeof ROLES)[keyof typeof ROLES];
 
 
 export interface User {
