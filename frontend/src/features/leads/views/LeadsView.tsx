@@ -48,59 +48,43 @@ export const LeadsView = () => {
 
   const [leads, setLeads] = useState<Lead[]>([]);
   const [representantes, setRepresentantes] = useState<Representante[]>([]);
+  const [total, setTotal] = useState(0);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('todos');
   const [zonaFilter, setZonaFilter] = useState('');
   const [actividadFilter, setActividadFilter] = useState('');
   const [assignTarget, setAssignTarget] = useState<Lead | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Paginacion client-side: cargamos todos los leads y mostramos de a 20.
-  // Cuando el backend soporte ?page=X&limit=Y, esto pasa a server-side.
   const [page, setPage] = useState(1);
 
   useEffect(() => {
     let cancelled = false;
     setIsLoading(true);
-    Promise.all([leadsService.getAll(), representantesService.getAll()]).then(([data, reps]) => {
+    Promise.all([
+      leadsService.getPaginated({
+        search:       search          || undefined,
+        status:       statusFilter !== 'todos' ? statusFilter : undefined,
+        zona:         zonaFilter      || undefined,
+        actividad:    actividadFilter || undefined,
+    }, page),
+      representantesService.getAll(),
+    ]).then(([{ leads, total }, reps]) => {
       if (cancelled) return;
-      setLeads(data);
+      setLeads(leads);
+      setTotal(total);
       setRepresentantes(reps);
       setIsLoading(false);
     });
     return () => { cancelled = true; };
-  }, [user]);
+  }, [user, page, search, statusFilter, zonaFilter, actividadFilter]);
 
-  const filtered = useMemo(() => {
-    const q = search.toLowerCase().trim();
-    return leads.filter((l) => {
-      if (statusFilter !== 'todos' && l.status !== statusFilter) return false;
-      if (zonaFilter && l.zona !== zonaFilter) return false;
-      if (actividadFilter && l.actividad !== actividadFilter) return false;
-      if (q && !(
-        l.razonSocial.toLowerCase().includes(q) ||
-        l.cuit.includes(q) ||
-        l.localidad.toLowerCase().includes(q)
-      )) return false;
-      return true;
-    });
-  }, [leads, search, statusFilter, zonaFilter, actividadFilter]);
-
-  // Reset a pagina 1 cuando cambian los filtros (sino podrias quedar en una pagina vacia)
   useEffect(() => {
     setPage(1);
   }, [search, statusFilter, zonaFilter, actividadFilter]);
 
-  // Slice de la pagina actual
-  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
-  const paginatedLeads = useMemo(() => {
-    const start = (page - 1) * ITEMS_PER_PAGE;
-    return filtered.slice(start, start + ITEMS_PER_PAGE);
-  }, [filtered, page]);
-
-  // Rango "X-Y" mostrado en el contador
-  const rangeStart = filtered.length === 0 ? 0 : (page - 1) * ITEMS_PER_PAGE + 1;
-  const rangeEnd   = Math.min(page * ITEMS_PER_PAGE, filtered.length);
+  const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+  const rangeStart = total === 0 ? 0 : (page - 1) * ITEMS_PER_PAGE + 1;
+  const rangeEnd   = Math.min(page * ITEMS_PER_PAGE, total);
 
   const handleAssigned = (updated: Lead) => {
     setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
@@ -114,9 +98,9 @@ export const LeadsView = () => {
         <p style={{ fontSize: '12px', color: '#7a9bbf', margin: 0 }}>
           {isLoading
             ? 'Cargando leads...'
-            : filtered.length === 0
+            : total === 0
               ? '0 leads'
-              : `Mostrando ${rangeStart}–${rangeEnd} de ${filtered.length.toLocaleString('es-AR')} leads`}
+              : `Mostrando ${rangeStart}–${rangeEnd} de ${total.toLocaleString('es-AR')} leads`}
         </p>
       </div>
 
@@ -162,15 +146,15 @@ export const LeadsView = () => {
           <tbody>
             {isLoading ? (
               <tr><td colSpan={canAssign ? 7 : 6} style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px' }}>Cargando...</td></tr>
-            ) : paginatedLeads.length === 0 ? (
+            ) : leads.length === 0 ? (
               <tr><td colSpan={canAssign ? 7 : 6} style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px' }}>No se encontraron leads con los filtros aplicados</td></tr>
             ) : (
-              paginatedLeads.map((lead, idx) => (
+              leads.map((lead, idx) => (
                 <tr
                   key={lead.id}
                   onClick={() => navigate(`/leads/${lead.id}`)}
                   style={{
-                    borderBottom: idx < paginatedLeads.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                    borderBottom: idx < leads.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
                     cursor: 'pointer',
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}

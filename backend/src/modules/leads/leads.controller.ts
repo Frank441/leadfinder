@@ -40,17 +40,29 @@ export class LeadsController {
         }
     };
 
+    getPaginated: RequestHandler = async (req, res) => {
+        try {
+            const user  = req.user!;
+            const page  = Number(req.query.page)  || 1;
+            const limit = Number(req.query.limit) || 20;
+            const filters: LeadsFilters = {
+                search:          req.query.search          as string | undefined,
+                status:          req.query.status          as LeadsFilters["status"],
+                zona:            req.query.zona            as string | undefined,
+                actividad:       req.query.actividad       as string | undefined,
+                representanteId: req.query.representanteId as string | undefined,
+            };
+            const result = await this.service.getPaginated(user.role, user.sub, filters, page, limit);
+            res.json(result);
+        } catch (err) {
+            this.handleError(err, res);
+        }
+    };
+
     getAll: RequestHandler = async (req, res) => {
         try {
             const user = req.user!;
-            const filters: LeadsFilters = {
-                search:          req.query.search  as string | undefined,
-                status:          req.query.status  as LeadsFilters["status"],
-                zona:            req.query.zona    as string | undefined,
-                actividad:       req.query.actividad as string | undefined,
-                representanteId: req.query.representanteId as string | undefined,
-            };
-            const leads = await this.service.getAll(user.role, user.sub, filters);
+            const leads = await this.service.getAll(user.role, user.sub);
             res.json(leads);
         } catch (err) {
             this.handleError(err, res);

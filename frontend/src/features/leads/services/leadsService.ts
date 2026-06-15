@@ -2,15 +2,20 @@ import type { Lead, LeadStatus, LeadsFilters, VisitNote } from '@leadfinder/shar
 import { apiFetch } from '../../../lib/api';
 
 export const leadsService = {
-    async getAll(filters?: LeadsFilters): Promise<Lead[]> {
+    async getAll(): Promise<Lead[]> {
+        return apiFetch<Lead[]>('/api/v1/leads');
+    },
+
+    async getPaginated(filters?: LeadsFilters, page: number = 1, limit: number = 20): Promise<{ leads: Lead[]; total: number }> {
         const params = new URLSearchParams();
         if (filters?.search)          params.set('search',          filters.search);
         if (filters?.status)          params.set('status',          filters.status);
         if (filters?.zona)            params.set('zona',            filters.zona);
         if (filters?.actividad)       params.set('actividad',       filters.actividad);
         if (filters?.representanteId) params.set('representanteId', filters.representanteId);
-        const qs = params.toString();
-        return apiFetch<Lead[]>(`/api/v1/leads${qs ? `?${qs}` : ''}`);
+        params.set('page',  String(page));
+        params.set('limit', String(limit));
+        return apiFetch<{ leads: Lead[]; total: number }>(`/api/v1/leads/paginated?${params.toString()}`);
     },
 
     async getById(id: string): Promise<Lead | null> {

@@ -3,41 +3,79 @@ import type { UserRole, UserId } from "@leadfinder/shared/types/user";
 import { ROLES } from "@leadfinder/shared/types/user";
 import type { PrismaLeadWithRelations, PrismaVisitaWithUser } from "@/types/api";
 import { LEAD_INCLUDE } from "@/types/api";
-import { mapProvinciaToZona } from "@/utils/leadMappers";
+import { getProvinciasByZona, getActividadDbValues  } from "@/utils/leadMappers";
 import prisma from "../../../prisma/client";
+import type { Prisma } from '../../../generated/prisma/index';
 
 export class LeadsRepository {
-    async findAll(
+    async getAll(
+        role: UserRole,
+        userId: UserId,
+    ): Promise<PrismaLeadWithRelations[]> {
+        const where = {
+            empresa: { provincia: { not: null } },
+            ...(role === ROLES.representante && { id_usuario_asignado: Number(userId) }),
+        };
+        return prisma.leads.findMany({ where, include: LEAD_INCLUDE, orderBy: { fecha_creacion: 'desc' } });
+    }
+
+
+    async getPaginated(
         role: UserRole,
         userId: UserId,
         filters: LeadsFilters = {},
-    ): Promise<PrismaLeadWithRelations[]> {
-        const leads = await prisma.leads.findMany({
-            include:  LEAD_INCLUDE,
-            orderBy: { fecha_creacion: "desc" },
-        });
+        page: number = 1,
+        limit: number = 20,
+    ): Promise<{ leads: PrismaLeadWithRelations[]; total: number }> {
+        const where: Prisma.leadsWhereInput = {
+            empresa: {
+                AND: [
+                    { provincia: { not: null } },
+                    ...(filters.zona
+                        ? [{
+                            OR: getProvinciasByZona(filters.zona).map(p => ({
+                                provincia: { equals: p, mode: 'insensitive' as const },
+                            })),
+                        }]
+                        : []),
+                    ...(filters.actividad
+                        ? [{
+                            OR: getActividadDbValues(filters.actividad).map(code => ({
+                                tipo_explotacion: { equals: code, mode: 'insensitive' as const },
+                            })),
+                        }]
+                        : []),
+                    ...(filters.search
+                        ? [{
+                            OR: [
+                                { nombre_empresa: { contains: filters.search, mode: 'insensitive' as const } },
+                                { cuit:           { contains: filters.search } },
+                                { localidad:      { contains: filters.search, mode: 'insensitive' as const } },
+                            ],
+                        }]
+                        : []),
+                ],
+            },
+            ...(role === ROLES.representante && { id_usuario_asignado: Number(userId) }),
+            ...(filters.representanteId    && { id_usuario_asignado: Number(filters.representanteId) }),
+            ...(filters.status && filters.status !== 'todos' && {
+                estado: { nombre: { equals: filters.status, mode: 'insensitive' as const } },
+            }),
+        };
 
-        return leads.filter((lead) => {
-            if (!lead.empresa.provincia?.trim()) return false;
-            if (role === ROLES.representante && lead.id_usuario_asignado !== Number(userId)) return false;
-            if (filters.representanteId && String(lead.id_usuario_asignado) !== filters.representanteId) return false;
-            if (filters.status && filters.status !== "todos" && lead.estado.nombre.toLowerCase() !== filters.status) return false;
-            if (filters.zona) {
-                const leadZona = mapProvinciaToZona(lead.empresa.provincia ?? "");
-                if (leadZona.toLowerCase() !== filters.zona.toLowerCase()) return false;
-            }
-            if (filters.actividad && !lead.empresa.actividad_principal?.toLowerCase().includes(filters.actividad.toLowerCase())) return false;
-            if (filters.search) {
-                const q = filters.search.toLowerCase();
-                const match =
-                    lead.empresa.nombre_empresa.toLowerCase().includes(q) ||
-                    lead.empresa.cuit.includes(q) ||
-                    (lead.empresa.localidad ?? "").toLowerCase().includes(q);
-                if (!match) return false;
-            }
-            return true;
-        });
-    }
+    const [leads, total] = await prisma.$transaction([
+        prisma.leads.findMany({
+            where,
+            include: LEAD_INCLUDE,
+            orderBy: { fecha_creacion: 'desc' },
+            skip:    (page - 1) * limit,
+            take:    limit,
+        }),
+        prisma.leads.count({ where }),
+    ]);
+
+    return { leads, total };
+}
 
     findById(id: number): Promise<PrismaLeadWithRelations | null> {
         return prisma.leads.findUnique({

@@ -13,7 +13,7 @@ const leadsRouter = Router();
 
 // Ruta fija antes de /:id para evitar conflicto con el wildcard
 leadsRouter.get("/representantes",    authenticate, controller.getRepresentantes);
-
+leadsRouter.get("/paginated",         authenticate, controller.getPaginated);
 leadsRouter.get("/",                  authenticate, controller.getAll);
 leadsRouter.get("/:id",               authenticate, controller.getById);
 leadsRouter.put("/:id/asignar",       authenticate, authorize(ROLES.director, ROLES.supervisor), controller.assign);

@@ -14,34 +14,40 @@ const BCRA_SITUACION: Record<number, BcraSituacion> = {
     6: "Riesgo alto",
 };
 
+const PROVINCIA_ZONA_MAP: Record<string, string> = {
+    "buenos aires": "Buenos Aires",
+    "córdoba": "Centro",
+    "santa fe": "Centro",
+    "entre ríos": "Centro",
+    "mendoza": "Cuyo",
+    "san juan": "Cuyo",
+    "san luis": "Cuyo",
+    "neuquén": "Patagonia",
+    "la pampa": "Patagonia",
+    "río negro": "Patagonia",
+    "chubut": "Patagonia",
+    "santa cruz": "Patagonia",
+    "tierra del fuego": "Patagonia",
+    "tucumán": "NOA",
+    "salta": "NOA",
+    "jujuy": "NOA",
+    "santiago del estero": "NOA",
+    "catamarca": "NOA",
+    "la rioja": "NOA",
+    "chaco": "NEA",
+    "corrientes": "NEA",
+    "formosa": "NEA",
+    "misiones": "NEA",
+};
+
 export function mapProvinciaToZona(provincia: string): string {
-    const p = (provincia ?? "").toLowerCase().trim();
-    const MAP: Record<string, string> = {
-        "buenos aires": "Buenos Aires",
-        "córdoba": "Centro",
-        "santa fe": "Centro",
-        "entre ríos": "Centro",
-        "mendoza": "Cuyo",
-        "san juan": "Cuyo",
-        "san luis": "Cuyo",
-        "neuquén": "Patagonia",
-        "la pampa": "Patagonia",
-        "río negro": "Patagonia",
-        "chubut": "Patagonia",
-        "santa cruz": "Patagonia",
-        "tierra del fuego": "Patagonia",
-        "tucumán": "NOA",
-        "salta": "NOA",
-        "jujuy": "NOA",
-        "santiago del estero": "NOA",
-        "catamarca": "NOA",
-        "la rioja": "NOA",
-        "chaco": "NEA",
-        "corrientes": "NEA",
-        "formosa": "NEA",
-        "misiones": "NEA"
-    };
-    return MAP[p] ?? provincia ?? "";
+    return PROVINCIA_ZONA_MAP[(provincia ?? "").toLowerCase().trim()] ?? provincia ?? "";
+}
+
+export function getProvinciasByZona(zona: string): string[] {
+    return Object.entries(PROVINCIA_ZONA_MAP)
+        .filter(([, z]) => z.toLowerCase() === zona.toLowerCase())
+        .map(([provincia]) => provincia);
 }
 
 export function mapActividad(actividad: string): string {
@@ -52,6 +58,17 @@ export function mapActividad(actividad: string): string {
         "m": "Mixta",
     };
     return MAP[a] ?? actividad ?? "";
+}
+
+export function getActividadDbValues(actividad: string): string[] {
+    const MAP: Record<string, string> = {
+        "g": "Ganadería",
+        "a": "Agricultura",
+        "m": "Mixta",
+    };
+    return Object.entries(MAP)
+        .filter(([, label]) => label.toLowerCase() === actividad.toLowerCase())
+        .map(([code]) => code);
 }
 
 export function mapSenasaData(empresa: PrismaCuitData): SenasaData {
@@ -110,7 +127,7 @@ export function mapLead(lead: PrismaLeadWithRelations): Lead {
         razonSocial:     lead.empresa.nombre_empresa,
         localidad:       lead.empresa.localidad ?? "",
         provincia:       lead.empresa.provincia ?? "",
-        zona:            mapProvinciaToZona(lead.empresa.provincia ?? ""),
+        zona:            mapProvinciaToZona(lead.empresa.provincia ?? "") ?? "",
         actividad:       mapActividad(lead.empresa.tipo_explotacion ?? ""),
         status:          lead.estado.nombre.toLowerCase() as LeadStatus,
         score:           Number(lead.score_viabilidad ?? 0),
