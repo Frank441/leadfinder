@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import type { Lead, LeadStatus } from '@leadfinder/shared/types/leads';
 import { ROLES } from "@leadfinder/shared/types/user";
 import { useAuth } from '../../../context/AuthContext';
@@ -22,6 +22,7 @@ export const FichaCUITView = () => {
   const [representantes, setRepresentantes] = useState<Representante[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (!id) return;
@@ -63,7 +64,7 @@ export const FichaCUITView = () => {
       <div style={{ padding: '40px', textAlign: 'center', fontFamily: "'Inter', system-ui, sans-serif" }}>
         <p style={{ fontSize: '14px', color: '#f0f4f8', marginBottom: '12px' }}>No se encontró el lead solicitado.</p>
         <button
-          onClick={() => navigate('/leads')}
+          onClick={() => navigate(`/leads?${searchParams.toString()}`)}
           style={{
             background: 'rgba(26,170,110,0.15)', border: '1px solid rgba(26,170,110,0.4)',
             color: '#1aaa6e', borderRadius: '8px', padding: '6px 14px', fontSize: '12px',
@@ -87,7 +88,7 @@ export const FichaCUITView = () => {
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
       {/* Volver */}
       <button
-        onClick={() => navigate('/leads')}
+        onClick={() => navigate(`/leads?${searchParams.toString()}`)}
         style={{
           background: 'transparent', border: 'none',
           color: '#7a9bbf', fontSize: '12px', cursor: 'pointer',

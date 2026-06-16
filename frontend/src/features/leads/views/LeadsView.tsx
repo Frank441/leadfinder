@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import type { Lead, Representante } from '@leadfinder/shared/types/leads';
 import { ROLES } from "@leadfinder/shared/types/user";
 import { useAuth } from '../../../context/AuthContext';
@@ -45,42 +45,55 @@ const RepresentanteCell = ({ representanteId, representantes }: { representanteI
 export const LeadsView = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page            = Number(searchParams.get('page'))     || 1;
+  const search          = searchParams.get('search')           || '';
+  const statusFilter    = (searchParams.get('status')          || 'todos') as StatusFilter;
+  const zonaFilter      = searchParams.get('zona')             || '';
+  const actividadFilter = searchParams.get('actividad')        || '';
+
+  const setPage = (p: number) =>
+    setSearchParams(prev => { prev.set('page', String(p)); return prev; });
+
+  const setSearch = (v: string) =>
+    setSearchParams(prev => { v ? prev.set('search', v) : prev.delete('search'); prev.set('page', '1'); return prev; });
+
+  const setStatusFilter = (v: StatusFilter) =>
+    setSearchParams(prev => { v !== 'todos' ? prev.set('status', v) : prev.delete('status'); prev.set('page', '1'); return prev; });
+
+  const setZonaFilter = (v: string) =>
+    setSearchParams(prev => { v ? prev.set('zona', v) : prev.delete('zona'); prev.set('page', '1'); return prev; });
+
+  const setActividadFilter = (v: string) =>
+    setSearchParams(prev => { v ? prev.set('actividad', v) : prev.delete('actividad'); prev.set('page', '1'); return prev; });
 
   const [leads, setLeads] = useState<Lead[]>([]);
   const [representantes, setRepresentantes] = useState<Representante[]>([]);
   const [total, setTotal] = useState(0);
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('todos');
-  const [zonaFilter, setZonaFilter] = useState('');
-  const [actividadFilter, setActividadFilter] = useState('');
   const [assignTarget, setAssignTarget] = useState<Lead | null>(null);
   const [isFetching, setIsFetching] = useState(false);
-  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    let cancelled = false;
-    setIsFetching(true);
-    Promise.all([
-      leadsService.getPaginated({
-        search:    search          || undefined,
-        status:    statusFilter !== 'todos' ? statusFilter : undefined,
-        zona:      zonaFilter      || undefined,
-        actividad: actividadFilter || undefined,
-      }, page),
-      representantesService.getAll(),
-    ]).then(([{ leads, total }, reps]) => {
-      if (cancelled) return;
-      setLeads(leads);
-      setTotal(total);
-      setRepresentantes(reps);
-      setIsFetching(false);
-    });
-    return () => { cancelled = true; };
-  }, [user, page, search, statusFilter, zonaFilter, actividadFilter]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [search, statusFilter, zonaFilter, actividadFilter]);
+      let cancelled = false;
+      setIsFetching(true);
+      Promise.all([
+        leadsService.getPaginated({
+          search:    search          || undefined,
+          status:    statusFilter !== 'todos' ? statusFilter : undefined,
+          zona:      zonaFilter      || undefined,
+          actividad: actividadFilter || undefined,
+        }, page),
+        representantesService.getAll(),
+      ]).then(([{ leads: newLeads, total }, reps]) => {
+        if (cancelled) return;
+        setLeads(newLeads);
+        setTotal(total);
+        setRepresentantes(reps);
+        setIsFetching(false);
+      });
+      return () => { cancelled = true; };
+    }, [user, page, search, statusFilter, zonaFilter, actividadFilter]);
 
   const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
   const rangeStart = total === 0 ? 0 : (page - 1) * ITEMS_PER_PAGE + 1;
@@ -153,7 +166,7 @@ export const LeadsView = () => {
                 leads.map((lead, idx) => (
                   <tr
                     key={lead.id}
-                    onClick={() => navigate(`/leads/${lead.id}`)}
+                    onClick={() => navigate(`/leads/${lead.id}?${searchParams.toString()}`)}
                     style={{
                       borderBottom: idx < leads.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
                       cursor: 'pointer',
