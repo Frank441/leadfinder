@@ -7,6 +7,10 @@
         "node": ">=20"
     },
     "scripts": {
-        "preinstall": "npx only-allow pnpm"
+        "preinstall": "npx only-allow pnpm",
+        "dev": "concurrently -n backend,frontend,shared -c blue,green,yellow \"pnpm --filter backend dev\" \"pnpm --filter frontend dev\" \"pnpm --filter shared dev\""
+    },
+    "devDependencies": {
+        "concurrently": "^10.0.3"
     }
 }
