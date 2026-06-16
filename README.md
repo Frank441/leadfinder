@@ -64,14 +64,7 @@ pnpm run parser
 
 ### 8. Iniciar el servidor de desarrollo
 ```bash
-pnpm dev
-```
-
-### 9. Iniciar el cliente
-Abrí una nueva terminal desde la raíz del proyecto:
-```bash
 cd ..
-cd frontend
 pnpm dev
 ```
 
