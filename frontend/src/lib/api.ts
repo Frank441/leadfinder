@@ -10,6 +10,7 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
             ...options?.headers,
         },
     });
+    if (res.status === 204) return undefined as T;
 
     const data = await res.json() as T & { message?: string };
     if (!res.ok) throw new Error(data.message ?? `Error ${res.status}`);

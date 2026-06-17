@@ -53,18 +53,15 @@ export const FichaCUITView = () => {
 
   const handleDeleteNote = async (noteId: string) => {
       if (!lead) return;
-      console.log('before delete, notes:', lead.notes.map(n => n.id));
+
       await leadsService.deleteNote(lead.id, noteId);
-      await new Promise(resolve => setTimeout(resolve, 300)); 
       const updated = await leadsService.getById(lead.id);
-      console.log('after delete, notes:', updated?.notes.map(n => n.id));
-      console.log('updated lead notes:', updated?.notes);
 
       if (updated) setLead(updated);
   };
 
   const handleEditNote = async (noteId: string, content: string) => {
-      if (!lead || !user) return;
+      if (!lead) return;
       await leadsService.editNote(lead.id, noteId, content);
       const updated = await leadsService.getById(lead.id);
       if (updated) setLead(updated);

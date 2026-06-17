@@ -84,9 +84,7 @@ export const VisitNotesSection = ({ notes, onAdd, onEdit, onDelete, canManageNot
   const handleDelete = async (noteId: string) => {
     setDeletingId(noteId);
     try {
-      console.log('deleting note', noteId);
       await onDelete(noteId);
-      console.log('deleted ok');
     } finally {
       setDeletingId(null);
     }
