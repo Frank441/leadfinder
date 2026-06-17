@@ -43,3 +43,44 @@ export function normalizeArcaString(value: unknown): string | null {
     const str = String(value).trim();
     return str === "" ? null : str.toUpperCase();
 }
+
+const INVALID_NOMBRE_PATTERNS = [
+    "SIN NOMBRE",
+    "SIN DENOMINACION",
+    "S/D",
+    "S/N",
+    "S/NOMBRE",
+    "SD",
+    "SN",
+    "NULL",
+    "N/A",
+    "NA",
+];
+
+function stripAccents(str: string): string {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+export function isValidNombreEstablecimiento(value: unknown): boolean {
+    if (value === null || value === undefined) return false;
+
+    let str = stripAccents(String(value).trim().toUpperCase());
+    str = str.replace(/\.+$/, "");
+
+    if (str === "") return false;
+    if (INVALID_NOMBRE_PATTERNS.includes(str)) return false;
+    if (/^-+$/.test(str)) return false;
+    if (/^\.+$/.test(str)) return false;
+    if (/^\d+$/.test(str)) return false;
+
+    return true;
+}
+
+export function pickBestSenasaRecord<T extends { nombre_establecimiento: string | null }>(
+    records: T[]
+): T | null {
+    if (records.length === 0) return null;
+
+    const withValidName = records.find((r) => isValidNombreEstablecimiento(r.nombre_establecimiento));
+    return withValidName ?? records[0];
+}

@@ -1,6 +1,6 @@
 import xlsx from "xlsx";
 import { ParserError, ParserResult, Senasa } from "../types/parser";
-import { normalizeCuit, normalizeDate } from "../utils/excelNormalizers";
+import { isValidNombreEstablecimiento, normalizeCuit, normalizeDate } from "../utils/excelNormalizers";
 
 interface SenasaRow {
   renspa: unknown;
@@ -71,7 +71,7 @@ export function parseSenasa(
             latitud: row.latitud !== null ? Number(row.latitud) : null,
             longitud: row.longitud !== null ? Number(row.longitud) : null,
             tipo_explotacion: validTipoExplotacion,
-            nombre_establecimiento: row.nombre_establecimiento
+            nombre_establecimiento: isValidNombreEstablecimiento(row.nombre_establecimiento)
                 ? String(row.nombre_establecimiento).trim()
                 : null,
             fecha_inscripcion: normalizeDate(row.fecha_inscripcion),

@@ -5,6 +5,7 @@ import { parseSenasa } from "./parseSenasa";
 import { parseArca } from "./parseArca";
 import { parseBcra } from "./parseBcra";
 import { loadProvincias } from "./loadProvinces.js";
+import { pickBestSenasaRecord } from "@/utils/excelNormalizers.js";
 
 process.loadEnvFile();
 
@@ -88,7 +89,7 @@ async function loadData(
                     continue;
                 }
 
-                const senasaPrincipal = c.senasa?.[0] ?? null;
+                const senasaPrincipal = pickBestSenasaRecord(c.senasa ?? []);
 
                 const empresa = await prisma.empresas.upsert({
                     where: { cuit: c.cuit },
