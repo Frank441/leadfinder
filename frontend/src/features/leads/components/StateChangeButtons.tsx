@@ -35,7 +35,7 @@ const canChangeTo = (
 ): boolean => {
   if (role !== ROLES.representante) return false;
   if (target === current) return false;
-  if (current === LEAD_STATUSES.cliente || target === LEAD_STATUSES.cliente) return false;
+  if (current === LEAD_STATUSES.cliente) return false;
 
   return true;
 };
@@ -65,11 +65,12 @@ export const StateChangeButtons = ({ current, onChange, userRole }: StateChangeB
           // Tooltip explicativo segun por que no esta habilitado
           let title: string | undefined;
           if (!enabled && !isActive) {
-            if (userRole === ROLES.director) title = 'El director no puede cambiar el estado';
-            if (userRole === ROLES.representante) {
+            if (userRole === ROLES.director || userRole === ROLES.supervisor) {
+              title = 'Solo un representante puede cambiar el estado del lead';
+            } else if (userRole === ROLES.representante) {
               title = current === LEAD_STATUSES.cliente
                 ? 'El lead ya fue convertido a Cliente'
-                : 'Solo el supervisor puede convertir a Cliente';
+                : 'Este cambio de estado no está permitido desde el estado actual';
             }
           }
 
