@@ -44,6 +44,7 @@ const RepresentanteCell = ({ representanteId, representantes }: { representanteI
 
 export const LeadsView = () => {
   const { user } = useAuth();
+  console.log('user:', user);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 

@@ -98,6 +98,35 @@ export class LeadsController {
         }
     };
 
+    deleteNote: RequestHandler = async (req, res) => {
+        try {
+            const leadId  = Number(req.params.id);
+            const noteId  = Number(req.params.noteId);
+            if (isNaN(leadId) || isNaN(noteId)) { res.status(400).json({ message: "ID inválido." }); return; }
+            await this.service.deleteNote(leadId, noteId);
+            res.status(204).send();
+        } catch (err) {
+            this.handleError(err, res);
+        }
+    };
+
+    editNote: RequestHandler = async (req, res) => {
+        try {
+            const leadId  = Number(req.params.id);
+            const noteId  = Number(req.params.noteId);
+            if (isNaN(leadId) || isNaN(noteId)) { res.status(400).json({ message: "ID inválido." }); return; }
+            const { content } = req.body as { content?: string };
+            if (!content?.trim()) {
+                res.status(400).json({ message: "El contenido de la nota es requerido." });
+                return;
+            }
+            const note = await this.service.editNote(leadId, noteId, content.trim());
+            res.json(note);
+        } catch (err) {
+            this.handleError(err, res);
+        }
+    };
+
     private handleError(err: unknown, res: Parameters<RequestHandler>[1]): void {
         if (err instanceof NotFoundError) {
             res.status(404).json({ message: err.message });

@@ -51,6 +51,25 @@ export const FichaCUITView = () => {
     if (updated) setLead(updated);
   };
 
+  const handleDeleteNote = async (noteId: string) => {
+      if (!lead) return;
+      console.log('before delete, notes:', lead.notes.map(n => n.id));
+      await leadsService.deleteNote(lead.id, noteId);
+      await new Promise(resolve => setTimeout(resolve, 300)); 
+      const updated = await leadsService.getById(lead.id);
+      console.log('after delete, notes:', updated?.notes.map(n => n.id));
+      console.log('updated lead notes:', updated?.notes);
+
+      if (updated) setLead(updated);
+  };
+
+  const handleEditNote = async (noteId: string, content: string) => {
+      if (!lead || !user) return;
+      await leadsService.editNote(lead.id, noteId, content);
+      const updated = await leadsService.getById(lead.id);
+      if (updated) setLead(updated);
+  };
+
   if (isLoading) {
     return (
       <div style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px', fontFamily: "'Inter', system-ui, sans-serif" }}>
@@ -82,7 +101,7 @@ export const FichaCUITView = () => {
   // Permisos por rol (US11 + US14):
   // - Notas: solo el representante deja constancia de visitas.
   // - Cambio de estado: la habilitacion fina vive dentro de StateChangeButtons.
-  const canAddNote = user?.role === ROLES.representante;
+  const canManageNotes = user?.role === ROLES.representante;
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
@@ -174,7 +193,13 @@ export const FichaCUITView = () => {
       </div>
 
       {/* Notas de visita (US12) */}
-      <VisitNotesSection notes={lead.notes} onAdd={handleAddNote} canAdd={canAddNote} />
+      <VisitNotesSection
+        notes={lead.notes}
+        onAdd={handleAddNote}
+        onEdit={handleEditNote}
+        onDelete={handleDeleteNote}
+        canManageNotes={canManageNotes}
+      />
     </div>
   );
 };

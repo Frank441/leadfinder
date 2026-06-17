@@ -34,6 +34,19 @@ export const leadsService = {
         });
     },
 
+    async deleteNote(leadId: string, noteId: string): Promise<void> {
+        await apiFetch<void>(`/api/v1/leads/${leadId}/notas/${noteId}`, {
+            method: 'DELETE',
+        });
+    },
+
+    async editNote(leadId: string, noteId: string, content: string): Promise<VisitNote> {
+        return apiFetch<VisitNote>(`/api/v1/leads/${leadId}/notas/${noteId}`, {
+            method: 'PUT',
+            body:   JSON.stringify({ content }),
+        });
+    },
+
     async assign(leadId: string, representanteId: string | null): Promise<Lead> {
         return apiFetch<Lead>(`/api/v1/leads/${leadId}/asignar`, {
             method: 'PUT',

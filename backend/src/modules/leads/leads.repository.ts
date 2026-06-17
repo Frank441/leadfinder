@@ -138,4 +138,16 @@ export class LeadsRepository {
             include: { usuario: true },
         });
     }
+    
+    async deleteNote(noteId: number): Promise<void> {
+        await prisma.visitas.delete({ where: { id_visita: noteId } });
+    }
+
+    async editNote(noteId: number, content: string): Promise<PrismaVisitaWithUser> {
+        return prisma.visitas.update({
+            where:   { id_visita: noteId },
+            data:    { comentarios: content },
+            include: { usuario: true },
+        });
+    }
 }

@@ -58,4 +58,21 @@ export class LeadsService {
         const visita = await this.repository.createNote(leadId, userId, content);
         return mapVisitNote(visita);
     }
+
+    async deleteNote(leadId: number, noteId: number): Promise<void> {
+        const lead = await this.repository.findById(leadId);
+        if (!lead) throw new NotFoundError(`Lead ${leadId} no encontrado.`);
+        const note = lead.visitas.find((v) => v.id_visita === noteId);
+        if (!note) throw new NotFoundError(`Nota ${noteId} no encontrada.`);
+        await this.repository.deleteNote(noteId);
+    }
+
+    async editNote(leadId: number, noteId: number, content: string): Promise<VisitNote> {
+        const lead = await this.repository.findById(leadId);
+        if (!lead) throw new NotFoundError(`Lead ${leadId} no encontrado.`);
+        const note = lead.visitas.find((v) => v.id_visita === noteId);
+        if (!note) throw new NotFoundError(`Nota ${noteId} no encontrada.`);
+        const updated = await this.repository.editNote(noteId, content);
+        return mapVisitNote(updated);
+    }
 }

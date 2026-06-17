@@ -19,5 +19,7 @@ leadsRouter.get("/:id",               authenticate, controller.getById);
 leadsRouter.put("/:id/asignar",       authenticate, authorize(ROLES.director, ROLES.supervisor), controller.assign);
 leadsRouter.put("/:id/estado",        authenticate, controller.updateStatus);
 leadsRouter.post("/:id/notas",        authenticate, controller.createNote);
+leadsRouter.delete("/:id/notas/:noteId", authenticate, controller.deleteNote);
+leadsRouter.put("/:id/notas/:noteId",    authenticate, controller.editNote);
 
 export default leadsRouter;

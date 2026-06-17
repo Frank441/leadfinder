@@ -58,8 +58,8 @@ const NAV_ITEMS: NavItem[] = [
 
 const ROLE_LABEL: Record<UserRole, string> = {
   director:      'Director Comercial',
-  supervisor:    ROLES.supervisor,
-  representante: ROLES.representante,
+  supervisor:    'Supervisor',
+  representante: 'Representante',
 };
 
 const PAGE_INFO: Record<string, { title: string; subtitle?: string }> = {
