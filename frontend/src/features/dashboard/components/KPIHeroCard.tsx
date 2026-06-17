@@ -1,4 +1,4 @@
-import type { KPIData } from '../data/mockDashboard';
+import type { KPIData } from '../types';
 
 interface KPIHeroCardProps {
   label: string;
@@ -22,7 +22,11 @@ const formatValue = (value: number, format: KPIHeroCardProps['format']): string 
 
 export const KPIHeroCard = ({ label, data, format = 'number', hero = false, accent = 'green' }: KPIHeroCardProps) => {
   const color = ACCENT_COLOR[accent];
-  const isPositive = data.delta >= 0;
+
+  // El delta puede no estar disponible (cuando el backend todavia no lo soporta).
+  // En ese caso escondemos la flecha y mostramos solo el contexto del periodo.
+  const hasDelta = typeof data.delta === 'number';
+  const isPositive = hasDelta && data.delta! >= 0;
   const deltaColor = isPositive ? '#2ecc8f' : '#ff7b7b';
   const arrow = isPositive ? '▲' : '▼';
 
@@ -61,10 +65,14 @@ export const KPIHeroCard = ({ label, data, format = 'number', hero = false, acce
         display: 'flex', alignItems: 'center', gap: '8px',
         fontSize: '11px',
       }}>
-        <span style={{ color: deltaColor, fontWeight: 600 }}>
-          {arrow} {isPositive ? '+' : ''}{data.delta.toFixed(1)}%
-        </span>
-        <span style={{ color: '#7a9bbf' }}>{data.deltaLabel}</span>
+        {hasDelta && (
+          <span style={{ color: deltaColor, fontWeight: 600 }}>
+            {arrow} {isPositive ? '+' : ''}{data.delta!.toFixed(1)}%
+          </span>
+        )}
+        {data.deltaLabel && (
+          <span style={{ color: '#7a9bbf' }}>{data.deltaLabel}</span>
+        )}
       </div>
     </div>
   );

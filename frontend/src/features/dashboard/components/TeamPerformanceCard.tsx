@@ -1,4 +1,4 @@
-import type { RepPerformance } from '../data/mockDashboard';
+import type { RepPerformance } from '../types';
 
 interface TeamPerformanceCardProps {
   team: RepPerformance[];

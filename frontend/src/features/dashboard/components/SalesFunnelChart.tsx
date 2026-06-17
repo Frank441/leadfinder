@@ -1,4 +1,4 @@
-import type { FunnelStage } from '../data/mockDashboard';
+import type { FunnelStage } from '../types';
 import { STATUS_CONFIG } from '../../leads/components/StatusBadge';
 
 interface SalesFunnelChartProps {

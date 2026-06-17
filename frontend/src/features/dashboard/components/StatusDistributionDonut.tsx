@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import type { StatusSlice } from '../data/mockDashboard';
+import type { StatusSlice } from '../types';
 import { STATUS_CONFIG } from '../../leads/components/StatusBadge';
 
 interface StatusDistributionDonutProps {

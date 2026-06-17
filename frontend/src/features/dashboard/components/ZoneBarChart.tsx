@@ -1,5 +1,5 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell, ResponsiveContainer } from 'recharts';
-import type { ZoneStat } from '../data/mockDashboard';
+import type { ZoneStat } from '../types';
 
 interface ZoneBarChartProps {
   data: ZoneStat[];

@@ -1,5 +1,5 @@
-import type { Period } from '../data/mockDashboard';
-import { PERIOD_LABEL } from '../data/mockDashboard';
+import type { Period } from '../types';
+import { PERIOD_LABEL } from '../types';
 
 interface PeriodSelectorProps {
   value: Period;
