@@ -1,4 +1,5 @@
 import type { SenasaData } from '@leadfinder/shared/types/leads';
+import { CardEmptyState } from './CardEmptyState';
 
 interface SenasaCardProps {
   data: SenasaData;
@@ -15,6 +16,15 @@ const Row = ({ label, value }: { label: string; value: string | number }) => (
   </div>
 );
 
+const isEmpty = (v: string | undefined | null) => !v || v.trim() === '' || v.toUpperCase() === 'N/A';
+
+/**
+ * Considera vacios los datos de SENASA cuando ningun campo significativo trae info real.
+ */
+const isSenasaEmpty = (d: SenasaData): boolean => {
+  return isEmpty(d.actividad) && isEmpty(d.estadoSanitario) && d.superficieHa === 0;
+};
+
 export const SenasaCard = ({ data }: SenasaCardProps) => {
   return (
     <div style={{
@@ -29,10 +39,17 @@ export const SenasaCard = ({ data }: SenasaCardProps) => {
           SENASA
         </span>
       </div>
-      <Row label="Actividad"     value={data.actividad} />
-      <Row label="Superficie"    value={`${data.superficieHa.toLocaleString('es-AR')} ha`} />
-      <Row label="Estado sanit." value={data.estadoSanitario} />
-      <Row label="RENSPA"        value={data.renspaActivo ? 'Activo' : 'Inactivo'} />
+
+      {isSenasaEmpty(data) ? (
+        <CardEmptyState source="SENASA" />
+      ) : (
+        <>
+          <Row label="Actividad"     value={data.actividad || 'Sin datos'} />
+          <Row label="Superficie"    value={data.superficieHa > 0 ? `${data.superficieHa.toLocaleString('es-AR')} ha` : 'Sin datos'} />
+          <Row label="Estado sanit." value={data.estadoSanitario || 'Sin datos'} />
+          <Row label="RENSPA"        value={data.renspaActivo ? 'Activo' : 'Inactivo'} />
+        </>
+      )}
     </div>
   );
 };

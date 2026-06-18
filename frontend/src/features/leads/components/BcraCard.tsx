@@ -1,4 +1,5 @@
 import type { BcraData, BcraSituacion } from "@leadfinder/shared/types/leads";
+import { CardEmptyState } from './CardEmptyState';
 
 interface BcraCardProps {
   data: BcraData;
@@ -26,10 +27,16 @@ const Row = ({ label, value }: { label: string; value: string | number }) => (
 const formatDate = (iso: string | null) =>
   iso ? new Date(iso).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Sin datos';
 
+/**
+ * El criterio "sin datos" del BCRA pasa cuando el backend devuelve `situacion: "Sin datos"`,
+ * no hay numero de situacion crediticia y no hay fecha de consulta.
+ */
+const isBcraEmpty = (d: BcraData): boolean => {
+  return d.situacion === 'Sin datos' && !d.situacionNumero && !d.ultimaConsulta;
+};
+
 export const BcraCard = ({ data }: BcraCardProps) => {
   const c = SITUACION_COLOR[data.situacion];
-  const icon = data.situacion === 'Normal' ? '✓' : data.situacion === 'Sin datos' ? '?' : '!';
-  const situacion = data.situacionNumero ? `${data.situacionNumero}` : 'Sin datos';
 
   return (
     <div style={{
@@ -45,27 +52,35 @@ export const BcraCard = ({ data }: BcraCardProps) => {
         </span>
       </div>
 
-      {/* Indicador grande */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '6px 0 18px 0' }}>
-        <div style={{
-          width: '56px', height: '56px', borderRadius: '50%',
-          border: `2px solid ${c.ring}`,
-          background: c.bg,
-          color: c.text,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '24px', fontWeight: 700,
-        }}>
-          {icon}
-        </div>
-        <div style={{ marginTop: '8px', fontSize: '13px', fontWeight: 600, color: c.text }}>
-          {data.situacion}
-        </div>
-        <div style={{ fontSize: '11px', color: '#7a9bbf', marginTop: '2px' }}>Situación crediticia: {situacion}</div>
-      </div>
+      {isBcraEmpty(data) ? (
+        <CardEmptyState source="BCRA" />
+      ) : (
+        <>
+          {/* Indicador grande */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '6px 0 18px 0' }}>
+            <div style={{
+              width: '56px', height: '56px', borderRadius: '50%',
+              border: `2px solid ${c.ring}`,
+              background: c.bg,
+              color: c.text,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '24px', fontWeight: 700,
+            }}>
+              {data.situacion === 'Normal' ? '✓' : data.situacion === 'Sin datos' ? '?' : '!'}
+            </div>
+            <div style={{ marginTop: '8px', fontSize: '13px', fontWeight: 600, color: c.text }}>
+              {data.situacion}
+            </div>
+            <div style={{ fontSize: '11px', color: '#7a9bbf', marginTop: '2px' }}>
+              Situación crediticia: {data.situacionNumero ?? 'Sin datos'}
+            </div>
+          </div>
 
-      <Row label="Cheques rechazados" value={data.chequesRechazados === 0 ? 'Sin registros' : data.chequesRechazados} />
-      <Row label="Deudas incob."      value={data.deudasIncobrables === 0 ? 'Sin registros' : data.deudasIncobrables} />
-      <Row label="Última consulta"    value={formatDate(data.ultimaConsulta)} />
+          <Row label="Cheques rechazados" value={data.chequesRechazados === 0 ? 'Sin registros' : data.chequesRechazados} />
+          <Row label="Deudas incob."      value={data.deudasIncobrables === 0 ? 'Sin registros' : data.deudasIncobrables} />
+          <Row label="Última consulta"    value={formatDate(data.ultimaConsulta)} />
+        </>
+      )}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import type { ArcaData } from '@leadfinder/shared/types/leads';
+import { CardEmptyState } from './CardEmptyState';
 
 interface ArcaCardProps {
   data: ArcaData;
@@ -15,6 +16,17 @@ const Row = ({ label, value }: { label: string; value: string }) => (
   </div>
 );
 
+const isEmpty = (v: string | undefined | null) => !v || v.trim() === '' || v.toUpperCase() === 'N/A';
+
+/**
+ * Considera vacios los datos de ARCA cuando todos los campos clave estan en blanco
+ * o el backend usa "Sin datos" como placeholder.
+ */
+const isArcaEmpty = (d: ArcaData): boolean => {
+  const categoriaVacia = isEmpty(d.categoria) || d.categoria === 'Sin datos';
+  return categoriaVacia && isEmpty(d.actividadAfip);
+};
+
 export const ArcaCard = ({ data }: ArcaCardProps) => {
   return (
     <div style={{
@@ -29,11 +41,18 @@ export const ArcaCard = ({ data }: ArcaCardProps) => {
           ARCA (AFIP)
         </span>
       </div>
-      <Row label="Categoría"      value={data.categoria} />
-      <Row label="Estado CUIT"    value={data.estadoCUIT} />
-      <Row label="Actividad AFIP" value={data.actividadAfip} />
-      <Row label="Obligaciones"   value={data.obligacionesAlDia ? 'Al día' : 'Con atrasos'} />
-      <Row label="Último pago"    value={data.ultimoPago} />
+
+      {isArcaEmpty(data) ? (
+        <CardEmptyState source="ARCA" />
+      ) : (
+        <>
+          <Row label="Categoría"      value={data.categoria || 'Sin datos'} />
+          <Row label="Estado CUIT"    value={data.estadoCUIT} />
+          <Row label="Actividad AFIP" value={data.actividadAfip || 'Sin datos'} />
+          <Row label="Obligaciones"   value={data.obligacionesAlDia ? 'Al día' : 'Con atrasos'} />
+          <Row label="Último pago"    value={data.ultimoPago || 'Sin datos'} />
+        </>
+      )}
     </div>
   );
 };
