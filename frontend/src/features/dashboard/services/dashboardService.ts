@@ -63,6 +63,11 @@ const buildInitials = (name: string): string => {
 /**
  * El embudo necesita pctOfTotal y pctFromPrev, que el backend no devuelve.
  * Los calculamos acá usando el orden Lead → Contacto → Prospecto → Cliente.
+ *
+ * pctOfTotal: porcentaje sobre la suma de TODOS los estados.
+ * Esto refleja la composicion real del pipeline (ej. Lead = 99.7% si casi todos
+ * los leads estan sin contactar). No usamos el count del primer estado como base
+ * porque el backend devuelve snapshot actual, no datos historicos acumulados.
  */
 const adaptFunnel = (raw: BackendFunnelStage[]): FunnelStage[] => {
   // Mapeamos a un dict para garantizar el orden y manejar estados faltantes
@@ -73,7 +78,7 @@ const adaptFunnel = (raw: BackendFunnelStage[]): FunnelStage[] => {
   }
 
   const ORDER: LeadStatus[] = ['lead', 'contacto', 'prospecto', 'cliente'];
-  const total = byStatus.get('lead') ?? 0;
+  const total = Array.from(byStatus.values()).reduce((sum, n) => sum + n, 0);
   let prevCount: number | null = null;
 
   return ORDER.map((status) => {
