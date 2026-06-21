@@ -16,16 +16,16 @@ export const LeadMarkerPopup = ({ lead }: LeadMarkerPopupProps) => {
   return (
     <div style={{ minWidth: '200px', maxWidth: '260px' }}>
       <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em',
-                    color: '#a8bdd4', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    color: 'var(--color-text-label)', textTransform: 'uppercase', marginBottom: '4px' }}>
         CUIT {lead.cuit}
       </div>
-      <div style={{ fontSize: '14px', fontWeight: 600, color: '#f0f4f8', marginBottom: '8px' }}>
+      <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text)', marginBottom: '8px' }}>
         {lead.razonSocial}
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
         <StatusBadge status={lead.status} />
-        <span style={{ fontSize: '11px', color: '#7a9bbf' }}>
+        <span style={{ fontSize: '11px', color: 'var(--color-text-sec)' }}>
           {lead.localidad}{lead.provincia ? `, ${lead.provincia}` : ''}
         </span>
       </div>
@@ -37,7 +37,7 @@ export const LeadMarkerPopup = ({ lead }: LeadMarkerPopupProps) => {
           width: '100%',
           marginTop: '4px',
           padding: '7px 12px',
-          background: '#1aaa6e',
+          background: 'var(--color-green)',
           color: '#fff',
           border: 'none',
           borderRadius: '8px',
@@ -46,8 +46,8 @@ export const LeadMarkerPopup = ({ lead }: LeadMarkerPopupProps) => {
           cursor: 'pointer',
           fontFamily: "'Inter', system-ui, sans-serif",
         }}
-        onMouseEnter={(e) => { e.currentTarget.style.background = '#2ecc8f'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.background = '#1aaa6e'; }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-green-light)'; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-green)'; }}
       >
         Ver ficha completa
       </button>

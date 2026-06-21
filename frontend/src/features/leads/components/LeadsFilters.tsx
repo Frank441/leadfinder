@@ -8,10 +8,10 @@ interface LeadsFiltersProps {
 }
 
 const selectStyle: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.05)',
-  border: '1px solid rgba(255,255,255,0.07)',
+  background: 'var(--color-input-bg)',
+  border: '1px solid var(--color-border)',
   borderRadius: '9px',
-  color: '#f0f4f8',
+  color: 'var(--color-text)',
   padding: '8px 13px',
   fontSize: '12px',
   outline: 'none',
@@ -23,8 +23,8 @@ const selectStyle: React.CSSProperties = {
 // Estilo aplicado a cada <option> para que el dropdown nativo respete el dark theme.
 // Sin esto el sistema operativo renderiza las opciones con sus colores por defecto.
 const optionStyle: React.CSSProperties = {
-  background: '#172840',
-  color: '#f0f4f8',
+  background: 'var(--color-card)',
+  color: 'var(--color-text)',
 };
 
 export const LeadsFilters = ({ zona, actividad, onChangeZona, onChangeActividad }: LeadsFiltersProps) => {

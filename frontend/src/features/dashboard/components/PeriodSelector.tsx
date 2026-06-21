@@ -12,8 +12,8 @@ export const PeriodSelector = ({ value, onChange }: PeriodSelectorProps) => {
   return (
     <div style={{
       display: 'inline-flex',
-      background: '#172840',
-      border: '1px solid rgba(255,255,255,0.07)',
+      background: 'var(--color-card)',
+      border: '1px solid var(--color-border)',
       borderRadius: '9px',
       padding: '3px',
       gap: '2px',
@@ -29,8 +29,8 @@ export const PeriodSelector = ({ value, onChange }: PeriodSelectorProps) => {
               padding: '6px 14px',
               borderRadius: '7px',
               border: 'none',
-              background: isActive ? '#1aaa6e' : 'transparent',
-              color: isActive ? '#fff' : '#7a9bbf',
+              background: isActive ? 'var(--color-green)' : 'transparent',
+              color: isActive ? '#fff' : 'var(--color-text-sec)',
               fontSize: '12px',
               fontWeight: isActive ? 600 : 500,
               cursor: 'pointer',

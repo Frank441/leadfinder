@@ -14,14 +14,14 @@ const STATUS_FILL: Record<LeadStatus, string> = {
   lead:      '#e05252',
   contacto:  '#e09a30',
   prospecto: '#3d8fe0',
-  cliente:   '#1aaa6e',
+  cliente:   'var(--color-green)',
 };
 
 const STATUS_STROKE: Record<LeadStatus, string> = {
   lead:      '#ff7b7b',
   contacto:  '#ffba55',
   prospecto: '#74b4ff',
-  cliente:   '#2ecc8f',
+  cliente:   'var(--color-green-light)',
 };
 
 export const buildLeadIcon = (status: LeadStatus): L.DivIcon => {

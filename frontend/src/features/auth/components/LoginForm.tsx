@@ -9,10 +9,10 @@ interface LoginFormProps {
 
 const INPUT_STYLE: React.CSSProperties = {
   width: '100%',
-  background: 'rgba(255,255,255,0.05)',
-  border: '1px solid rgba(255,255,255,0.08)',
+  background: 'var(--color-input-bg)',
+  border: '1px solid var(--color-border-strong)',
   borderRadius: '9px',
-  color: '#f0f4f8',
+  color: 'var(--color-text)',
   padding: '11px 14px',
   fontSize: '13px',
   outline: 'none',
@@ -30,12 +30,12 @@ export const LoginForm = ({ onSubmit, isLoading = false, error }: LoginFormProps
   };
 
   const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.target.style.borderColor = '#1aaa6e';
-    e.target.style.background = 'rgba(26,170,110,0.06)';
+    e.target.style.borderColor = 'var(--color-green)';
+    e.target.style.background = 'var(--color-input-focus-bg)';
   };
   const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.target.style.borderColor = 'rgba(255,255,255,0.08)';
-    e.target.style.background = 'rgba(255,255,255,0.05)';
+    e.target.style.borderColor = 'var(--color-border-strong)';
+    e.target.style.background = 'var(--color-input-bg)';
   };
 
   return (
@@ -54,7 +54,7 @@ export const LoginForm = ({ onSubmit, isLoading = false, error }: LoginFormProps
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-        <label style={{ fontSize: '11px', fontWeight: 500, color: '#a8bdd4' }}>
+        <label style={{ fontSize: '11px', fontWeight: 500, color: 'var(--color-text-label)' }}>
           Correo electrónico
         </label>
         <input
@@ -70,7 +70,7 @@ export const LoginForm = ({ onSubmit, isLoading = false, error }: LoginFormProps
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-        <label style={{ fontSize: '11px', fontWeight: 500, color: '#a8bdd4' }}>
+        <label style={{ fontSize: '11px', fontWeight: 500, color: 'var(--color-text-label)' }}>
           Contraseña
         </label>
         <input
@@ -90,7 +90,7 @@ export const LoginForm = ({ onSubmit, isLoading = false, error }: LoginFormProps
         disabled={isLoading}
         style={{
           width: '100%',
-          background: isLoading ? '#0f7d50' : '#1aaa6e',
+          background: isLoading ? '#0f7d50' : 'var(--color-green)',
           color: '#ffffff',
           border: 'none',
           borderRadius: '9px',
@@ -102,8 +102,8 @@ export const LoginForm = ({ onSubmit, isLoading = false, error }: LoginFormProps
           transition: 'background 0.15s',
           marginTop: '4px',
         }}
-        onMouseEnter={(e) => { if (!isLoading) e.currentTarget.style.background = '#2ecc8f'; }}
-        onMouseLeave={(e) => { if (!isLoading) e.currentTarget.style.background = '#1aaa6e'; }}
+        onMouseEnter={(e) => { if (!isLoading) e.currentTarget.style.background = 'var(--color-green-light)'; }}
+        onMouseLeave={(e) => { if (!isLoading) e.currentTarget.style.background = 'var(--color-green)'; }}
       >
         {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
       </button>

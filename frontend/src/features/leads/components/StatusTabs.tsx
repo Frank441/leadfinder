@@ -8,11 +8,11 @@ interface StatusTabsProps {
 }
 
 const TABS: { value: StatusFilter; label: string; activeBg: string; activeColor: string }[] = [
-  { value: 'todos',     label: 'Todos',     activeBg: '#1aaa6e',                   activeColor: '#fff' },
+  { value: 'todos',     label: 'Todos',     activeBg: 'var(--color-green)',                   activeColor: '#fff' },
   { value: 'lead',      label: 'Lead',      activeBg: 'rgba(224,82,82,0.18)',      activeColor: '#ff7b7b' },
   { value: 'contacto',  label: 'Contacto',  activeBg: 'rgba(224,154,48,0.18)',     activeColor: '#ffba55' },
   { value: 'prospecto', label: 'Prospecto', activeBg: 'rgba(61,143,224,0.18)',     activeColor: '#74b4ff' },
-  { value: 'cliente',   label: 'Cliente',   activeBg: 'rgba(26,170,110,0.18)',     activeColor: '#2ecc8f' },
+  { value: 'cliente',   label: 'Cliente',   activeBg: 'var(--color-green-bg)',     activeColor: 'var(--color-green-light)' },
 ];
 
 export const StatusTabs = ({ value, onChange }: StatusTabsProps) => {
@@ -28,9 +28,9 @@ export const StatusTabs = ({ value, onChange }: StatusTabsProps) => {
             style={{
               padding: '6px 14px',
               borderRadius: '8px',
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid var(--color-border-strong)',
               background: isActive ? tab.activeBg : 'transparent',
-              color: isActive ? tab.activeColor : '#7a9bbf',
+              color: isActive ? tab.activeColor : 'var(--color-text-sec)',
               fontSize: '12px',
               fontWeight: isActive ? 600 : 500,
               cursor: 'pointer',

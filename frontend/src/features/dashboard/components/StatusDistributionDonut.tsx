@@ -17,15 +17,15 @@ const CustomTooltip = ({ active, payload }: TooltipProps) => {
   const total = payload[0].value;
   return (
     <div style={{
-      background: '#172840',
+      background: 'var(--color-card)',
       border: '1px solid rgba(255,255,255,0.1)',
       borderRadius: '8px',
       padding: '8px 12px',
       fontSize: '12px',
       fontFamily: "'Inter', system-ui, sans-serif",
     }}>
-      <div style={{ color: '#f0f4f8', fontWeight: 600 }}>{slice.label}</div>
-      <div style={{ color: '#7a9bbf', marginTop: '2px' }}>
+      <div style={{ color: 'var(--color-text)', fontWeight: 600 }}>{slice.label}</div>
+      <div style={{ color: 'var(--color-text-sec)', marginTop: '2px' }}>
         {total.toLocaleString('es-AR')} leads
       </div>
     </div>
@@ -37,8 +37,8 @@ export const StatusDistributionDonut = ({ data }: StatusDistributionDonutProps) 
 
   return (
     <div style={{
-      background: '#172840',
-      border: '1px solid rgba(255,255,255,0.07)',
+      background: 'var(--color-card)',
+      border: '1px solid var(--color-border)',
       borderRadius: '14px',
       padding: '20px 24px',
       display: 'flex',
@@ -46,10 +46,10 @@ export const StatusDistributionDonut = ({ data }: StatusDistributionDonutProps) 
       height: '100%',
     }}>
       <div style={{ marginBottom: '12px' }}>
-        <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#f0f4f8', margin: 0 }}>
+        <h2 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-text)', margin: 0 }}>
           Estado actual de los leads
         </h2>
-        <p style={{ fontSize: '11px', color: '#7a9bbf', margin: '4px 0 0 0' }}>
+        <p style={{ fontSize: '11px', color: 'var(--color-text-sec)', margin: '4px 0 0 0' }}>
           Cuántos leads hay en cada etapa
         </p>
       </div>
@@ -86,8 +86,8 @@ export const StatusDistributionDonut = ({ data }: StatusDistributionDonutProps) 
           justifyContent: 'center',
           pointerEvents: 'none',
         }}>
-          <div style={{ fontSize: '11px', color: '#7a9bbf', fontWeight: 500 }}>Total</div>
-          <div style={{ fontSize: '28px', fontWeight: 700, color: '#f0f4f8', fontVariantNumeric: 'tabular-nums' }}>
+          <div style={{ fontSize: '11px', color: 'var(--color-text-sec)', fontWeight: 500 }}>Total</div>
+          <div style={{ fontSize: '28px', fontWeight: 700, color: 'var(--color-text)', fontVariantNumeric: 'tabular-nums' }}>
             {total.toLocaleString('es-AR')}
           </div>
         </div>
@@ -101,8 +101,8 @@ export const StatusDistributionDonut = ({ data }: StatusDistributionDonutProps) 
           return (
             <div key={slice.status} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: cfg.dot }} />
-              <span style={{ color: '#f0f4f8' }}>{slice.label}</span>
-              <span style={{ color: '#7a9bbf', fontVariantNumeric: 'tabular-nums' }}>
+              <span style={{ color: 'var(--color-text)' }}>{slice.label}</span>
+              <span style={{ color: 'var(--color-text-sec)', fontVariantNumeric: 'tabular-nums' }}>
                 {pct.toFixed(1)}%
               </span>
             </div>

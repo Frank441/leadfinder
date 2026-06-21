@@ -47,17 +47,17 @@ export const AssignLeadModal = ({ lead, onClose, onAssigned }: AssignLeadModalPr
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%', maxWidth: '440px', margin: '0 16px',
-          background: '#172840',
+          background: 'var(--color-card)',
           borderRadius: '14px',
-          border: '1px solid rgba(255,255,255,0.07)',
+          border: '1px solid var(--color-border)',
           padding: '24px',
         }}
       >
         <div style={{ marginBottom: '4px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 600, color: '#f0f4f8', margin: 0 }}>
+          <h2 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text)', margin: 0 }}>
             {isReassign ? 'Reasignar lead' : 'Asignar lead'}
           </h2>
-          <p style={{ fontSize: '12px', color: '#7a9bbf', margin: '4px 0 0 0' }}>
+          <p style={{ fontSize: '12px', color: 'var(--color-text-sec)', margin: '4px 0 0 0' }}>
             {lead.razonSocial}
           </p>
         </div>
@@ -66,12 +66,12 @@ export const AssignLeadModal = ({ lead, onClose, onAssigned }: AssignLeadModalPr
           <div style={{
             marginTop: '14px',
             padding: '10px 12px',
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.07)',
+            background: 'var(--color-card-hover)',
+            border: '1px solid var(--color-border)',
             borderRadius: '8px',
-            fontSize: '12px', color: '#7a9bbf',
+            fontSize: '12px', color: 'var(--color-text-sec)',
           }}>
-            Actualmente asignado a <strong style={{ color: '#f0f4f8', fontWeight: 600 }}>{currentRep.name}</strong>
+            Actualmente asignado a <strong style={{ color: 'var(--color-text)', fontWeight: 600 }}>{currentRep.name}</strong>
           </div>
         )}
 
@@ -87,17 +87,17 @@ export const AssignLeadModal = ({ lead, onClose, onAssigned }: AssignLeadModalPr
                   display: 'flex', alignItems: 'center', gap: '12px',
                   padding: '10px 12px',
                   borderRadius: '9px',
-                  border: `1px solid ${isSelected ? '#1aaa6e' : 'rgba(255,255,255,0.07)'}`,
-                  background: isSelected ? 'rgba(26,170,110,0.08)' : 'transparent',
-                  color: '#f0f4f8', fontSize: '13px', cursor: 'pointer', textAlign: 'left',
+                  border: `1px solid ${isSelected ? 'var(--color-green)' : 'var(--color-border)'}`,
+                  background: isSelected ? 'var(--color-green-bg)' : 'transparent',
+                  color: 'var(--color-text)', fontSize: '13px', cursor: 'pointer', textAlign: 'left',
                   fontFamily: "'Inter', system-ui, sans-serif",
                   transition: 'border-color 0.15s, background 0.15s',
                 }}
               >
                 <div style={{
                   width: '32px', height: '32px', borderRadius: '50%',
-                  background: isSelected ? '#1aaa6e' : 'rgba(255,255,255,0.08)',
-                  color: isSelected ? '#fff' : '#7a9bbf',
+                  background: isSelected ? 'var(--color-green)' : 'var(--color-border-strong)',
+                  color: isSelected ? '#fff' : 'var(--color-text-sec)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '11px', fontWeight: 600, flexShrink: 0,
                 }}>
@@ -105,7 +105,7 @@ export const AssignLeadModal = ({ lead, onClose, onAssigned }: AssignLeadModalPr
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '13px', fontWeight: 500 }}>{rep.name}</div>
-                  <div style={{ fontSize: '11px', color: '#7a9bbf', marginTop: '2px' }}>{rep.email}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--color-text-sec)', marginTop: '2px' }}>{rep.email}</div>
                 </div>
                 {isSelected && (
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1aaa6e" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -135,12 +135,12 @@ export const AssignLeadModal = ({ lead, onClose, onAssigned }: AssignLeadModalPr
 
         <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'flex-end' }}>
           <button type="button" onClick={onClose} disabled={isSaving}
-            style={{ padding: '9px 16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.07)', background: 'transparent', color: '#7a9bbf', fontSize: '12px', fontWeight: 500, cursor: isSaving ? 'not-allowed' : 'pointer', fontFamily: "'Inter', system-ui, sans-serif" }}>
+            style={{ padding: '9px 16px', borderRadius: '8px', border: '1px solid var(--color-border)', background: 'transparent', color: 'var(--color-text-sec)', fontSize: '12px', fontWeight: 500, cursor: isSaving ? 'not-allowed' : 'pointer', fontFamily: "'Inter', system-ui, sans-serif" }}>
             Cancelar
           </button>
           <button type="button" onClick={handleConfirm}
             disabled={isSaving || selectedId === lead.representanteId}
-            style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: (isSaving || selectedId === lead.representanteId) ? '#0f7d50' : '#1aaa6e', color: '#fff', fontSize: '12px', fontWeight: 600, cursor: (isSaving || selectedId === lead.representanteId) ? 'not-allowed' : 'pointer', fontFamily: "'Inter', system-ui, sans-serif" }}>
+            style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: (isSaving || selectedId === lead.representanteId) ? '#0f7d50' : 'var(--color-green)', color: '#fff', fontSize: '12px', fontWeight: 600, cursor: (isSaving || selectedId === lead.representanteId) ? 'not-allowed' : 'pointer', fontFamily: "'Inter', system-ui, sans-serif" }}>
             {isSaving ? 'Guardando...' : 'Confirmar'}
           </button>
         </div>

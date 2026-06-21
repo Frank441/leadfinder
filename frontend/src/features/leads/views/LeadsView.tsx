@@ -17,7 +17,7 @@ const TH: React.CSSProperties = {
   padding: '11px 16px', textAlign: 'left',
   fontSize: '11px', fontWeight: 600,
   letterSpacing: '0.06em', textTransform: 'uppercase',
-  color: '#a8bdd4', whiteSpace: 'nowrap',
+  color: 'var(--color-text-label)', whiteSpace: 'nowrap',
 };
 
 const ITEMS_PER_PAGE = 20;
@@ -25,19 +25,19 @@ const ITEMS_PER_PAGE = 20;
 const RepresentanteCell = ({ representanteId, representantes }: { representanteId: string | null; representantes: Representante[] }) => {
   const rep = representanteId ? representantes.find((r) => r.id === representanteId) : null;
   if (!rep) {
-    return <span style={{ color: '#3d5a73', fontStyle: 'italic', fontSize: '12px' }}>Sin asignar</span>;
+    return <span style={{ color: 'var(--color-text-muted)', fontStyle: 'italic', fontSize: '12px' }}>Sin asignar</span>;
   }
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
       <div style={{
         width: '22px', height: '22px', borderRadius: '50%',
-        background: 'rgba(26,170,110,0.15)', color: '#1aaa6e',
+        background: 'var(--color-green-bg)', color: 'var(--color-green)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: '10px', fontWeight: 600,
       }}>
         {rep.initials}
       </div>
-      <span style={{ fontSize: '12px', color: '#f0f4f8' }}>{rep.name}</span>
+      <span style={{ fontSize: '12px', color: 'var(--color-text)' }}>{rep.name}</span>
     </div>
   );
 };
@@ -109,7 +109,7 @@ export const LeadsView = () => {
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-        <p style={{ fontSize: '12px', color: '#7a9bbf', margin: 0 }}>
+        <p style={{ fontSize: '12px', color: 'var(--color-text-sec)', margin: 0 }}>
           {isFetching && leads.length === 0
             ? 'Cargando leads...'
             : total === 0
@@ -126,14 +126,14 @@ export const LeadsView = () => {
           onChange={(e) => setSearch(e.target.value)}
           style={{
             flex: '1 1 260px', minWidth: '220px',
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.07)',
-            borderRadius: '9px', color: '#f0f4f8',
+            background: 'var(--color-input-bg)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '9px', color: 'var(--color-text)',
             padding: '9px 13px', fontSize: '13px', outline: 'none',
             fontFamily: "'Inter', system-ui, sans-serif",
           }}
-          onFocus={(e) => { e.target.style.borderColor = '#1aaa6e'; e.target.style.background = 'rgba(26,170,110,0.06)'; }}
-          onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.07)'; e.target.style.background = 'rgba(255,255,255,0.05)'; }}
+          onFocus={(e) => { e.target.style.borderColor = 'var(--color-green)'; e.target.style.background = 'var(--color-input-focus-bg)'; }}
+          onBlur={(e) => { e.target.style.borderColor = 'var(--color-border)'; e.target.style.background = 'var(--color-input-bg)'; }}
         />
         <LeadsFilters
           zona={zonaFilter}
@@ -145,10 +145,10 @@ export const LeadsView = () => {
       </div>
 
       <div style={{ opacity: isFetching ? 0.5 : 1, transition: 'opacity 0.15s' }}>
-        <div style={{ background: '#172840', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', overflow: 'hidden' }}>
+        <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderRadius: '12px', overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+              <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
                 <th style={TH}>Establecimiento</th>
                 <th style={TH}>CUIT</th>
                 <th style={TH}>Zona</th>
@@ -160,29 +160,29 @@ export const LeadsView = () => {
             </thead>
             <tbody>
               {isFetching && leads.length === 0 ? (
-                <tr><td colSpan={canAssign ? 7 : 6} style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px' }}>Cargando...</td></tr>
+                <tr><td colSpan={canAssign ? 7 : 6} style={{ padding: '40px', textAlign: 'center', color: 'var(--color-text-sec)', fontSize: '13px' }}>Cargando...</td></tr>
               ) : leads.length === 0 ? (
-                <tr><td colSpan={canAssign ? 7 : 6} style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px' }}>No se encontraron leads con los filtros aplicados</td></tr>
+                <tr><td colSpan={canAssign ? 7 : 6} style={{ padding: '40px', textAlign: 'center', color: 'var(--color-text-sec)', fontSize: '13px' }}>No se encontraron leads con los filtros aplicados</td></tr>
               ) : (
                 leads.map((lead, idx) => (
                   <tr
                     key={lead.id}
                     onClick={() => navigate(`/leads/${lead.id}?${searchParams.toString()}`)}
                     style={{
-                      borderBottom: idx < leads.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                      borderBottom: idx < leads.length - 1 ? '1px solid var(--color-border)' : 'none',
                       cursor: 'pointer',
                     }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-card-hover)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                   >
                     <td style={{ padding: '12px 16px' }}>
-                      <div style={{ fontSize: '13px', color: '#f0f4f8', fontWeight: 500 }}>{lead.razonSocial}</div>
-                      <div style={{ fontSize: '11px', color: '#7a9bbf', marginTop: '2px' }}>
+                      <div style={{ fontSize: '13px', color: 'var(--color-text)', fontWeight: 500 }}>{lead.razonSocial}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--color-text-sec)', marginTop: '2px' }}>
                         {lead.superficieHa.toLocaleString('es-AR')} ha
                       </div>
                     </td>
-                    <td style={{ padding: '12px 16px', fontSize: '12px', color: '#7a9bbf', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{lead.cuit}</td>
-                    <td style={{ padding: '12px 16px', fontSize: '12px', color: '#7a9bbf', whiteSpace: 'nowrap' }}>{lead.zona}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: 'var(--color-text-sec)', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{lead.cuit}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: 'var(--color-text-sec)', whiteSpace: 'nowrap' }}>{lead.zona}</td>
                     <td style={{ padding: '12px 16px' }}>
                       <RepresentanteCell representanteId={lead.representanteId} representantes={representantes} />
                     </td>
@@ -194,14 +194,14 @@ export const LeadsView = () => {
                           onClick={(e) => { e.stopPropagation(); setAssignTarget(lead); }}
                           style={{
                             background: 'transparent',
-                            border: '1px solid rgba(255,255,255,0.07)',
-                            borderRadius: '6px', color: '#7a9bbf',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: '6px', color: 'var(--color-text-sec)',
                             padding: '4px 10px', fontSize: '11px',
                             cursor: 'pointer', whiteSpace: 'nowrap',
                             fontFamily: "'Inter', system-ui, sans-serif",
                           }}
-                          onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#1aaa6e'; e.currentTarget.style.color = '#1aaa6e'; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#7a9bbf'; }}
+                          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-green)'; e.currentTarget.style.color = 'var(--color-green)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-text-sec)'; }}
                         >
                           {lead.representanteId ? 'Reasignar' : 'Asignar'}
                         </button>

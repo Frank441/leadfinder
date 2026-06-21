@@ -18,10 +18,10 @@ const ARG_CENTER: [number, number] = [-38.4161, -63.6167];
 const INITIAL_ZOOM = 5;
 
 const SELECT_STYLE: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.05)',
-  border: '1px solid rgba(255,255,255,0.07)',
+  background: 'var(--color-input-bg)',
+  border: '1px solid var(--color-border)',
   borderRadius: '9px',
-  color: '#f0f4f8',
+  color: 'var(--color-text)',
   padding: '7px 13px',
   fontSize: '12px',
   outline: 'none',
@@ -31,8 +31,8 @@ const SELECT_STYLE: React.CSSProperties = {
 };
 
 const OPTION_STYLE: React.CSSProperties = {
-  background: '#172840',
-  color: '#f0f4f8',
+  background: 'var(--color-card)',
+  color: 'var(--color-text)',
 };
 
 /**
@@ -89,7 +89,7 @@ export const MapView = () => {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         marginBottom: '14px', gap: '12px', flexWrap: 'wrap',
       }}>
-        <p style={{ fontSize: '12px', color: '#7a9bbf', margin: 0 }}>
+        <p style={{ fontSize: '12px', color: 'var(--color-text-sec)', margin: 0 }}>
           {isLoading
             ? 'Cargando leads...'
             : `${visibleLeads.length} ${visibleLeads.length === 1 ? 'lead ubicado' : 'leads ubicados'} en el mapa`}
@@ -116,8 +116,8 @@ export const MapView = () => {
         height: 'calc(100vh - 160px)',
         borderRadius: '12px',
         overflow: 'hidden',
-        border: '1px solid rgba(255,255,255,0.07)',
-        background: '#172840',
+        border: '1px solid var(--color-border)',
+        background: 'var(--color-card)',
       }}>
         <MapContainer
           center={ARG_CENTER}

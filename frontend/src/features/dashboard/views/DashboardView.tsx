@@ -40,7 +40,7 @@ export const DashboardView = () => {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         gap: '12px', flexWrap: 'wrap', marginBottom: '20px',
       }}>
-        <p style={{ fontSize: '12px', color: '#7a9bbf', margin: 0 }}>
+        <p style={{ fontSize: '12px', color: 'var(--color-text-sec)', margin: 0 }}>
           Resumen general del equipo comercial
         </p>
         <PeriodSelector value={period} onChange={setPeriod} />
@@ -64,7 +64,7 @@ export const DashboardView = () => {
         <div style={{
           padding: '60px 20px',
           textAlign: 'center',
-          color: '#7a9bbf',
+          color: 'var(--color-text-sec)',
           fontSize: '13px',
         }}>
           Cargando datos...

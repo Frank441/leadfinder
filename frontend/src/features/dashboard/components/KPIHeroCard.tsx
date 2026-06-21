@@ -9,7 +9,7 @@ interface KPIHeroCardProps {
 }
 
 const ACCENT_COLOR: Record<NonNullable<KPIHeroCardProps['accent']>, string> = {
-  green:  '#2ecc8f',
+  green:  'var(--color-green-light)',
   blue:   '#74b4ff',
   orange: '#ffba55',
   purple: '#c084fc',
@@ -27,15 +27,15 @@ export const KPIHeroCard = ({ label, data, format = 'number', hero = false, acce
   // En ese caso escondemos la flecha y mostramos solo el contexto del periodo.
   const hasDelta = typeof data.delta === 'number';
   const isPositive = hasDelta && data.delta! >= 0;
-  const deltaColor = isPositive ? '#2ecc8f' : '#ff7b7b';
+  const deltaColor = isPositive ? 'var(--color-green-light)' : '#ff7b7b';
   const arrow = isPositive ? '▲' : '▼';
 
   return (
     <div style={{
       background: hero
         ? `linear-gradient(135deg, rgba(26,170,110,0.10), rgba(26,170,110,0.03))`
-        : '#172840',
-      border: `1px solid ${hero ? 'rgba(26,170,110,0.35)' : 'rgba(255,255,255,0.07)'}`,
+        : 'var(--color-card)',
+      border: `1px solid ${hero ? 'var(--color-green-border)' : 'var(--color-border)'}`,
       borderRadius: '14px',
       padding: hero ? '22px 24px' : '18px 20px',
       display: 'flex',
@@ -45,7 +45,7 @@ export const KPIHeroCard = ({ label, data, format = 'number', hero = false, acce
     }}>
       <div style={{
         fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em',
-        color: '#a8bdd4', textTransform: 'uppercase',
+        color: 'var(--color-text-label)', textTransform: 'uppercase',
       }}>
         {label}
       </div>
@@ -53,7 +53,7 @@ export const KPIHeroCard = ({ label, data, format = 'number', hero = false, acce
       <div style={{
         fontSize: hero ? '40px' : '30px',
         fontWeight: 700,
-        color: hero ? color : '#f0f4f8',
+        color: hero ? color : 'var(--color-text)',
         lineHeight: 1.05,
         margin: hero ? '8px 0' : '6px 0',
         fontVariantNumeric: 'tabular-nums',
@@ -71,7 +71,7 @@ export const KPIHeroCard = ({ label, data, format = 'number', hero = false, acce
           </span>
         )}
         {data.deltaLabel && (
-          <span style={{ color: '#7a9bbf' }}>{data.deltaLabel}</span>
+          <span style={{ color: 'var(--color-text-sec)' }}>{data.deltaLabel}</span>
         )}
       </div>
     </div>

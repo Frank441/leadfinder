@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate, matchPath } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import type { UserRole } from '@leadfinder/shared/types/user';
 import { ROLES } from "@leadfinder/shared/types/user";
 
@@ -47,6 +48,22 @@ const IconLogout = () => (
   </svg>
 );
 
+const IconSun = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2" /><path d="M12 20v2" />
+    <path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" />
+    <path d="M2 12h2" /><path d="M20 12h2" />
+    <path d="m4.93 19.07 1.41-1.41" /><path d="m17.66 6.34 1.41-1.41" />
+  </svg>
+);
+
+const IconMoon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
+);
+
 const NAV_ITEMS: NavItem[] = [
   { path: '/dashboard', label: 'Dashboard',  icon: <IconDashboard />, roles: [ROLES.director] },
   { path: '/leads',     label: 'Leads',      icon: <IconLeads />,    roles: [ROLES.director, ROLES.supervisor, ROLES.representante] },
@@ -77,6 +94,7 @@ const getPageInfo = (pathname: string): { title: string; subtitle?: string } => 
 
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -96,19 +114,19 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const pageInfo = getPageInfo(location.pathname);
 
   return (
-    <div style={{ display: 'flex', height: '100vh', background: '#0b1929', fontFamily: "'Inter', system-ui, sans-serif" }}>
+    <div style={{ display: 'flex', height: '100vh', background: 'var(--color-bg)', fontFamily: "'Inter', system-ui, sans-serif" }}>
       {/* Sidebar */}
       <aside style={{
         width: '220px', flexShrink: 0,
-        background: '#111f30',
-        borderRight: '1px solid rgba(255,255,255,0.07)',
+        background: 'var(--color-surface)',
+        borderRight: '1px solid var(--color-border)',
         display: 'flex', flexDirection: 'column',
       }}>
         {/* Brand */}
-        <div style={{ padding: '18px 16px', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+        <div style={{ padding: '18px 16px', borderBottom: '1px solid var(--color-border)' }}>
           <Link to={user?.role === ROLES.director ? '/dashboard' : '/leads'} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
             <img src="/logo.png" alt="Lead Finder" style={{ width: '36px', height: '36px', objectFit: 'contain', flexShrink: 0, display: 'block' }} />
-            <span style={{ fontSize: '13px', fontWeight: 600, color: '#f0f4f8' }}>Lead Finder</span>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text)' }}>Lead Finder</span>
           </Link>
         </div>
 
@@ -124,8 +142,8 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 display: 'flex', alignItems: 'center', gap: '10px',
                 padding: '8px 10px', borderRadius: '8px', textDecoration: 'none',
                 fontSize: '13px', fontWeight: isActive ? 500 : 400,
-                color: isActive ? '#1aaa6e' : '#7a9bbf',
-                background: isActive ? 'rgba(26,170,110,0.12)' : 'transparent',
+                color: isActive ? 'var(--color-green)' : 'var(--color-text-sec)',
+                background: isActive ? 'var(--color-green-bg)' : 'transparent',
                 transition: 'background 0.15s, color 0.15s',
               }}>
                 {item.icon}
@@ -136,35 +154,52 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
         </nav>
 
         {/* User + logout */}
-        <div style={{ padding: '10px 8px', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+        <div style={{ padding: '10px 8px', borderTop: '1px solid var(--color-border)' }}>
           <div style={{ padding: '8px 10px', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{
               width: '30px', height: '30px', borderRadius: '50%',
-              background: 'rgba(26,170,110,0.15)', color: '#1aaa6e',
+              background: 'var(--color-green-bg)', color: 'var(--color-green)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: '11px', fontWeight: 600, flexShrink: 0,
             }}>
               {[user?.nombre, user?.apellido].filter(Boolean).map((n) => n![0]).join('').slice(0, 2).toUpperCase() || 'U'}
             </div>
             <div style={{ minWidth: 0, flex: 1 }}>
-              <div style={{ fontSize: '12px', fontWeight: 500, color: '#f0f4f8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <div style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {user ? `${user.nombre} ${user.apellido}` : 'Usuario'}
               </div>
-              <div style={{ fontSize: '10px', color: '#7a9bbf', marginTop: '1px' }}>
+              <div style={{ fontSize: '10px', color: 'var(--color-text-sec)', marginTop: '1px' }}>
                 {user?.role ? ROLE_LABEL[user.role] : ''}
               </div>
             </div>
           </div>
+          {/* Toggle de modo claro/oscuro */}
+          <button onClick={toggleTheme} style={{
+            display: 'flex', alignItems: 'center', gap: '9px',
+            width: '100%', padding: '8px 10px', borderRadius: '8px',
+            border: 'none', background: 'transparent',
+            color: 'var(--color-text-sec)', fontSize: '12px', cursor: 'pointer',
+            fontFamily: "'Inter', system-ui, sans-serif",
+            transition: 'color 0.15s, background 0.15s',
+          }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-card-hover)'; e.currentTarget.style.color = 'var(--color-text)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--color-text-sec)'; }}
+            title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+          >
+            {theme === 'dark' ? <IconSun /> : <IconMoon />}
+            {theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+          </button>
+
           <button onClick={handleLogout} style={{
             display: 'flex', alignItems: 'center', gap: '9px',
             width: '100%', padding: '8px 10px', borderRadius: '8px',
             border: 'none', background: 'transparent',
-            color: '#3d5a73', fontSize: '12px', cursor: 'pointer',
+            color: 'var(--color-text-sec)', fontSize: '12px', cursor: 'pointer',
             fontFamily: "'Inter', system-ui, sans-serif",
             transition: 'color 0.15s, background 0.15s',
           }}
             onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(224,82,82,0.08)'; e.currentTarget.style.color = '#ff7b7b'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#3d5a73'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--color-text-sec)'; }}
           >
             <IconLogout />
             Cerrar sesión
@@ -175,16 +210,16 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Main */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <header style={{
-          minHeight: '56px', background: '#111f30',
-          borderBottom: '1px solid rgba(255,255,255,0.07)',
+          minHeight: '56px', background: 'var(--color-surface)',
+          borderBottom: '1px solid var(--color-border)',
           display: 'flex', alignItems: 'center', padding: '10px 24px', flexShrink: 0,
         }}>
           <div>
-            <h1 style={{ fontSize: '15px', fontWeight: 600, color: '#f0f4f8', margin: 0 }}>
+            <h1 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-text)', margin: 0 }}>
               {pageInfo.title}
             </h1>
             {pageInfo.subtitle && (
-              <p style={{ fontSize: '11px', color: '#7a9bbf', margin: '2px 0 0 0' }}>
+              <p style={{ fontSize: '11px', color: 'var(--color-text-sec)', margin: '2px 0 0 0' }}>
                 {pageInfo.subtitle}
               </p>
             )}

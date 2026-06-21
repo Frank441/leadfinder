@@ -25,17 +25,17 @@ export const ConfirmDeleteModal = ({ onConfirm, onClose }: ConfirmDeleteModalPro
       background: 'rgba(0,0,0,0.6)',
     }}>
       <div style={{
-        background: '#172840',
-        border: '1px solid rgba(255,255,255,0.07)',
+        background: 'var(--color-card)',
+        border: '1px solid var(--color-border)',
         borderRadius: '14px',
         padding: '28px 28px 24px',
         width: '100%', maxWidth: '380px',
         fontFamily: "'Inter', system-ui, sans-serif",
       }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#f0f4f8', margin: '0 0 8px 0' }}>
+        <h2 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text)', margin: '0 0 8px 0' }}>
           ¿Eliminar nota?
         </h2>
-        <p style={{ fontSize: '13px', color: '#7a9bbf', margin: '0 0 24px 0', lineHeight: 1.5 }}>
+        <p style={{ fontSize: '13px', color: 'var(--color-text-sec)', margin: '0 0 24px 0', lineHeight: 1.5 }}>
           Esta acción no se puede deshacer. La nota será eliminada permanentemente.
         </p>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
@@ -44,8 +44,8 @@ export const ConfirmDeleteModal = ({ onConfirm, onClose }: ConfirmDeleteModalPro
             disabled={isDeleting}
             style={{
               padding: '8px 18px', borderRadius: '8px',
-              border: '1px solid rgba(255,255,255,0.07)',
-              background: 'transparent', color: '#7a9bbf',
+              border: '1px solid var(--color-border)',
+              background: 'transparent', color: 'var(--color-text-sec)',
               fontSize: '13px', cursor: isDeleting ? 'not-allowed' : 'pointer',
               fontFamily: "'Inter', system-ui, sans-serif",
             }}

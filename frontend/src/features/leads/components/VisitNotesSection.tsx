@@ -34,12 +34,12 @@ const IconButton = ({
         width: '26px', height: '26px',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: hovered
-          ? danger ? 'rgba(220,53,69,0.15)' : 'rgba(255,255,255,0.07)'
-          : 'rgba(255,255,255,0.03)',
-        border: `1px solid ${hovered ? (danger ? 'rgba(220,53,69,0.5)' : 'rgba(255,255,255,0.15)') : 'rgba(255,255,255,0.06)'}`,
+          ? danger ? 'rgba(220,53,69,0.15)' : 'var(--color-border)'
+          : 'var(--color-card-hover)',
+        border: `1px solid ${hovered ? (danger ? 'rgba(220,53,69,0.5)' : 'rgba(255,255,255,0.15)') : 'var(--color-input-bg)'}`,
         borderRadius: '6px',
         cursor: 'pointer',
-        color: hovered ? (danger ? '#dc3545' : '#f0f4f8') : '#7a9bbf',
+        color: hovered ? (danger ? '#dc3545' : 'var(--color-text)') : 'var(--color-text-sec)',
         fontSize: '12px',
         transition: 'all 0.15s',
         flexShrink: 0,
@@ -92,25 +92,25 @@ export const VisitNotesSection = ({ notes, onAdd, onEdit, onDelete, canManageNot
 
   return (
     <div style={{
-      background: '#172840',
-      border: '1px solid rgba(255,255,255,0.07)',
+      background: 'var(--color-card)',
+      border: '1px solid var(--color-border)',
       borderRadius: '12px',
       padding: '18px 20px',
     }}>
-      <h2 style={{ fontSize: '14px', fontWeight: 600, color: '#f0f4f8', margin: '0 0 14px 0' }}>
+      <h2 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text)', margin: '0 0 14px 0' }}>
         Notas de visita
       </h2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {notes.length === 0 ? (
-          <p style={{ fontSize: '12px', color: '#7a9bbf', margin: 0, fontStyle: 'italic' }}>
+          <p style={{ fontSize: '12px', color: 'var(--color-text-sec)', margin: 0, fontStyle: 'italic' }}>
             Todavía no hay notas registradas para este lead.
           </p>
         ) : (
           notes.map((note) => (
             <div key={note.id} style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.05)',
+              background: 'var(--color-card-hover)',
+              border: '1px solid var(--color-input-bg)',
               borderRadius: '9px',
               padding: '10px 13px',
               display: 'flex',
@@ -121,9 +121,9 @@ export const VisitNotesSection = ({ notes, onAdd, onEdit, onDelete, canManageNot
               {/* Note content */}
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 500, color: '#f0f4f8' }}>{note.userName}</span>
-                  <span style={{ fontSize: '11px', color: '#3d5a73' }}>·</span>
-                  <span style={{ fontSize: '11px', color: '#7a9bbf' }}>{formatDate(note.date)}</span>
+                  <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text)' }}>{note.userName}</span>
+                  <span style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>·</span>
+                  <span style={{ fontSize: '11px', color: 'var(--color-text-sec)' }}>{formatDate(note.date)}</span>
                 </div>
 
                 {editingId === note.id ? (
@@ -134,10 +134,10 @@ export const VisitNotesSection = ({ notes, onAdd, onEdit, onDelete, canManageNot
                       rows={3}
                       style={{
                         width: '100%',
-                        background: 'rgba(255,255,255,0.05)',
+                        background: 'var(--color-input-bg)',
                         border: '1px solid #1aaa6e',
                         borderRadius: '9px',
-                        color: '#f0f4f8',
+                        color: 'var(--color-text)',
                         padding: '10px 13px',
                         fontSize: '13px',
                         outline: 'none',
@@ -151,8 +151,8 @@ export const VisitNotesSection = ({ notes, onAdd, onEdit, onDelete, canManageNot
                         onClick={() => setEditingId(null)}
                         style={{
                           padding: '6px 14px', borderRadius: '7px',
-                          border: '1px solid rgba(255,255,255,0.07)',
-                          background: 'transparent', color: '#7a9bbf',
+                          border: '1px solid var(--color-border)',
+                          background: 'transparent', color: 'var(--color-text-sec)',
                           fontSize: '12px', cursor: 'pointer',
                           fontFamily: "'Inter', system-ui, sans-serif",
                         }}
@@ -165,7 +165,7 @@ export const VisitNotesSection = ({ notes, onAdd, onEdit, onDelete, canManageNot
                         style={{
                           padding: '6px 14px', borderRadius: '7px',
                           border: 'none',
-                          background: (!editContent.trim() || isSaving) ? '#0f7d50' : '#1aaa6e',
+                          background: (!editContent.trim() || isSaving) ? '#0f7d50' : 'var(--color-green)',
                           color: '#fff', fontSize: '12px', fontWeight: 600,
                           cursor: (!editContent.trim() || isSaving) ? 'not-allowed' : 'pointer',
                           fontFamily: "'Inter', system-ui, sans-serif",
@@ -176,7 +176,7 @@ export const VisitNotesSection = ({ notes, onAdd, onEdit, onDelete, canManageNot
                     </div>
                   </div>
                 ) : (
-                  <p style={{ fontSize: '13px', color: '#f0f4f8', margin: 0, lineHeight: 1.5 }}>
+                  <p style={{ fontSize: '13px', color: 'var(--color-text)', margin: 0, lineHeight: 1.5 }}>
                     {note.content}
                   </p>
                 )}
@@ -217,18 +217,18 @@ export const VisitNotesSection = ({ notes, onAdd, onEdit, onDelete, canManageNot
             rows={3}
             style={{
               width: '100%',
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.07)',
+              background: 'var(--color-input-bg)',
+              border: '1px solid var(--color-border)',
               borderRadius: '9px',
-              color: '#f0f4f8',
+              color: 'var(--color-text)',
               padding: '10px 13px',
               fontSize: '13px',
               outline: 'none',
               resize: 'vertical',
               fontFamily: "'Inter', system-ui, sans-serif",
             }}
-            onFocus={(e) => { e.target.style.borderColor = '#1aaa6e'; e.target.style.background = 'rgba(26,170,110,0.06)'; }}
-            onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.07)'; e.target.style.background = 'rgba(255,255,255,0.05)'; }}
+            onFocus={(e) => { e.target.style.borderColor = 'var(--color-green)'; e.target.style.background = 'var(--color-input-focus-bg)'; }}
+            onBlur={(e) => { e.target.style.borderColor = 'var(--color-border)'; e.target.style.background = 'var(--color-input-bg)'; }}
           />
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
             <button
@@ -236,7 +236,7 @@ export const VisitNotesSection = ({ notes, onAdd, onEdit, onDelete, canManageNot
               disabled={!content.trim() || isSaving}
               style={{
                 padding: '8px 18px', borderRadius: '8px', border: 'none',
-                background: (!content.trim() || isSaving) ? '#0f7d50' : '#1aaa6e',
+                background: (!content.trim() || isSaving) ? '#0f7d50' : 'var(--color-green)',
                 color: '#fff', fontSize: '12px', fontWeight: 600,
                 cursor: (!content.trim() || isSaving) ? 'not-allowed' : 'pointer',
                 fontFamily: "'Inter', system-ui, sans-serif",

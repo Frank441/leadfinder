@@ -17,8 +17,8 @@ export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardPro
 
   return (
     <div style={{
-      background: '#172840',
-      border: '1px solid rgba(255,255,255,0.07)',
+      background: 'var(--color-card)',
+      border: '1px solid var(--color-border)',
       borderRadius: '14px',
       padding: '20px 24px',
       display: 'flex',
@@ -27,20 +27,20 @@ export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardPro
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '14px' }}>
         <div>
-          <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#f0f4f8', margin: 0 }}>
+          <h2 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-text)', margin: 0 }}>
             Ranking del equipo
           </h2>
-          <p style={{ fontSize: '11px', color: '#7a9bbf', margin: '4px 0 0 0' }}>
+          <p style={{ fontSize: '11px', color: 'var(--color-text-sec)', margin: '4px 0 0 0' }}>
             Ordenado por tasa de conversión
           </p>
         </div>
         <div style={{
           padding: '4px 10px',
-          background: 'rgba(26,170,110,0.12)',
-          border: '1px solid rgba(26,170,110,0.3)',
+          background: 'var(--color-green-bg)',
+          border: '1px solid var(--color-green-border)',
           borderRadius: '20px',
           fontSize: '11px',
-          color: '#2ecc8f',
+          color: 'var(--color-green-light)',
           fontWeight: 600,
         }}>
           Equipo: {globalRate.toFixed(1)}%
@@ -56,15 +56,15 @@ export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardPro
             <div key={rep.id} style={{
               display: 'flex', alignItems: 'center', gap: '12px',
               padding: '10px 0',
-              borderBottom: idx < sorted.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+              borderBottom: idx < sorted.length - 1 ? '1px solid var(--color-input-bg)' : 'none',
             }}>
               {/* Avatar + posicion */}
               <div style={{ position: 'relative' }}>
                 <div style={{
                   width: '34px', height: '34px', borderRadius: '50%',
-                  background: isTop ? 'rgba(26,170,110,0.25)' : 'rgba(255,255,255,0.06)',
-                  color: isTop ? '#2ecc8f' : '#7a9bbf',
-                  border: isTop ? '1px solid rgba(26,170,110,0.5)' : '1px solid transparent',
+                  background: isTop ? 'var(--color-green-bg)' : 'var(--color-input-bg)',
+                  color: isTop ? 'var(--color-green-light)' : 'var(--color-text-sec)',
+                  border: isTop ? '1px solid var(--color-green-border)' : '1px solid transparent',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '11px', fontWeight: 700,
                 }}>
@@ -83,21 +83,21 @@ export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardPro
               {/* Info + barra */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 500, color: '#f0f4f8' }}>{rep.name}</span>
-                  <span style={{ fontSize: '11px', color: '#7a9bbf', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text)' }}>{rep.name}</span>
+                  <span style={{ fontSize: '11px', color: 'var(--color-text-sec)', whiteSpace: 'nowrap' }}>
                     {rep.leads} leads · {rep.conversiones} conv.
                   </span>
                 </div>
                 <div style={{
                   height: '6px',
-                  background: 'rgba(255,255,255,0.04)',
+                  background: 'var(--color-input-bg)',
                   borderRadius: '3px',
                   overflow: 'hidden',
                 }}>
                   <div style={{
                     height: '100%',
                     width: `${(rep.leads / maxLeads) * 100}%`,
-                    background: isTop ? '#1aaa6e' : 'rgba(116,180,255,0.4)',
+                    background: isTop ? 'var(--color-green)' : 'rgba(116,180,255,0.4)',
                     borderRadius: '3px',
                     transition: 'width 0.4s ease',
                   }} />
@@ -110,7 +110,7 @@ export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardPro
                 textAlign: 'right',
                 fontSize: '14px',
                 fontWeight: 700,
-                color: aboveGlobal ? '#2ecc8f' : '#ffba55',
+                color: aboveGlobal ? 'var(--color-green-light)' : '#ffba55',
                 fontVariantNumeric: 'tabular-nums',
               }}>
                 {rep.tasaConversion.toFixed(1)}%

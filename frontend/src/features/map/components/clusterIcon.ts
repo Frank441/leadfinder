@@ -14,7 +14,7 @@ const STATUS_COLOR: Record<LeadStatus, string> = {
   lead:      '#e05252',
   contacto:  '#e09a30',
   prospecto: '#3d8fe0',
-  cliente:   '#1aaa6e',
+  cliente:   'var(--color-green)',
 };
 
 // Orden del embudo de ventas, asi los segmentos se leen Lead -> Contacto -> ... -> Cliente
@@ -91,7 +91,7 @@ export const buildClusterIcon = (cluster: MarkerClusterLike): L.DivIcon => {
         <circle cx="${cx}" cy="${cy}" r="${r - strokeWidth / 2}" fill="rgba(11,25,41,0.92)" />
         <!-- Aro guia gris muy sutil, para cuando un cluster tiene un solo estado -->
         <circle cx="${cx}" cy="${cy}" r="${r}" fill="none"
-                stroke="rgba(255,255,255,0.08)" stroke-width="${strokeWidth}" />
+                stroke="var(--color-border-strong)" stroke-width="${strokeWidth}" />
         ${segments}
       </svg>
       <div style="

@@ -43,14 +43,14 @@ const canChangeTo = (
 export const StateChangeButtons = ({ current, onChange, userRole }: StateChangeButtonsProps) => {
   return (
     <div style={{
-      background: '#172840',
-      border: '1px solid rgba(255,255,255,0.07)',
+      background: 'var(--color-card)',
+      border: '1px solid var(--color-border)',
       borderRadius: '12px',
       padding: '18px 20px',
     }}>
       <div style={{
         fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em',
-        textTransform: 'uppercase', color: '#a8bdd4',
+        textTransform: 'uppercase', color: 'var(--color-text-label)',
         marginBottom: '14px',
       }}>
         Cambio de estado
@@ -84,9 +84,9 @@ export const StateChangeButtons = ({ current, onChange, userRole }: StateChangeB
                 style={{
                   padding: '6px 14px',
                   borderRadius: '20px',
-                  border: `1px solid ${isActive ? cfg.dot : 'rgba(255,255,255,0.08)'}`,
+                  border: `1px solid ${isActive ? cfg.dot : 'var(--color-border-strong)'}`,
                   background: isActive ? cfg.bg : 'transparent',
-                  color: isActive ? cfg.text : '#7a9bbf',
+                  color: isActive ? cfg.text : 'var(--color-text-sec)',
                   fontSize: '12px',
                   fontWeight: isActive ? 600 : 500,
                   cursor: enabled ? 'pointer' : 'not-allowed',
@@ -98,7 +98,7 @@ export const StateChangeButtons = ({ current, onChange, userRole }: StateChangeB
                 {cfg.label}
               </button>
               {idx < ORDER.length - 1 && (
-                <span style={{ color: '#3d5a73', fontSize: '14px' }}>→</span>
+                <span style={{ color: 'var(--color-text-muted)', fontSize: '14px' }}>→</span>
               )}
             </div>
           );

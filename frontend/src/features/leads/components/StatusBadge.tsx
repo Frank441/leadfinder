@@ -4,7 +4,7 @@ export const STATUS_CONFIG: Record<LeadStatus, { label: string; dot: string; tex
   lead:      { label: 'Lead',      dot: '#e05252', text: '#ff7b7b', bg: 'rgba(224,82,82,0.13)' },
   contacto:  { label: 'Contacto',  dot: '#e09a30', text: '#ffba55', bg: 'rgba(224,154,48,0.13)' },
   prospecto: { label: 'Prospecto', dot: '#3d8fe0', text: '#74b4ff', bg: 'rgba(61,143,224,0.13)' },
-  cliente:   { label: 'Cliente',   dot: '#1aaa6e', text: '#2ecc8f', bg: 'rgba(26,170,110,0.13)' },
+  cliente:   { label: 'Cliente',   dot: 'var(--color-green)', text: 'var(--color-green-light)', bg: 'var(--color-green-bg)' },
 };
 
 interface StatusBadgeProps {

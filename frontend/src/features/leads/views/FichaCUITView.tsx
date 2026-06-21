@@ -69,7 +69,7 @@ export const FichaCUITView = () => {
 
   if (isLoading) {
     return (
-      <div style={{ padding: '40px', textAlign: 'center', color: '#7a9bbf', fontSize: '13px', fontFamily: "'Inter', system-ui, sans-serif" }}>
+      <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-text-sec)', fontSize: '13px', fontFamily: "'Inter', system-ui, sans-serif" }}>
         Cargando ficha...
       </div>
     );
@@ -78,12 +78,12 @@ export const FichaCUITView = () => {
   if (notFound || !lead) {
     return (
       <div style={{ padding: '40px', textAlign: 'center', fontFamily: "'Inter', system-ui, sans-serif" }}>
-        <p style={{ fontSize: '14px', color: '#f0f4f8', marginBottom: '12px' }}>No se encontró el lead solicitado.</p>
+        <p style={{ fontSize: '14px', color: 'var(--color-text)', marginBottom: '12px' }}>No se encontró el lead solicitado.</p>
         <button
           onClick={() => navigate(`/leads?${searchParams.toString()}`)}
           style={{
-            background: 'rgba(26,170,110,0.15)', border: '1px solid rgba(26,170,110,0.4)',
-            color: '#1aaa6e', borderRadius: '8px', padding: '6px 14px', fontSize: '12px',
+            background: 'var(--color-green-bg)', border: '1px solid var(--color-green-border)',
+            color: 'var(--color-green)', borderRadius: '8px', padding: '6px 14px', fontSize: '12px',
             cursor: 'pointer', fontFamily: "'Inter', system-ui, sans-serif",
           }}
         >
@@ -107,21 +107,21 @@ export const FichaCUITView = () => {
         onClick={() => navigate(`/leads?${searchParams.toString()}`)}
         style={{
           background: 'transparent', border: 'none',
-          color: '#7a9bbf', fontSize: '12px', cursor: 'pointer',
+          color: 'var(--color-text-sec)', fontSize: '12px', cursor: 'pointer',
           marginBottom: '14px', padding: 0,
           fontFamily: "'Inter', system-ui, sans-serif",
           display: 'flex', alignItems: 'center', gap: '6px',
         }}
-        onMouseEnter={(e) => { e.currentTarget.style.color = '#f0f4f8'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = '#7a9bbf'; }}
+        onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-text)'; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-sec)'; }}
       >
         ← Volver al listado
       </button>
 
       {/* Header */}
       <div style={{
-        background: '#172840',
-        border: '1px solid rgba(255,255,255,0.07)',
+        background: 'var(--color-card)',
+        border: '1px solid var(--color-border)',
         borderRadius: '12px',
         padding: '20px 22px',
         marginBottom: '18px',
@@ -132,23 +132,23 @@ export const FichaCUITView = () => {
         flexWrap: 'wrap',
       }}>
         <div style={{ flex: 1, minWidth: '260px' }}>
-          <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', color: '#a8bdd4', textTransform: 'uppercase', marginBottom: '6px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', color: 'var(--color-text-label)', textTransform: 'uppercase', marginBottom: '6px' }}>
             CUIT {lead.cuit}
           </div>
-          <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#f0f4f8', margin: '0 0 12px 0' }}>
+          <h1 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--color-text)', margin: '0 0 12px 0' }}>
             {lead.razonSocial}
           </h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
             <StatusBadge status={lead.status} size="md" />
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#7a9bbf' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: 'var(--color-text-sec)' }}>
               📍 {lead.localidad}, {lead.provincia}
             </span>
             {rep ? (
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#7a9bbf' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: 'var(--color-text-sec)' }}>
                 👤 {rep.name}
               </span>
             ) : (
-              <span style={{ fontSize: '12px', color: '#3d5a73', fontStyle: 'italic' }}>
+              <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
                 Sin representante asignado
               </span>
             )}
@@ -158,16 +158,16 @@ export const FichaCUITView = () => {
         {/* Score */}
         <div style={{
           padding: '14px 20px',
-          background: 'rgba(26,170,110,0.08)',
-          border: '1px solid rgba(26,170,110,0.3)',
+          background: 'var(--color-green-bg)',
+          border: '1px solid var(--color-green-border)',
           borderRadius: '10px',
           textAlign: 'center',
           minWidth: '110px',
         }}>
-          <div style={{ fontSize: '28px', fontWeight: 700, color: '#2ecc8f', lineHeight: 1 }}>
+          <div style={{ fontSize: '28px', fontWeight: 700, color: 'var(--color-green-light)', lineHeight: 1 }}>
             {lead.score}
           </div>
-          <div style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.04em', color: '#7a9bbf', textTransform: 'uppercase', marginTop: '4px' }}>
+          <div style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.04em', color: 'var(--color-text-sec)', textTransform: 'uppercase', marginTop: '4px' }}>
             Score viabilidad
           </div>
         </div>

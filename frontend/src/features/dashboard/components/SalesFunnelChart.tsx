@@ -16,17 +16,17 @@ interface SalesFunnelChartProps {
 export const SalesFunnelChart = ({ data }: SalesFunnelChartProps) => {
   return (
     <div style={{
-      background: '#172840',
-      border: '1px solid rgba(255,255,255,0.07)',
+      background: 'var(--color-card)',
+      border: '1px solid var(--color-border)',
       borderRadius: '14px',
       padding: '20px 24px',
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '18px' }}>
         <div>
-          <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#f0f4f8', margin: 0 }}>
+          <h2 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-text)', margin: 0 }}>
             Embudo de ventas
           </h2>
-          <p style={{ fontSize: '11px', color: '#7a9bbf', margin: '4px 0 0 0' }}>
+          <p style={{ fontSize: '11px', color: 'var(--color-text-sec)', margin: '4px 0 0 0' }}>
             Cuántos leads avanzan en cada etapa hasta convertirse en clientes
           </p>
         </div>
@@ -46,15 +46,15 @@ export const SalesFunnelChart = ({ data }: SalesFunnelChartProps) => {
                   <span style={{
                     width: '8px', height: '8px', borderRadius: '50%', background: cfg.dot,
                   }} />
-                  <span style={{ color: '#f0f4f8', fontWeight: 500 }}>
+                  <span style={{ color: 'var(--color-text)', fontWeight: 500 }}>
                     {stage.label}
                   </span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ color: '#f0f4f8', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
+                  <span style={{ color: 'var(--color-text)', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
                     {stage.count.toLocaleString('es-AR')}
                   </span>
-                  <span style={{ color: '#7a9bbf', fontVariantNumeric: 'tabular-nums', minWidth: '46px', textAlign: 'right' }}>
+                  <span style={{ color: 'var(--color-text-sec)', fontVariantNumeric: 'tabular-nums', minWidth: '46px', textAlign: 'right' }}>
                     {stage.pctOfTotal.toFixed(1)}%
                   </span>
                 </div>
@@ -63,7 +63,7 @@ export const SalesFunnelChart = ({ data }: SalesFunnelChartProps) => {
               {/* Barra */}
               <div style={{
                 height: '14px',
-                background: 'rgba(255,255,255,0.04)',
+                background: 'var(--color-input-bg)',
                 borderRadius: '7px',
                 overflow: 'hidden',
                 position: 'relative',
@@ -82,7 +82,7 @@ export const SalesFunnelChart = ({ data }: SalesFunnelChartProps) => {
                 <div style={{
                   marginTop: '4px',
                   fontSize: '10px',
-                  color: '#7a9bbf',
+                  color: 'var(--color-text-sec)',
                   fontStyle: 'italic',
                 }}>
                   ↳ Avanzaron el {stage.pctFromPrev.toFixed(1)}% desde la etapa anterior

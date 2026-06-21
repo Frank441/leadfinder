@@ -7,10 +7,10 @@ interface SenasaCardProps {
 
 const Row = ({ label, value }: { label: string; value: string | number }) => (
   <div style={{ marginBottom: '10px' }}>
-    <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.04em', color: '#a8bdd4', textTransform: 'uppercase' }}>
+    <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.04em', color: 'var(--color-text-label)', textTransform: 'uppercase' }}>
       {label}
     </div>
-    <div style={{ fontSize: '13px', fontWeight: 600, color: '#f0f4f8', marginTop: '2px' }}>
+    <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text)', marginTop: '2px' }}>
       {value}
     </div>
   </div>
@@ -28,14 +28,14 @@ const isSenasaEmpty = (d: SenasaData): boolean => {
 export const SenasaCard = ({ data }: SenasaCardProps) => {
   return (
     <div style={{
-      background: '#172840',
-      border: '1px solid rgba(255,255,255,0.07)',
+      background: 'var(--color-card)',
+      border: '1px solid var(--color-border)',
       borderRadius: '12px',
       padding: '18px 20px',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '14px' }}>
         <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3d8fe0' }} />
-        <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.05em', color: '#7a9bbf', textTransform: 'uppercase' }}>
+        <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.05em', color: 'var(--color-text-sec)', textTransform: 'uppercase' }}>
           SENASA
         </span>
       </div>

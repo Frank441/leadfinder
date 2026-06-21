@@ -3,7 +3,7 @@ interface ScoreBadgeProps {
 }
 
 const colorFor = (score: number) => {
-  if (score >= 80) return { text: '#2ecc8f', bg: 'rgba(26,170,110,0.13)', border: 'rgba(26,170,110,0.3)' };
+  if (score >= 80) return { text: 'var(--color-green-light)', bg: 'var(--color-green-bg)', border: 'var(--color-green-border)' };
   if (score >= 60) return { text: '#74b4ff', bg: 'rgba(61,143,224,0.13)', border: 'rgba(61,143,224,0.3)' };
   return                  { text: '#ffba55', bg: 'rgba(224,154,48,0.13)', border: 'rgba(224,154,48,0.3)' };
 };

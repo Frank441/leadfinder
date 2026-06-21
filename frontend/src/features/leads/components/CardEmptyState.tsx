@@ -23,14 +23,14 @@ export const CardEmptyState = ({ source }: CardEmptyStateProps) => {
         background: 'rgba(122,155,191,0.08)',
         border: '1px solid rgba(122,155,191,0.18)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: '#7a9bbf', fontSize: '18px', fontWeight: 700,
+        color: 'var(--color-text-sec)', fontSize: '18px', fontWeight: 700,
       }}>
         ⓘ
       </div>
-      <div style={{ fontSize: '13px', fontWeight: 600, color: '#f0f4f8' }}>
+      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text)' }}>
         Información no disponible
       </div>
-      <div style={{ fontSize: '11px', color: '#7a9bbf', maxWidth: '210px', lineHeight: 1.4 }}>
+      <div style={{ fontSize: '11px', color: 'var(--color-text-sec)', maxWidth: '210px', lineHeight: 1.4 }}>
         No se pudieron obtener los datos de {source} para este CUIT.
       </div>
     </div>

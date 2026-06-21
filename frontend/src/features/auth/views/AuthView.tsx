@@ -30,7 +30,7 @@ export const AuthView = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#0b1929',
+      background: 'var(--color-bg)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -48,27 +48,27 @@ export const AuthView = () => {
         width: '100%',
         maxWidth: '400px',
         margin: '0 16px',
-        background: '#172840',
+        background: 'var(--color-card)',
         borderRadius: '16px',
-        border: '1px solid rgba(255,255,255,0.07)',
+        border: '1px solid var(--color-border)',
         padding: '36px 40px',
       }}>
         {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '28px' }}>
           <img src="/logo.png" alt="Lead Finder" style={{ width: '44px', height: '44px', objectFit: 'contain', flexShrink: 0, display: 'block' }} />
-          <span style={{ color: '#f0f4f8', fontSize: '24px', fontWeight: 700 }}>Lead Finder</span>
+          <span style={{ color: 'var(--color-text)', fontSize: '24px', fontWeight: 700 }}>Lead Finder</span>
         </div>
 
-        <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#f0f4f8', margin: '0 0 6px 0' }}>
+        <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-text)', margin: '0 0 6px 0' }}>
           Bienvenido
         </h1>
-        <p style={{ fontSize: '13px', color: '#7a9bbf', margin: '0 0 28px 0' }}>
+        <p style={{ fontSize: '13px', color: 'var(--color-text-sec)', margin: '0 0 28px 0' }}>
           Ingresá con tu cuenta de Colombo &amp; Magliano
         </p>
 
         <LoginForm onSubmit={handleLogin} isLoading={isLoading} error={error} />
 
-        <p style={{ textAlign: 'center', fontSize: '11px', color: '#3d5a73', marginTop: '20px', marginBottom: 0 }}>
+        <p style={{ textAlign: 'center', fontSize: '11px', color: 'var(--color-text-muted)', marginTop: '20px', marginBottom: 0 }}>
           ¿Problemas para ingresar? Contactá a tu administrador
         </p>
       </div>

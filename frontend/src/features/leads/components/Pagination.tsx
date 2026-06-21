@@ -28,9 +28,9 @@ const baseBtn: React.CSSProperties = {
   height: '30px',
   padding: '0 10px',
   borderRadius: '8px',
-  border: '1px solid rgba(255,255,255,0.07)',
+  border: '1px solid var(--color-border)',
   background: 'transparent',
-  color: '#7a9bbf',
+  color: 'var(--color-text-sec)',
   fontSize: '12px',
   fontWeight: 500,
   cursor: 'pointer',
@@ -66,7 +66,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       {pages.map((p, idx) => {
         if (p === 'dots') {
           return (
-            <span key={`dots-${idx}`} style={{ color: '#3d5a73', fontSize: '12px', padding: '0 4px' }}>
+            <span key={`dots-${idx}`} style={{ color: 'var(--color-text-muted)', fontSize: '12px', padding: '0 4px' }}>
               ...
             </span>
           );
@@ -79,9 +79,9 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
             onClick={() => onPageChange(p)}
             style={{
               ...baseBtn,
-              background: isActive ? '#1aaa6e' : 'transparent',
-              borderColor: isActive ? '#1aaa6e' : 'rgba(255,255,255,0.07)',
-              color: isActive ? '#fff' : '#7a9bbf',
+              background: isActive ? 'var(--color-green)' : 'transparent',
+              borderColor: isActive ? 'var(--color-green)' : 'var(--color-border)',
+              color: isActive ? '#fff' : 'var(--color-text-sec)',
               fontWeight: isActive ? 600 : 500,
             }}
           >

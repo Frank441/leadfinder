@@ -6,7 +6,21 @@ Cualquier duda o cambio que quieran proponer, lo discutimos en la próxima reuni
 
 ---
 
-## Colores
+## Modos de visualización
+
+La app soporta dos modos: **dark** (por defecto) y **light**. El usuario puede alternar entre ambos desde el sidebar.
+
+- En la primera visita detectamos la preferencia del sistema operativo (`prefers-color-scheme`).
+- Después, la elección manual se persiste en `localStorage` bajo la clave `lf_theme`.
+- El cambio se aplica seteando `data-theme="dark" | "light"` en el elemento `<html>`. Las variables CSS hacen el resto sin re-renders en React.
+
+### Por qué tenemos light mode
+
+Pensado para los **representantes en campo**, que muchas veces operan bajo luz solar directa (smartphone o tablet en el campo). El light mode mejora la legibilidad cuando hay reflejos sobre la pantalla.
+
+---
+
+## Colores — Dark mode
 
 La paleta está basada en azul marino oscuro como base y verde como color de acción. El fondo es más oscuro que el sidebar para generar jerarquía visual.
 
@@ -19,23 +33,64 @@ La paleta está basada en azul marino oscuro como base y verde como color de acc
 | `--color-green-light` | `#2ecc8f` | Hover de botones verdes, acentos |
 | `--color-text` | `#f0f4f8` | Texto principal |
 | `--color-text-sec` | `#7a9bbf` | Texto secundario, labels |
-| `--color-text-muted` | `#3d5a73` | Texto muy apagado, placeholders, headers de tabla |
+| `--color-text-muted` | `#3d5a73` | Texto muy apagado, placeholders |
+| `--color-text-label` | `#a8bdd4` | Labels en mayúscula (headers de tabla, secciones de cards) |
 | `--color-border` | `rgba(255,255,255,0.07)` | Bordes de cards y separadores |
 
-Para usar estos valores en el código de React, los declaramos en el archivo `style.css` global y los llamamos con `var(--color-bg)` etc. Esto ya está configurado.
+---
+
+## Colores — Light mode
+
+Pensado para uso bajo luz directa. Fondo casi blanco (no blanco puro porque deslumbra), sidebar/cards en blanco para máximo contraste.
+
+| Variable | Hex | Dónde se usa |
+|---|---|---|
+| `--color-bg` | `#f1f5f9` | Fondo principal |
+| `--color-surface` | `#ffffff` | Sidebar y top bar |
+| `--color-card` | `#ffffff` | Cards (con sombra sutil) |
+| `--color-green` | `#1aaa6e` | Verde primario (igual que dark, mantiene identidad de marca) |
+| `--color-green-light` | `#16a05e` | Verde oscurecido para mejor contraste sobre blanco |
+| `--color-text` | `#0f172a` | Texto principal (casi negro azulado) |
+| `--color-text-sec` | `#475569` | Texto secundario |
+| `--color-text-muted` | `#94a3b8` | Texto apagado |
+| `--color-text-label` | `#64748b` | Labels en mayúscula |
+| `--color-border` | `rgba(15,23,42,0.08)` | Bordes y separadores |
+
+Las cards en light mode llevan una sombra sutil (`box-shadow`) para definir el borde sin necesitar líneas marcadas.
+
+### Cómo usar las variables
+
+Llamalas desde React con `var(--nombre)`:
+
+```tsx
+<div style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }} />
+```
+
+**Nunca pongas colores hardcodeados** (`#0b1929`, `#172840`, etc.) en componentes nuevos. Si te falta un token, sumalo a `style.css` con valores para ambos modos.
 
 ---
 
 ## Estados del lead
 
-Cada estado tiene su propio color. Estos colores se usan siempre igual en toda la app: en los badges, en los marcadores del mapa y en los botones del cambio de estado.
+Cada estado tiene su propio color. Estos colores se usan siempre igual en toda la app: en los badges, en los marcadores del mapa y en los botones del cambio de estado. En light mode se usan tonos más saturados para mantener jerarquía visual sobre el fondo blanco.
 
-| Estado | Color del punto | Color del texto | Background del badge |
+### Dark mode
+
+| Estado | Punto | Texto | Background del badge |
 |---|---|---|---|
-| Lead | `#e05252` | `#ff7b7b` | `rgba(224, 82, 82, 0.13)` |
-| Contacto | `#e09a30` | `#ffba55` | `rgba(224, 154, 48, 0.13)` |
-| Prospecto | `#3d8fe0` | `#74b4ff` | `rgba(61, 143, 224, 0.13)` |
-| Cliente | `#1aaa6e` | `#2ecc8f` | `rgba(26, 170, 110, 0.13)` |
+| Lead | `#e05252` | `#ff7b7b` | `rgba(224,82,82,0.13)` |
+| Contacto | `#e09a30` | `#ffba55` | `rgba(224,154,48,0.13)` |
+| Prospecto | `#3d8fe0` | `#74b4ff` | `rgba(61,143,224,0.13)` |
+| Cliente | `#1aaa6e` | `#2ecc8f` | `rgba(26,170,110,0.13)` |
+
+### Light mode
+
+| Estado | Punto | Texto | Background del badge |
+|---|---|---|---|
+| Lead | `#dc2626` | `#b91c1c` | `rgba(220,38,38,0.10)` |
+| Contacto | `#d97706` | `#b45309` | `rgba(217,119,6,0.10)` |
+| Prospecto | `#2563eb` | `#1d4ed8` | `rgba(37,99,235,0.10)` |
+| Cliente | `#16a34a` | `#15803d` | `rgba(22,163,74,0.10)` |
 
 El badge siempre tiene un puntito del color del estado a la izquierda del texto. El border-radius es 20px para que quede como píldora.
 
