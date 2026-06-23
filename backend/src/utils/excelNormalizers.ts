@@ -55,6 +55,7 @@ const INVALID_NOMBRE_PATTERNS = [
     "NULL",
     "N/A",
     "NA",
+    "S.N",
 ];
 
 function stripAccents(str: string): string {
