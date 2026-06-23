@@ -2,8 +2,10 @@ import type { Lead, LeadStatus, LeadsFilters, VisitNote } from '@leadfinder/shar
 import { apiFetch } from '../../../lib/api';
 
 export const leadsService = {
-    async getAll(): Promise<Lead[]> {
-        return apiFetch<Lead[]>('/api/v1/leads');
+    async getAll(filters: LeadsFilters = {}): Promise<Lead[]> {
+        const params = new URLSearchParams();
+        if (filters.representanteId) params.set('representanteId', filters.representanteId);
+        return apiFetch<Lead[]>(`/api/v1/leads?${params.toString()}`);
     },
 
     async getPaginated(filters?: LeadsFilters, page: number = 1, limit: number = 20): Promise<{ leads: Lead[]; total: number }> {

@@ -11,10 +11,12 @@ export class LeadsRepository {
     async getAll(
         role: UserRole,
         userId: UserId,
+        filters: LeadsFilters = {},
     ): Promise<PrismaLeadWithRelations[]> {
         const where = {
             empresa: { provincia: { not: null } },
             ...(role === ROLES.representante && { id_usuario_asignado: Number(userId) }),
+            ...(filters.representanteId && { id_usuario_asignado: Number(filters.representanteId) }),
         };
         return prisma.leads.findMany({ where, include: LEAD_INCLUDE, orderBy: { fecha_creacion: 'desc' } });
     }

@@ -62,7 +62,8 @@ export class LeadsController {
     getAll: RequestHandler = async (req, res) => {
         try {
             const user = req.user!;
-            const leads = await this.service.getAll(user.role, user.sub);
+            const representanteId = req.query.representanteId ? String(req.query.representanteId) : undefined;
+            const leads = await this.service.getAll(user.role, user.sub, { representanteId });
             res.json(leads);
         } catch (err) {
             this.handleError(err, res);

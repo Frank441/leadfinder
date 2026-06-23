@@ -7,10 +7,10 @@ import { mapLead, mapVisitNote } from "@/utils/leadMappers";
 export class LeadsService {
     constructor(private readonly repository: LeadsRepository) {}
 
-    async getAll(role: UserRole, userId: UserId): Promise<Lead[]> {
-        const leads = await this.repository.getAll(role, userId);
+    async getAll(role: UserRole, userId: UserId, filters: LeadsFilters = {}): Promise<Lead[]> {
+        const leads = await this.repository.getAll(role, userId, filters);
         return leads.map(mapLead);
-    }
+}
 
     async getPaginated(
         role: UserRole,
