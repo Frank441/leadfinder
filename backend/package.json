@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "tsx watch .",
     "db:dev": "docker compose up -d --wait && pnpm dlx prisma migrate dev --name init",
-    "parser": "tsx src/parser/runParser.ts"
+    "parser": "tsx src/parser/runParser.ts",
+    "demo-data": "tsx scripts/demo-data.ts"
   },
   "keywords": [],
   "engines": {
