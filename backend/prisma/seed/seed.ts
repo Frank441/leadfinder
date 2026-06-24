@@ -88,6 +88,48 @@ async function main() {
     },
   });
 
+  await prisma.usuarios.upsert({
+    where: { email: "representante2@colombomagliano.com" },
+    update: {},
+    create: {
+      nombre: "Sofía",
+      apellido: "Reyes",
+      email: "representante2@colombomagliano.com",
+      password_hash: await hashPassword("Representante123!"),
+      telefono: "1178901234",
+      activo: true,
+      id_role: rolRepresentante.id_role,
+    },
+  });
+
+  await prisma.usuarios.upsert({
+    where: { email: "representante3@colombomagliano.com" },
+    update: {},
+    create: {
+      nombre: "Diego",
+      apellido: "Fernández",
+      email: "representante3@colombomagliano.com",
+      password_hash: await hashPassword("Representante123!"),
+      telefono: "1189012345",
+      activo: true,
+      id_role: rolRepresentante.id_role,
+    },
+  });
+
+  await prisma.usuarios.upsert({
+    where: { email: "representante4@colombomagliano.com" },
+    update: {},
+    create: {
+      nombre: "Valentina",
+      apellido: "Cruz",
+      email: "representante4@colombomagliano.com",
+      password_hash: await hashPassword("Representante123!"),
+      telefono: "1190123456",
+      activo: true,
+      id_role: rolRepresentante.id_role,
+    },
+  });
+
   console.log("✅ Usuarios creados");
 
   // ─────────────────────────────────────────────
