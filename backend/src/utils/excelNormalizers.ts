@@ -58,6 +58,15 @@ const INVALID_NOMBRE_PATTERNS = [
     "S.N",
 ];
 
+const INVALID_PATTERNS = [
+    /^-+$/,
+    /^\.+$/,
+    /^\d+$/,
+    /^\d{4}-\d{2}-\d{2}/,
+    /^(MON|TUE|WED|THU|FRI|SAT|SUN)/i,
+    /^[^A-Z0-9]+$/,
+];
+
 function stripAccents(str: string): string {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
@@ -68,11 +77,9 @@ export function isValidNombreEstablecimiento(value: unknown): boolean {
     let str = stripAccents(String(value).trim().toUpperCase());
     str = str.replace(/\.+$/, "");
 
-    if (str === "") return false;
+    if (!str || str.length < 3) return false;
     if (INVALID_NOMBRE_PATTERNS.includes(str)) return false;
-    if (/^-+$/.test(str)) return false;
-    if (/^\.+$/.test(str)) return false;
-    if (/^\d+$/.test(str)) return false;
+    if (INVALID_PATTERNS.some((pattern) => pattern.test(str))) return false;
 
     return true;
 }
