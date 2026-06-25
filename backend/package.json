@@ -6,6 +6,7 @@
   "main": "index.ts",
   "scripts": {
     "dev": "tsx watch .",
+    "start": "tsx index.ts",
     "db:dev": "docker compose up -d --wait && pnpm dlx prisma migrate dev --name init",
     "parser": "tsx src/parser/runParser.ts",
     "demo-data": "tsx scripts/demo-data.ts"
@@ -26,6 +27,7 @@
     "express": "5.2.1",
     "jsonwebtoken": "9.0.3",
     "pg": "8.21.0",
+    "tsx": "4.22.0",
     "xlsx": "0.18.5"
   },
   "devDependencies": {
@@ -36,7 +38,6 @@
     "@types/node": "25.8.0",
     "@types/pg": "8.20.0",
     "prisma": "7.8.0",
-    "tsx": "4.22.0",
     "typescript": "6.0.3"
   }
 }

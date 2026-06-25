@@ -1,4 +1,6 @@
-process.loadEnvFile()
+if (!process.env.DATABASE_URL) {
+    try { process.loadEnvFile(); } catch {}
+}
 
 import authRouter from "@/modules/auth/auth.routes";
 import cuitRouter from "@/modules/cuit/cuit.routes";
@@ -8,8 +10,11 @@ import statsRouter from "@/modules/stats/stats.router";
 import cors from "cors";
 import express from "express";
 
-for (const key of ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_PORT', 'JWT_SECRET']) {
-    if (!process.env[key]) throw new Error(`${key} is not set in .env`);
+const required = process.env.DATABASE_URL
+    ? ['JWT_SECRET']
+    : ['DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_PORT', 'JWT_SECRET'];
+for (const key of required) {
+    if (!process.env[key]) throw new Error(`${key} is not set`);
 }
 
 const port = process.env.PORT || 3001;
