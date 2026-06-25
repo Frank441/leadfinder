@@ -96,7 +96,7 @@ export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardPro
                 }}>
                   <div style={{
                     height: '100%',
-                    width: `${(rep.leads / maxLeads) * 100}%`,
+                    width: `${(rep.tasaConversion / maxLeads) * 100}%`,
                     background: isTop ? 'var(--color-green)' : 'rgba(116,180,255,0.4)',
                     borderRadius: '3px',
                     transition: 'width 0.4s ease',
