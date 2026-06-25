@@ -6,7 +6,6 @@ import { useAuth } from '../../../context/AuthContext';
 import { leadsService } from '../services/leadsService';
 import { representantesService } from '../services/representantesService';
 import { StatusBadge } from '../components/StatusBadge';
-import { ScoreBadge } from '../components/ScoreBadge';
 import { StatusTabs } from '../components/StatusTabs';
 import type { StatusFilter } from '../components/StatusTabs';
 import { LeadsFilters } from '../components/LeadsFilters';
@@ -154,7 +153,6 @@ export const LeadsView = () => {
                 <th style={TH}>Zona</th>
                 <th style={TH}>Representante</th>
                 <th style={TH}>Estado</th>
-                <th style={{ ...TH, textAlign: 'center' }}>Score</th>
                 {canAssign && <th style={TH}></th>}
               </tr>
             </thead>
@@ -187,7 +185,6 @@ export const LeadsView = () => {
                       <RepresentanteCell representanteId={lead.representanteId} representantes={representantes} />
                     </td>
                     <td style={{ padding: '12px 16px' }}><StatusBadge status={lead.status} /></td>
-                    <td style={{ padding: '12px 16px', textAlign: 'center' }}><ScoreBadge score={lead.score} /></td>
                     {canAssign && (
                       <td style={{ padding: '12px 16px' }}>
                         <button

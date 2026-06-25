@@ -130,7 +130,6 @@ export function mapLead(lead: PrismaLeadWithRelations): Lead {
         zona:            mapProvinciaToZona(lead.empresa.provincia ?? "") ?? "",
         actividad:       mapActividad(lead.empresa.tipo_explotacion ?? ""),
         status:          lead.estado.nombre.toLowerCase() as LeadStatus,
-        score:           Number(lead.score_viabilidad ?? 0),
         representanteId: lead.id_usuario_asignado ? String(lead.id_usuario_asignado) : null,
         superficieHa:    Number(lead.empresa.superficie ?? 0),
         lat:             Number(lead.empresa.latitud ?? 0),

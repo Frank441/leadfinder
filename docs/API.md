@@ -265,7 +265,6 @@ Lista completa de leads (sin paginar).
   zona: string;
   actividad: string;
   status: "lead" | "contacto" | "prospecto" | "cliente";
-  score: number;                 // 0–100
   representanteId: string | null;
   superficieHa: number;
   lat: number;

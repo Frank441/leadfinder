@@ -155,22 +155,6 @@ export const FichaCUITView = () => {
           </div>
         </div>
 
-        {/* Score */}
-        <div style={{
-          padding: '14px 20px',
-          background: 'var(--color-green-bg)',
-          border: '1px solid var(--color-green-border)',
-          borderRadius: '10px',
-          textAlign: 'center',
-          minWidth: '110px',
-        }}>
-          <div style={{ fontSize: '28px', fontWeight: 700, color: 'var(--color-green-light)', lineHeight: 1 }}>
-            {lead.score}
-          </div>
-          <div style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.04em', color: 'var(--color-text-sec)', textTransform: 'uppercase', marginTop: '4px' }}>
-            Score viabilidad
-          </div>
-        </div>
       </div>
 
       {/* Cambio de estado (US11 + US14) */}

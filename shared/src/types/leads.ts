@@ -65,7 +65,6 @@ export interface Lead {
   zona: string;
   actividad: string;
   status: LeadStatus;
-  score: number; // 0–100
   representanteId: string | null;
   superficieHa: number;
   lat: number;
