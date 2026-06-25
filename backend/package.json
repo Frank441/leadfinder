@@ -9,7 +9,7 @@
     "start": "tsx index.ts",
     "db:dev": "docker compose up -d --wait && pnpm dlx prisma migrate dev --name init",
     "parser": "tsx src/parser/runParser.ts",
-    "demo-data": "tsx scripts/demo-data.ts"
+    "demo:data": "tsx scripts/demo-data.ts"
   },
   "keywords": [],
   "engines": {
