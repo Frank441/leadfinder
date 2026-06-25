@@ -14,6 +14,7 @@ export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardPro
   const sorted = [...team].sort((a, b) => b.tasaConversion - a.tasaConversion);
   const maxLeads = Math.max(...team.map((r) => r.leads), 1);
   const topId = sorted[0]?.id;
+  const totalConversion = team.reduce((sum, r) => sum + r.tasaConversion, 0);
 
   return (
     <div style={{
@@ -96,7 +97,7 @@ export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardPro
                 }}>
                   <div style={{
                     height: '100%',
-                    width: `${(rep.tasaConversion / maxLeads) * 100}%`,
+                    width: `${(rep.tasaConversion / totalConversion) * 100}%`,
                     background: isTop ? 'var(--color-green)' : 'rgba(116,180,255,0.4)',
                     borderRadius: '3px',
                     transition: 'width 0.4s ease',
