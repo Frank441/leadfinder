@@ -29,7 +29,7 @@ Completá en el `.env` los valores vacíos con los datos provistos por el equipo
 pnpm install && pnpm --filter shared build
 ```
 
-### 4. Inicializar la base de datos
+### 4. Levantar la base de datos y aplicar migraciones
 ```bash
 cd backend
 pnpm run db:dev
@@ -54,15 +54,25 @@ Una vez completado, las credenciales de acceso disponibles son:
 | Director      | director@colombomagliano.com           | Director123!      |
 | Supervisor    | supervisor@colombomagliano.com         | Supervisor123!    |
 | Representante | representante@colombomagliano.com      | Representante123! |
+| Representante | representante2@colombomagliano.com     | Representante123! |
+| Representante | representante3@colombomagliano.com     | Representante123! |
+| Representante | representante4@colombomagliano.com     | Representante123! |
 
-### 7. Carga datos de las APIs
+### 7. Cargar datos de las APIs
 ```bash
 pnpm run parser
 ```
 
 > Este comando procesa los archivos Excel (BCRA, SENASA, ARCA) y carga los datos en la base de datos. Puede tardar varios minutos.
 
-### 8. Iniciar el servidor de desarrollo
+### 8. (Opcional) Redistribuir datos para la demo
+```bash
+pnpm run demo:data
+```
+
+> Este comando mezcla los CUITs, redistribuye los estados de los leads y asigna un representante a cada lead.
+
+### 9. Iniciar el proyecto
 ```bash
 cd ..
 pnpm dev
@@ -89,4 +99,9 @@ docker compose down
 Los datos persisten en el volumen `pg_dev_data`. Si querés borrar también los datos del volumen:
 ```bash
 docker compose down -v
+```
+
+### Eliminar los datos obtenidos del parser y mantener el schema y el seed
+```bash
+docker exec -it prisma_postgres_dev psql -U leadfinder_user -d leadfinder_dev -c "TRUNCATE TABLE leads, bcra, arca, senasa, empresas RESTART IDENTITY CASCADE;"
 ```
