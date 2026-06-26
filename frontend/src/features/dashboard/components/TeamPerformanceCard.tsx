@@ -12,7 +12,6 @@ interface TeamPerformanceCardProps {
  */
 export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardProps) => {
   const sorted = [...team].sort((a, b) => b.tasaConversion - a.tasaConversion);
-  const maxLeads = Math.max(...team.map((r) => r.leads), 1);
   const topId = sorted[0]?.id;
   const totalConversion = team.reduce((sum, r) => sum + r.tasaConversion, 0);
 
