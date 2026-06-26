@@ -38,6 +38,7 @@ const PROVINCIA_ZONA_MAP: Record<string, string> = {
     "corrientes": "NEA",
     "formosa": "NEA",
     "misiones": "NEA",
+    "ciudad autónoma de buenos aires": "CABA",
 };
 
 export function mapProvinciaToZona(provincia: string): string {

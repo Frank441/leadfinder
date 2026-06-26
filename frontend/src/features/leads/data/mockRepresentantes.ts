@@ -14,6 +14,7 @@ export const ZONAS = [
   'Patagonia',
   'Cuyo',
   'Centro',
+  'CABA',
 ] as const;
 
 export const ACTIVIDADES = [
