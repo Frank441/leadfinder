@@ -3,14 +3,27 @@ import type { RepPerformance } from '../types';
 interface TeamPerformanceCardProps {
   team: RepPerformance[];
   globalRate: number;
+  /** Opcional. Por defecto: "Ranking del equipo". */
+  title?: string;
+  /** Opcional. Por defecto: "Ordenado por tasa de conversión". */
+  subtitle?: string;
+  /** Opcional. Etiqueta del chip de la derecha. Por defecto: "Equipo". */
+  chipLabel?: string;
 }
 
 /**
  * Ranking del equipo (US07a + US07b + US07c).
  * Ordenamos por tasa de conversion descendente para que el top performer este arriba.
- * Resaltamos visualmente al primero.
+ * Resaltamos visualmente al primero. Reusado para mostrar reps (vista supervisor)
+ * o supervisores (vista director) — solo cambian los textos.
  */
-export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardProps) => {
+export const TeamPerformanceCard = ({
+  team,
+  globalRate,
+  title    = 'Ranking del equipo',
+  subtitle = 'Ordenado por tasa de conversión',
+  chipLabel = 'Equipo',
+}: TeamPerformanceCardProps) => {
   const sorted = [...team].sort((a, b) => b.tasaConversion - a.tasaConversion);
   const topId = sorted[0]?.id;
   const totalConversion = team.reduce((sum, r) => sum + r.tasaConversion, 0);
@@ -28,10 +41,10 @@ export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardPro
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '14px' }}>
         <div>
           <h2 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-text)', margin: 0 }}>
-            Ranking del equipo
+            {title}
           </h2>
           <p style={{ fontSize: '11px', color: 'var(--color-text-sec)', margin: '4px 0 0 0' }}>
-            Ordenado por tasa de conversión
+            {subtitle}
           </p>
         </div>
         <div style={{
@@ -43,7 +56,7 @@ export const TeamPerformanceCard = ({ team, globalRate }: TeamPerformanceCardPro
           color: 'var(--color-green-light)',
           fontWeight: 600,
         }}>
-          Equipo: {globalRate.toFixed(1)}%
+          {chipLabel}: {globalRate.toFixed(1)}%
         </div>
       </div>
 

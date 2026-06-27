@@ -2,10 +2,13 @@ import type {
   StatsPeriod,
   FunnelStage as BackendFunnelStage,
   RepresentanteRanking,
+  SupervisorRanking,
   StatusCount,
   ZoneCount,
 } from '@leadfinder/shared/types/stats';
 import type { LeadStatus } from '@leadfinder/shared/types/leads';
+import type { UserRole } from '@leadfinder/shared/types/user';
+import { ROLES } from '@leadfinder/shared/types/user';
 import { apiFetch } from '../../../lib/api';
 import type {
   Period,
@@ -110,6 +113,22 @@ const adaptTeamRanking = (raw: RepresentanteRanking[]): RepPerformance[] => {
   }));
 };
 
+/**
+ * El ranking de supervisores se renderiza con el mismo componente que el de reps,
+ * así que lo mapeamos al mismo shape RepPerformance. El DashboardView se encarga
+ * de cambiar el título según el rol.
+ */
+const adaptSupervisorRanking = (raw: SupervisorRanking[]): RepPerformance[] => {
+  return raw.map((s) => ({
+    id:              s.supervisorId,
+    name:            s.name,
+    initials:        buildInitials(s.name),
+    leads:           s.assignedLeads,
+    conversiones:    s.convertedLeads,
+    tasaConversion:  s.conversionRate,
+  }));
+};
+
 const adaptZones = (raw: ZoneCount[]): ZoneStat[] => {
   const total = raw.reduce((acc, z) => acc + z.count, 0);
   return raw
@@ -145,8 +164,14 @@ export const dashboardService = {
    * los esconden. Cuando el backend lo soporte, alcanza con sumar las
    * llamadas al período previo y calcular acá el cambio porcentual.
    */
-  async getDashboard(period: Period): Promise<DashboardData> {
+  async getDashboard(period: Period, role: UserRole): Promise<DashboardData> {
     const p = toBackendPeriod(period);
+
+    // El director ve ranking de supervisores; el supervisor ve ranking de reps.
+    // Como solo el rol cambia, hacemos un fetch condicional sobre el endpoint que toca.
+    const rankingPromise: Promise<RepPerformance[]> = role === ROLES.director
+      ? get<SupervisorRanking[]>('supervisor-ranking', p).then(adaptSupervisorRanking)
+      : get<RepresentanteRanking[]>('team-ranking',    p).then(adaptTeamRanking);
 
     const [
       totalLeadsRes,
@@ -154,7 +179,7 @@ export const dashboardService = {
       inNegotiationRes,
       newClientsRes,
       funnelRes,
-      teamRes,
+      rankingData,
       breakdownRes,
       zonesRes,
     ] = await Promise.all([
@@ -163,7 +188,7 @@ export const dashboardService = {
       get<{ inNegotiation: number }>('in-negotiation',   p),
       get<{ newClients: number }>('new-clients',         p),
       get<BackendFunnelStage[]>('sales-funnel',          p),
-      get<RepresentanteRanking[]>('team-ranking',        p),
+      rankingPromise,
       get<StatusCount[]>('status-breakdown',             p),
       get<ZoneCount[]>('leads-by-zone',                  p),
     ]);
@@ -179,7 +204,7 @@ export const dashboardService = {
       },
       funnel:           adaptFunnel(funnelRes),
       distribution:     adaptStatusBreakdown(breakdownRes),
-      team:             adaptTeamRanking(teamRes),
+      team:             rankingData,
       zones:            adaptZones(zonesRes),
       globalConversion: conversionRateRes.conversionRate,
     };

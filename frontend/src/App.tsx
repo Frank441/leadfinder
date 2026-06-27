@@ -21,7 +21,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute allowedRoles={[ROLES.director]}>
+              <PrivateRoute allowedRoles={[ROLES.director, ROLES.supervisor]}>
                 <DashboardView />
               </PrivateRoute>
             }

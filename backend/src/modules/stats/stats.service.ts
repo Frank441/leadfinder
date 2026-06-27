@@ -3,6 +3,7 @@ import type {
     StatsPeriod,
     FunnelStage,
     RepresentanteRanking,
+    SupervisorRanking,
     StatusCount,
     ZoneCount,
 } from "@leadfinder/shared/types/stats";
@@ -43,6 +44,21 @@ export class StatsService {
                 conversionRate:  rep.assignedLeads === 0
                     ? 0
                     : Math.round((rep.convertedLeads / rep.assignedLeads) * 10000) / 100,
+            }))
+            .sort((a, b) => b.conversionRate - a.conversionRate);
+    }
+
+    async getSupervisorRanking(period: StatsPeriod): Promise<SupervisorRanking[]> {
+        const raw = await this.repository.getSupervisorRanking(period);
+        return raw
+            .map((sup) => ({
+                supervisorId:   sup.supervisorId,
+                name:           sup.name,
+                assignedLeads:  sup.assignedLeads,
+                convertedLeads: sup.convertedLeads,
+                conversionRate: sup.assignedLeads === 0
+                    ? 0
+                    : Math.round((sup.convertedLeads / sup.assignedLeads) * 10000) / 100,
             }))
             .sort((a, b) => b.conversionRate - a.conversionRate);
     }

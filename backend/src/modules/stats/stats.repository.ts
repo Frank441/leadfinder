@@ -116,6 +116,36 @@ export class StatsRepository {
         );
     }
 
+    async getSupervisorRanking(period: StatsPeriod): Promise<{
+        supervisorId: string;
+        name: string;
+        assignedLeads: number;
+        convertedLeads: number;
+    }[]> {
+        const { gte } = getPeriodRange(period);
+
+        const supervisores = await prisma.usuarios.findMany({
+            where: { activo: true, role: { nombre: "Supervisor" } },
+            select: { id_usuario: true, nombre: true, apellido: true },
+        });
+
+        const baseWhere = {
+            empresa: { provincia: { not: null } },
+            fecha_creacion: { gte },
+        };
+        const [assigned, converted] = await prisma.$transaction([
+            prisma.leads.count({ where: baseWhere }),
+            prisma.leads.count({ where: { ...baseWhere, estado: { nombre: "Cliente" } } }),
+        ]);
+
+        return supervisores.map((sup) => ({
+            supervisorId:  String(sup.id_usuario),
+            name:          `${sup.nombre} ${sup.apellido}`,
+            assignedLeads: assigned,
+            convertedLeads: converted,
+        }));
+    }
+
     async getCurrentStatusBreakdown(role: UserRole, userId: UserId, period: StatsPeriod): Promise<{ status: string; count: number }[]> {
         const where = this.baseWhere(role, userId, period);
         const counts = await prisma.estados_lead.findMany({

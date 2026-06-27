@@ -65,7 +65,7 @@ const IconMoon = () => (
 );
 
 const NAV_ITEMS: NavItem[] = [
-  { path: '/dashboard', label: 'Dashboard',  icon: <IconDashboard />, roles: [ROLES.director] },
+  { path: '/dashboard', label: 'Dashboard',  icon: <IconDashboard />, roles: [ROLES.director, ROLES.supervisor] },
   { path: '/leads',     label: 'Leads',      icon: <IconLeads />,    roles: [ROLES.director, ROLES.supervisor, ROLES.representante] },
   { path: '/mapa',      label: 'Mapa',       icon: <IconMap />,      roles: [ROLES.director, ROLES.supervisor, ROLES.representante] },
   // Item dinámico: solo aparece cuando estás dentro de una ficha
@@ -124,7 +124,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
       }}>
         {/* Brand */}
         <div style={{ padding: '18px 16px', borderBottom: '1px solid var(--color-border)' }}>
-          <Link to={user?.role === ROLES.director ? '/dashboard' : '/leads'} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+          <Link to={user?.role === ROLES.representante ? '/leads' : '/dashboard'} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
             <img src="/logo.png" alt="Lead Finder" style={{ width: '36px', height: '36px', objectFit: 'contain', flexShrink: 0, display: 'block' }} />
             <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text)' }}>Lead Finder</span>
           </Link>

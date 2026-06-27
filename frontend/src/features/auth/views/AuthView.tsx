@@ -19,7 +19,7 @@ export const AuthView = () => {
     try {
       const { user, token } = await loginService(credentials);
       login(user, token);
-      navigate(user.role === ROLES.director ? '/dashboard' : '/leads', { replace: true });
+      navigate(user.role === ROLES.representante ? '/leads' : '/dashboard', { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión.');
     } finally {

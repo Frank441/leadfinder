@@ -15,7 +15,7 @@ export const PrivateRoute = ({ children, allowedRoles }: PrivateRouteProps) => {
   if (!isAuthenticated) return <Navigate to="/auth" replace />;
 
   if (allowedRoles && user?.role && !allowedRoles.includes(user.role)) {
-    return <Navigate to={user.role === ROLES.director ? '/dashboard' : '/leads'} replace />;
+    return <Navigate to={user.role === ROLES.representante ? '/leads' : '/dashboard'} replace />;
   }
 
   return <AppLayout>{children}</AppLayout>;

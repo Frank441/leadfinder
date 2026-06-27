@@ -6,19 +6,26 @@ import { StatusDistributionDonut } from '../components/StatusDistributionDonut';
 import { ZoneBarChart } from '../components/ZoneBarChart';
 import { TeamPerformanceCard } from '../components/TeamPerformanceCard';
 import { dashboardService } from '../services/dashboardService';
+import { useAuth } from '../../../context/AuthContext';
+import { ROLES } from '@leadfinder/shared/types/user';
 import type { Period, DashboardData } from '../types';
 
 export const DashboardView = () => {
+  const { user } = useAuth();
   const [period, setPeriod] = useState<Period>('mes');
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const role = user?.role;
+  const isDirector = role === ROLES.director;
+
   useEffect(() => {
+    if (!role) return;
     let cancelled = false;
     setIsLoading(true);
     setError(null);
-    dashboardService.getDashboard(period)
+    dashboardService.getDashboard(period, role)
       .then((result) => {
         if (cancelled) return;
         setData(result);
@@ -31,7 +38,7 @@ export const DashboardView = () => {
         setIsLoading(false);
       });
     return () => { cancelled = true; };
-  }, [period]);
+  }, [period, role]);
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
@@ -84,25 +91,41 @@ export const DashboardView = () => {
             <KPIHeroCard label="Clientes nuevos"    data={data.kpis.clientesNuevos} format="number"     accent="green" />
           </div>
 
-          {/* SECCION 2: Embudo de ventas */}
-          <div style={{ marginBottom: '16px' }}>
-            <SalesFunnelChart data={data.funnel} />
-          </div>
+          {isDirector ? (
+            <>
+              {/* SECCION 2: Embudo de ventas */}
+              <div style={{ marginBottom: '16px' }}>
+                <SalesFunnelChart data={data.funnel} />
+              </div>
 
-          {/* SECCION 3: Ranking del equipo + Distribucion del pipeline */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '14px',
-            marginBottom: '16px',
-            alignItems: 'stretch',
-          }}>
-            <TeamPerformanceCard team={data.team} globalRate={data.globalConversion} />
-            <StatusDistributionDonut data={data.distribution} />
-          </div>
+              {/* SECCION 3: Ranking del equipo + Distribucion del pipeline */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+                gap: '14px',
+                marginBottom: '16px',
+                alignItems: 'stretch',
+              }}>
+                <TeamPerformanceCard
+                  team={data.team}
+                  globalRate={data.globalConversion}
+                  title="Ranking de supervisores"
+                  subtitle="Tasa de conversión del equipo a cargo de cada supervisor"
+                  chipLabel="Global"
+                />
+                <StatusDistributionDonut data={data.distribution} />
+              </div>
 
-          {/* SECCION 4: Distribucion por zona */}
-          <ZoneBarChart data={data.zones} />
+              {/* SECCION 4: Distribucion por zona */}
+              <ZoneBarChart data={data.zones} />
+            </>
+          ) : (
+            // Vista supervisor: solo KPIs + ranking del equipo a ancho completo.
+            <TeamPerformanceCard
+              team={data.team}
+              globalRate={data.globalConversion}
+            />
+          )}
         </div>
       ) : null}
     </div>

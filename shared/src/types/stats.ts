@@ -24,6 +24,14 @@ export interface RepresentanteRanking {
     conversionRate: number;
 }
 
+export interface SupervisorRanking {
+    supervisorId: string;
+    name: string;
+    assignedLeads: number;
+    convertedLeads: number;
+    conversionRate: number;
+}
+
 export interface StatusCount {
     status: string;
     count: number;

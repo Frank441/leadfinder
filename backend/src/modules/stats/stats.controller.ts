@@ -94,6 +94,17 @@ export class StatsController {
         }
     };
 
+    getSupervisorRanking: RequestHandler = async (req, res) => {
+        try {
+            const period = this.parsePeriod(req, res);
+            if (!period) return;
+            const data = await this.service.getSupervisorRanking(period);
+            res.json(data);
+        } catch (err) {
+            this.handleError(err, res);
+        }
+    };
+
     getStatusBreakdown: RequestHandler = async (req, res) => {
         try {
             const period = this.parsePeriod(req, res);
