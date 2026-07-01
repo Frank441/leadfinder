@@ -144,16 +144,16 @@ export const LeadsView = () => {
       </div>
 
       <div style={{ opacity: isFetching ? 0.5 : 1, transition: 'opacity 0.15s' }}>
-        <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderRadius: '12px', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <div style={{ background: 'var(--color-card)', border: '1px solid var(--color-border)', borderRadius: '12px', overflow: 'hidden', overflowX: "auto" }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed'}}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                <th style={TH}>Establecimiento</th>
-                <th style={TH}>CUIT</th>
-                <th style={TH}>Zona</th>
-                <th style={TH}>Representante</th>
-                <th style={TH}>Estado</th>
-                {canAssign && <th style={TH}></th>}
+                <th style={{ ...TH, width: '45%' }}>Establecimiento</th>
+                <th style={{ ...TH, width: '150px' }}>CUIT</th>
+                <th style={{ ...TH, width: '140px' }}>Zona</th>
+                <th style={{ ...TH, width: '220px' }}>Representante</th>
+                <th style={{ ...TH, width: '120px' }}>Estado</th>
+                {canAssign && <th style={{ ...TH, width: '110px' }} />}
               </tr>
             </thead>
             <tbody>
@@ -173,13 +173,17 @@ export const LeadsView = () => {
                     onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-card-hover)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                   >
-                    <td style={{ padding: '12px 16px' }}>
-                      <div style={{ fontSize: '13px', color: 'var(--color-text)', fontWeight: 500 }}>{lead.razonSocial}</div>
+                    <td style={{ padding: '12px 16px', overflow: 'hidden' }}>
+                      <div style={{ fontSize: '13px', color: 'var(--color-text)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {lead.razonSocial}
+                      </div>
                       <div style={{ fontSize: '11px', color: 'var(--color-text-sec)', marginTop: '2px' }}>
                         {lead.superficieHa.toLocaleString('es-AR')} ha
                       </div>
                     </td>
-                    <td style={{ padding: '12px 16px', fontSize: '12px', color: 'var(--color-text-sec)', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{lead.cuit}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: 'var(--color-text-sec)', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
+                        {`${lead.cuit.slice(0, 2)}-${lead.cuit.slice(2, 10)}-${lead.cuit.slice(10)}`}
+                    </td>
                     <td style={{ padding: '12px 16px', fontSize: '12px', color: 'var(--color-text-sec)', whiteSpace: 'nowrap' }}>{lead.zona}</td>
                     <td style={{ padding: '12px 16px' }}>
                       <RepresentanteCell representanteId={lead.representanteId} representantes={representantes} />
