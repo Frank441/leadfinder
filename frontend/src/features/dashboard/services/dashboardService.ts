@@ -173,34 +173,42 @@ export const dashboardService = {
       ? get<SupervisorRanking[]>('supervisor-ranking', p).then(adaptSupervisorRanking)
       : get<RepresentanteRanking[]>('team-ranking',    p).then(adaptTeamRanking);
 
+    const unassignedLeadsPromise: Promise<{ unassignedLeads: number } | null> = 
+        role === ROLES.supervisor
+            ? get<{ unassignedLeads: number }>('unassigned-leads', p)
+            : Promise.resolve(null);
+
     const [
-      totalLeadsRes,
-      conversionRateRes,
-      inNegotiationRes,
-      newClientsRes,
-      funnelRes,
-      rankingData,
-      breakdownRes,
-      zonesRes,
+        totalLeadsRes,
+        conversionRateRes,
+        inNegotiationRes,
+        newClientsRes,
+        funnelRes,
+        rankingData,
+        breakdownRes,
+        zonesRes,
+        unassignedLeadsRes,
     ] = await Promise.all([
-      get<{ totalLeads: number }>('total-leads',         p),
-      get<{ conversionRate: number }>('conversion-rate', p),
-      get<{ inNegotiation: number }>('in-negotiation',   p),
-      get<{ newClients: number }>('new-clients',         p),
-      get<BackendFunnelStage[]>('sales-funnel',          p),
-      rankingPromise,
-      get<StatusCount[]>('status-breakdown',             p),
-      get<ZoneCount[]>('leads-by-zone',                  p),
-    ]);
+        get<{ totalLeads: number }>('total-leads',         p),
+        get<{ conversionRate: number }>('conversion-rate', p),
+        get<{ inNegotiation: number }>('in-negotiation',   p),
+        get<{ newClients: number }>('new-clients',         p),
+        get<BackendFunnelStage[]>('sales-funnel',          p),
+        rankingPromise,
+        get<StatusCount[]>('status-breakdown',             p),
+        get<ZoneCount[]>('leads-by-zone',                  p),
+        unassignedLeadsPromise,
+    ]); 
 
     const deltaLabel = PERIOD_LABELS_DELTA[period];
 
     return {
       kpis: {
-        totalLeads:     { value: totalLeadsRes.totalLeads,         deltaLabel },
-        tasaConversion: { value: conversionRateRes.conversionRate, deltaLabel },
-        pipelineActivo: { value: inNegotiationRes.inNegotiation,   deltaLabel },
-        clientesNuevos: { value: newClientsRes.newClients,         deltaLabel },
+          totalLeads:      { value: totalLeadsRes.totalLeads,                          deltaLabel },
+          tasaConversion:  { value: conversionRateRes.conversionRate,                  deltaLabel },
+          pipelineActivo:  { value: inNegotiationRes.inNegotiation,                    deltaLabel },
+          clientesNuevos:  { value: newClientsRes.newClients,                          deltaLabel },
+          unassignedLeads: { value: unassignedLeadsRes?.unassignedLeads ?? 0,          deltaLabel },
       },
       funnel:           adaptFunnel(funnelRes),
       distribution:     adaptStatusBreakdown(breakdownRes),

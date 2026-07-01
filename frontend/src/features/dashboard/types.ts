@@ -32,6 +32,7 @@ export interface KPIs {
   tasaConversion: KPIData;
   pipelineActivo: KPIData;
   clientesNuevos: KPIData;
+  unassignedLeads: KPIData;
 }
 
 // ─────────────────────────────────────────────

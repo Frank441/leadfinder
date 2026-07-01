@@ -17,6 +17,10 @@ export class StatsService {
         return this.repository.getTotalLeads(role, userId, period);
     }
 
+    getTotalLeadsUnassigned(role: UserRole, userId: UserId, period: StatsPeriod): Promise<number> {
+        return this.repository.getTotalLeadsUnassigned(role, userId, period);
+    }
+
     getConversionRate(role: UserRole, userId: UserId, period: StatsPeriod): Promise<number> {
         return this.repository.getConversionRate(role, userId, period);
     }

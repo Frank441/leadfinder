@@ -38,6 +38,16 @@ export class StatsRepository {
         return prisma.leads.count({ where: this.baseWhere(role, userId, period) });
     }
 
+    async getTotalLeadsUnassigned(role: UserRole, userId: UserId, period: StatsPeriod): Promise<number> {
+        return prisma.leads.count({
+            where: {
+                ...this.baseWhere(role, userId, period),
+                id_usuario_asignado: null,
+                estado: { nombre: "Lead" },
+            },
+        });
+    }
+
     async getConversionRate(role: UserRole, userId: UserId, period: StatsPeriod): Promise<number> {
         const where = this.baseWhere(role, userId, period);
         const [total, converted] = await prisma.$transaction([

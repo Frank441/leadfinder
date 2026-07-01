@@ -35,6 +35,18 @@ export class StatsController {
         }
     };
 
+    getTotalLeadsUnassigned: RequestHandler = async (req, res) => {
+        try {
+            const period = this.parsePeriod(req, res);
+            if (!period) return;
+            const user = req.user!;
+            const data = await this.service.getTotalLeadsUnassigned(user.role, user.sub, period);
+            res.json({ unassignedLeads: data });
+        } catch (err) {
+            this.handleError(err, res);
+        }
+    };
+
     getConversionRate: RequestHandler = async (req, res) => {
         try {
             const period = this.parsePeriod(req, res);

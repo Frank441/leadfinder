@@ -15,6 +15,7 @@ const auth         = [authenticate, authorize(ROLES.director, ROLES.supervisor)]
 const directorOnly = [authenticate, authorize(ROLES.director)];
 
 statsRouter.get("/total-leads",        ...auth,         controller.getTotalLeads);
+statsRouter.get("/unassigned-leads",   ...auth,         controller.getTotalLeadsUnassigned)
 statsRouter.get("/conversion-rate",    ...auth,         controller.getConversionRate);
 statsRouter.get("/in-negotiation",     ...auth,         controller.getInNegotiation);
 statsRouter.get("/new-clients",        ...auth,         controller.getNewClients);

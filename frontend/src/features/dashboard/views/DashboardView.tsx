@@ -88,7 +88,13 @@ export const DashboardView = () => {
             <KPIHeroCard label="Total de leads"     data={data.kpis.totalLeads}     format="number"     accent="blue" />
             <KPIHeroCard label="Tasa de conversión" data={data.kpis.tasaConversion} format="percentage" accent="green" hero />
             <KPIHeroCard label="En negociación"     data={data.kpis.pipelineActivo} format="number"     accent="orange" />
-            <KPIHeroCard label="Clientes nuevos"    data={data.kpis.clientesNuevos} format="number"     accent="green" />
+            
+            {isDirector ? (
+                <KPIHeroCard label="Clientes nuevos" data={data.kpis.clientesNuevos} format="number" accent="green" />
+            ) : (
+                <KPIHeroCard label="Leads sin representante" data={data.kpis.unassignedLeads} format="number" accent="orange" />
+            )}
+            
           </div>
 
           {isDirector ? (
