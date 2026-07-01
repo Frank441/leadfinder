@@ -133,7 +133,7 @@ export const FichaCUITView = () => {
       }}>
         <div style={{ flex: 1, minWidth: '260px' }}>
           <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', color: 'var(--color-text-label)', textTransform: 'uppercase', marginBottom: '6px' }}>
-            CUIT {lead.cuit}
+            CUIT  {`${lead.cuit.slice(0, 2)}-${lead.cuit.slice(2, 10)}-${lead.cuit.slice(10)}`} 
           </div>
           <h1 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--color-text)', margin: '0 0 12px 0' }}>
             {lead.razonSocial}
