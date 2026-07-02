@@ -13,13 +13,15 @@ services:
     region: oregon
     branch: main
     healthCheckPath: /api/health
+    # NOTA: el seed y el parser NO van acá a propósito. Corrían en cada deploy
+    # y, tras un demo-data (que reescribe los CUITs), el parser dejaba de matchear
+    # por cuit y re-insertaba todo, duplicando empresas/leads. La carga inicial
+    # (seed -> parser -> demo-data) es un procedimiento manual de una sola vez.
     buildCommand: >-
       pnpm install --frozen-lockfile &&
       pnpm --filter @leadfinder/shared build &&
       pnpm --filter backend exec prisma generate &&
-      pnpm --filter backend exec prisma migrate deploy &&
-      pnpm --filter backend exec prisma db seed &&
-      pnpm --filter backend run parser
+      pnpm --filter backend exec prisma migrate deploy
     startCommand: pnpm --filter backend start
     envVars:
       - key: DATABASE_URL

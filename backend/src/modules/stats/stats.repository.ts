@@ -6,22 +6,20 @@ import prisma from "../../../prisma/client";
 const STATUS_ORDER = ["Lead", "Contacto", "Prospecto", "Cliente"];
 const NEGOTIATION_STATUSES = ["Contacto", "Prospecto"];
 
+// Ventana móvil hacia atrás desde hoy. Antes se usaba el inicio del mes/
+// trimestre/año calendario, lo que hacía caer el conteo a casi cero los
+// primeros días de cada período (p. ej. "este mes" el día 2 mostraba solo
+// los leads de esos 2 días). Con ventana móvil "último mes" = últimos 30 días.
+const PERIOD_DAYS: Record<StatsPeriod, number> = {
+    month: 30,
+    quarter: 90,
+    year: 365,
+};
+
 function getPeriodRange(period: StatsPeriod): { gte: Date } {
-    const now = new Date();
-    const start = new Date(now);
-
-    if (period === "month") {
-        start.setDate(1);
-        start.setHours(0, 0, 0, 0);
-    } else if (period === "quarter") {
-        const currentQuarterMonth = Math.floor(now.getMonth() / 3) * 3;
-        start.setMonth(currentQuarterMonth, 1);
-        start.setHours(0, 0, 0, 0);
-    } else {
-        start.setMonth(0, 1);
-        start.setHours(0, 0, 0, 0);
-    }
-
+    const start = new Date();
+    start.setDate(start.getDate() - (PERIOD_DAYS[period] ?? 30));
+    start.setHours(0, 0, 0, 0);
     return { gte: start };
 }
 
