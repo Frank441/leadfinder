@@ -9,7 +9,13 @@ import { PrismaClient } from "../generated/prisma/index.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { connectionString } from "../prisma/client.js";
 
-const adapter = new PrismaPg({ connectionString });
+// Render expone la DB externa por TLS; la interna y localhost no la requieren.
+const needsSsl = /\.render\.com|sslmode=require/.test(connectionString);
+const adapter = new PrismaPg({
+    connectionString,
+    connectionTimeoutMillis: 30_000,
+    ...(needsSsl ? { ssl: { rejectUnauthorized: false } } : {}),
+});
 const prisma = new PrismaClient({ adapter });
 
 
